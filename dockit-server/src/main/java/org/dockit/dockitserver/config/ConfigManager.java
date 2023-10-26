@@ -42,8 +42,8 @@ public final class ConfigManager {
         if (!rootDirectory.isDirectory()) {
             return false;
         }
-        String propertiesPath = path + PATH_SEPARATOR + configFileName;
-        String keyStorePath = path + PATH_SEPARATOR + keyStoreName;
+        String propertiesPath = path + configFileName;
+        String keyStorePath = path + keyStoreName;
 
         File propertiesFile = new File(propertiesPath);
         if (propertiesFile.isDirectory() || !propertiesFile.isFile()) {
@@ -67,7 +67,7 @@ public final class ConfigManager {
     public void loadConfig(String path, String configFileName, String keyStoreName) {
         Properties properties = loadPropertiesConfig(path, configFileName);
         config = generateConfigFromProperties(properties);
-        keyStore = loadKeystoreConfig(path + PATH_SEPARATOR + keyStoreName, config.getKeyStorePassword());
+        keyStore = loadKeystoreConfig(path + keyStoreName, config.getKeyStorePassword());
     }
 
     public void createConfig(String directoryName, String configFileName, String keyStoreName,

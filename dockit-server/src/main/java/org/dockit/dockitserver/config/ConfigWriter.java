@@ -41,7 +41,7 @@ public class ConfigWriter {
     }
 
     protected Properties createProperties(String path, String configFileName, Properties properties) throws ConfigWriterException {
-        String writePath = path + ConfigManager.getPathSeparator() + configFileName;
+        String writePath = path + configFileName;
         try {
             FileOutputStream outputStream = new FileOutputStream(writePath);
             String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());

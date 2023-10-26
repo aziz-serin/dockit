@@ -25,7 +25,7 @@ public class KeyStoreManager {
         if (ks == null) {
             return null;
         }
-        try (FileOutputStream fos = new FileOutputStream("newKeyStoreFileName.jks")) {
+        try (FileOutputStream fos = new FileOutputStream(path + keyStoreName)) {
             char[] pwdArray = password.toCharArray();
             ks.store(fos, pwdArray);
             return ks;
