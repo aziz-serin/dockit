@@ -22,6 +22,9 @@ public class KeyStoreManager {
 
     public static KeyStore createKeystore(String keyStoreName, String path, String password) {
         KeyStore ks = openKeyStore(null, password);
+        if (ks == null) {
+            return null;
+        }
         try (FileOutputStream fos = new FileOutputStream("newKeyStoreFileName.jks")) {
             char[] pwdArray = password.toCharArray();
             ks.store(fos, pwdArray);
