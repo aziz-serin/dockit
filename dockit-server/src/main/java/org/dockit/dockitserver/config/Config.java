@@ -21,8 +21,8 @@ public class Config {
 
     public Properties toProperties() {
         Properties properties = new Properties();
-        properties.put(ConfigConstants.DB_CONNECTION_CACHE_SIZE.toString(), maxDBCacheSize);
-        properties.put(ConfigConstants.MAX_AGENT_AMOUNT.toString(), maxAgentSize);
+        properties.put(ConfigConstants.DB_CONNECTION_CACHE_SIZE.toString(), maxDBCacheSize.toString());
+        properties.put(ConfigConstants.MAX_AGENT_AMOUNT.toString(), maxAgentSize.toString());
         properties.put(ConfigConstants.KEYSTORE_PASSWORD.toString(), keyStorePassword);
         return properties;
     }
