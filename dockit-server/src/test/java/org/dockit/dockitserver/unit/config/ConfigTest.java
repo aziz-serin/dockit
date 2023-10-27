@@ -1,5 +1,7 @@
-package org.dockit.dockitserver.config;
+package org.dockit.dockitserver.unit.config;
 
+import org.dockit.dockitserver.config.Config;
+import org.dockit.dockitserver.config.ConfigConstants;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

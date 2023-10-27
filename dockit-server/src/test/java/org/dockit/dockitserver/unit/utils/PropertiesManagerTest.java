@@ -1,9 +1,11 @@
-package org.dockit.dockitserver.utils;
+package org.dockit.dockitserver.unit.utils;
 
+import org.assertj.core.api.Assertions;
 import org.dockit.dockitserver.config.Config;
 import org.dockit.dockitserver.config.ConfigConstants;
 import org.dockit.dockitserver.exceptions.config.InvalidPropertyException;
 import org.dockit.dockitserver.testUtils.PropertiesTestUtils;
+import org.dockit.dockitserver.utils.PropertiesManager;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -48,7 +50,7 @@ public class PropertiesManagerTest {
 
     @Test
     public void readPropertiesReturnEmptyPropertiesIfItDoesNotExist() {
-        assertThat(PropertiesManager.readProperties(path, wrongFileName))
+        Assertions.assertThat(PropertiesManager.readProperties(path, wrongFileName))
                 .isInstanceOf(Properties.class)
                 .hasSize(0);
     }
