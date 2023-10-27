@@ -2,6 +2,7 @@ package org.dockit.dockitserver.utils;
 
 import org.dockit.dockitserver.config.Config;
 import org.dockit.dockitserver.config.ConfigConstants;
+import org.dockit.dockitserver.exceptions.config.InvalidPropertyException;
 import org.dockit.dockitserver.testUtils.PropertiesTestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import java.nio.file.Path;
 import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PropertiesManagerTest {
 
@@ -24,6 +26,7 @@ public class PropertiesManagerTest {
     final static String VALUE_1 = "15";
     final static String VALUE_2 = "password";
     final static String VALUE_3 = "12";
+    final static String EXCEPTION_MESSAGE = "Invalid property type provided!";
     static String path;
 
     @TempDir
@@ -67,5 +70,33 @@ public class PropertiesManagerTest {
         assertThat(config.getMaxDBCacheSize().toString()).isEqualTo(VALUE_1);
         assertThat(config.getKeyStorePassword()).isEqualTo(VALUE_2);
         assertThat(config.getMaxAgentSize().toString()).isEqualTo(VALUE_3);
+    }
+
+    @Test
+    public void generateConfigFromPropertiesThrowsExceptionGivenNonIntMaxAgentSize() {
+        Exception exception = assertThrows(InvalidPropertyException.class, () -> {
+            new Properties();
+            Properties exceptionProperties;
+            exceptionProperties = new Properties();
+            exceptionProperties.put(KEY_1, VALUE_1);
+            exceptionProperties.put(KEY_2, VALUE_2);
+            exceptionProperties.put(KEY_3, "str");
+            PropertiesManager.generateConfigFromProperties(exceptionProperties);
+        });
+        assertEquals(EXCEPTION_MESSAGE, exception.getMessage());
+    }
+
+    @Test
+    public void generateConfigFromPropertiesThrowsExceptionGivenNonIntDBCacheSize() {
+        Exception exception = assertThrows(InvalidPropertyException.class, () -> {
+            new Properties();
+            Properties exceptionProperties;
+            exceptionProperties = new Properties();
+            exceptionProperties.put(KEY_1, "str");
+            exceptionProperties.put(KEY_2, VALUE_2);
+            exceptionProperties.put(KEY_3, VALUE_3);
+            PropertiesManager.generateConfigFromProperties(exceptionProperties);
+        });
+        assertEquals(EXCEPTION_MESSAGE, exception.getMessage());
     }
 }

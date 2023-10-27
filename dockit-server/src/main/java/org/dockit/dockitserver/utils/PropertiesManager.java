@@ -2,6 +2,7 @@ package org.dockit.dockitserver.utils;
 
 import org.dockit.dockitserver.config.Config;
 import org.dockit.dockitserver.config.ConfigConstants;
+import org.dockit.dockitserver.exceptions.config.InvalidPropertyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,13 +27,30 @@ public class PropertiesManager {
         return properties;
     }
 
-    // TODO: Reject wrong type of config e.g. string for max agent size, it needs to be numbers, and throw exception
-    public static Config generateConfigFromProperties(Properties properties) {
+    public static Config generateConfigFromProperties(Properties properties) throws InvalidPropertyException {
         Config.ConfigBuilder configBuilder = new Config.ConfigBuilder();
+        String maxAgentSize = properties.getProperty(ConfigConstants.MAX_AGENT_AMOUNT.toString());
+        String maxDBCacheSize = properties.getProperty(ConfigConstants.DB_CONNECTION_CACHE_SIZE.toString());
+        String keyStorePassword = properties.getProperty(ConfigConstants.KEYSTORE_PASSWORD.toString());
+        if (isNotInt(maxAgentSize) || isNotInt(maxDBCacheSize)) {
+            throw new InvalidPropertyException("Invalid property type provided!");
+        }
         return configBuilder
-                .setMaxAgentSize(Integer.parseInt(properties.getProperty(ConfigConstants.MAX_AGENT_AMOUNT.toString())))
-                .setMaxDBCacheSize(Integer.parseInt(properties.getProperty(ConfigConstants.DB_CONNECTION_CACHE_SIZE.toString())))
-                .setKeyStorePassword(properties.getProperty(ConfigConstants.KEYSTORE_PASSWORD.toString()))
+                .setMaxAgentSize(Integer.parseInt(maxAgentSize))
+                .setMaxDBCacheSize(Integer.parseInt(maxDBCacheSize))
+                .setKeyStorePassword(keyStorePassword)
                 .build();
+    }
+
+    private static boolean isNotInt(String value) {
+        if (value == null) {
+            return true;
+        }
+        try {
+            int i = Integer.parseInt(value);
+            return false;
+        } catch (NumberFormatException e) {
+            return true;
+        }
     }
 }
