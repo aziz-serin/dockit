@@ -2,7 +2,6 @@ package org.dockit.dockitserver.utils;
 
 import org.dockit.dockitserver.config.Config;
 import org.dockit.dockitserver.config.ConfigConstants;
-import org.dockit.dockitserver.config.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,18 +26,13 @@ public class PropertiesManager {
         return properties;
     }
 
+    // TODO: Reject wrong type of config e.g. string for max agent size, it needs to be numbers, and throw exception
     public static Config generateConfigFromProperties(Properties properties) {
         Config.ConfigBuilder configBuilder = new Config.ConfigBuilder();
         return configBuilder
-                .setMaxAgentSize(Integer.parseInt(PropertiesManager
-                        .getProperty(ConfigConstants.MAX_AGENT_AMOUNT.toString(), properties)))
-                .setMaxDBCacheSize(Integer.parseInt(PropertiesManager
-                        .getProperty(ConfigConstants.DB_CONNECTION_CACHE_SIZE.toString(), properties)))
-                .setKeyStorePassword(PropertiesManager.getProperty(ConfigConstants.KEYSTORE_PASSWORD.toString(), properties))
+                .setMaxAgentSize(Integer.parseInt(properties.getProperty(ConfigConstants.MAX_AGENT_AMOUNT.toString())))
+                .setMaxDBCacheSize(Integer.parseInt(properties.getProperty(ConfigConstants.DB_CONNECTION_CACHE_SIZE.toString())))
+                .setKeyStorePassword(properties.getProperty(ConfigConstants.KEYSTORE_PASSWORD.toString()))
                 .build();
-    }
-
-    public static String getProperty(String propertyName, Properties properties) {
-        return properties.getProperty(propertyName);
     }
 }
