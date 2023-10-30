@@ -1,4 +1,4 @@
-package org.dockit.dockitserver.unit.utils;
+package org.dockit.dockitserver.utils;
 
 import org.dockit.dockitserver.utils.OSUtils;
 import org.junit.jupiter.api.BeforeAll;

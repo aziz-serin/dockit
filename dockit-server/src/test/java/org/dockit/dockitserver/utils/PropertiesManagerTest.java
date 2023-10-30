@@ -1,15 +1,15 @@
-package org.dockit.dockitserver.unit.utils;
+package org.dockit.dockitserver.utils;
 
 import org.assertj.core.api.Assertions;
 import org.dockit.dockitserver.config.Config;
 import org.dockit.dockitserver.config.ConfigConstants;
 import org.dockit.dockitserver.exceptions.config.InvalidPropertyException;
 import org.dockit.dockitserver.testUtils.PropertiesTestUtils;
-import org.dockit.dockitserver.utils.PropertiesManager;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.Properties;
 
@@ -20,8 +20,6 @@ public class PropertiesManagerTest {
 
     final static String fileName = "test.properties";
     final static String wrongFileName = "testX.properties";
-    // Replace path separator when executing tests in windows
-    final static String PATH_SEPARATOR = "/";
     final static String KEY_1 = ConfigConstants.DB_CONNECTION_CACHE_SIZE.toString();
     final static String KEY_2 = ConfigConstants.KEYSTORE_PASSWORD.toString();
     final static String KEY_3 = ConfigConstants.MAX_AGENT_AMOUNT.toString();
@@ -44,13 +42,13 @@ public class PropertiesManagerTest {
         properties.put(KEY_2, VALUE_2);
         properties.put(KEY_3, VALUE_3);
         propertiesTestUtils = new PropertiesTestUtils();
-        path = tempDir.toString() + PATH_SEPARATOR;
+        path = tempDir.toString() + File.pathSeparator;
         propertiesTestUtils.createPropertiesFile(path, fileName, properties);
     }
 
     @Test
     public void readPropertiesReturnEmptyPropertiesIfItDoesNotExist() {
-        Assertions.assertThat(PropertiesManager.readProperties(path, wrongFileName))
+        assertThat(PropertiesManager.readProperties(path, wrongFileName))
                 .isInstanceOf(Properties.class)
                 .hasSize(0);
     }

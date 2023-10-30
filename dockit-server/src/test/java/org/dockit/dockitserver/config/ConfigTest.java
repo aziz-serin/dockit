@@ -1,4 +1,4 @@
-package org.dockit.dockitserver.unit.config;
+package org.dockit.dockitserver.config;
 
 import org.dockit.dockitserver.config.Config;
 import org.dockit.dockitserver.config.ConfigConstants;
