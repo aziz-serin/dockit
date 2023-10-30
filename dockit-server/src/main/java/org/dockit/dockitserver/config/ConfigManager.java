@@ -70,10 +70,10 @@ public final class ConfigManager {
         keyStore = loadKeystoreConfig(path + keyStoreName, config.getKeyStorePassword());
     }
 
-    public void createConfig(String directoryName, String configFileName, String keyStoreName,
+    public void createConfig(String rootPath, String directoryName, String configFileName, String keyStoreName,
                              String keyStorePassword, Properties properties) throws ConfigWriterException {
         ConfigWriter configWriter = new ConfigWriter();
-        String path = configWriter.createRootDirectory(directoryName);
+        String path = configWriter.createRootDirectory(rootPath, directoryName);
         Properties savedProperties = createPropertiesConfig(configWriter, path, configFileName, properties);
         KeyStore ks = createKeyStoreConfig(configWriter, path, keyStoreName, keyStorePassword);
         if (savedProperties != null && ks != null) {

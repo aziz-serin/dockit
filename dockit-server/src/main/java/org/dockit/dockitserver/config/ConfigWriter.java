@@ -2,7 +2,6 @@ package org.dockit.dockitserver.config;
 
 import org.dockit.dockitserver.exceptions.config.ConfigWriterException;
 import org.dockit.dockitserver.security.keystore.KeyStoreManager;
-import org.dockit.dockitserver.utils.OSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,13 +18,9 @@ public class ConfigWriter {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigWriter.class);
 
-    protected String createRootDirectory(String directoryName) throws ConfigWriterException {
+    protected String createRootDirectory(String rootPath, String directoryName) throws ConfigWriterException {
         try {
-            String root = "/";
-            if (OSUtils.OSDetector.isWindows()) {
-                root = System.getenv("SystemDrive");
-            }
-            Path path = Paths.get(root + directoryName);
+            Path path = Paths.get(rootPath + directoryName);
 
             Files.createDirectories(path);
             logger.info("Directory '{}' is created", directoryName);
@@ -49,6 +44,7 @@ public class ConfigWriter {
             return properties;
         } catch (IOException e) {
             logger.debug("Could not create the properties!");
+            // ignore exception
             return null;
         }
     }
