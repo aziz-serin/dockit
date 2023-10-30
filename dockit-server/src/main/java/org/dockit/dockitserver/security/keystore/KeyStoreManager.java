@@ -38,7 +38,7 @@ public class KeyStoreManager {
             logger.error("Could not find the keyStore in the given path, {}", path);
             return null;
         } catch (IOException e) {
-            logger.error("Could not read the keyStore in the given path, {}", path);
+            logger.error(e.getMessage());
             return null;
         } catch (CertificateException e) {
             logger.error("Invalid certificate, check exception, \n {}", e.getMessage());
@@ -78,7 +78,7 @@ public class KeyStoreManager {
             logger.error("Invalid certificate, check exception, \n {}", e.getMessage());
             return null;
         } catch (IOException e) {
-            logger.error("Could not read the keyStore in the given path, {}", path);
+            logger.error(e.getMessage());
             return null;
         } catch (NoSuchAlgorithmException e) {
             logger.error("Specified algorithm does not exist: \n {}", e.getMessage());

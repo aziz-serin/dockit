@@ -4,6 +4,8 @@ import org.dockit.dockitserver.exceptions.config.ConfigWriterException;
 import org.dockit.dockitserver.security.keystore.KeyStoreManager;
 import org.dockit.dockitserver.utils.OSUtils;
 import org.dockit.dockitserver.utils.PropertiesManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.security.KeyStore;
@@ -16,6 +18,8 @@ public final class ConfigManager {
     private static Config config;
     private static KeyStore keyStore;
     private static String PATH_SEPARATOR;
+
+    private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
 
     public ConfigManager() {
         if (OSUtils.OSDetector.isWindows()) {
@@ -40,17 +44,20 @@ public final class ConfigManager {
     public boolean configExists(String path, String configFileName, String keyStoreName) {
         File rootDirectory = new File(path);
         if (!rootDirectory.isDirectory()) {
+            logger.debug("Root directory {} does not exist", path);
             return false;
         }
-        String propertiesPath = path + configFileName;
-        String keyStorePath = path + keyStoreName;
+        String propertiesPath = path + PATH_SEPARATOR + configFileName;
+        String keyStorePath = path + PATH_SEPARATOR + keyStoreName;
 
         File propertiesFile = new File(propertiesPath);
         if (propertiesFile.isDirectory() || !propertiesFile.isFile()) {
+            logger.debug("Properties file {} does not exist/wrong in path {}", configFileName, path);
             return false;
         }
         File keyStoreFile = new File(keyStorePath);
         if (keyStoreFile.isDirectory() || !keyStoreFile.isFile()) {
+            logger.debug("KeyStore file {} does not exist/wrong in path {}", keyStoreName, path);
             return false;
         }
         return true;
@@ -74,21 +81,13 @@ public final class ConfigManager {
                              String keyStorePassword, Properties properties) throws ConfigWriterException {
         ConfigWriter configWriter = new ConfigWriter();
         String path = configWriter.createRootDirectory(rootPath, directoryName);
-        Properties savedProperties = createPropertiesConfig(configWriter, path, configFileName, properties);
-        KeyStore ks = createKeyStoreConfig(configWriter, path, keyStoreName, keyStorePassword);
+        Properties savedProperties = configWriter.createProperties(path + PATH_SEPARATOR, configFileName, properties);
+        KeyStore ks = configWriter.createKeyStore(path + PATH_SEPARATOR, keyStoreName, keyStorePassword);
         if (savedProperties != null && ks != null) {
             config = generateConfigFromProperties(properties);
             keyStore = ks;
         } else {
             throw new ConfigWriterException("Could not create keystore and/or properties config");
         }
-    }
-
-    private Properties createPropertiesConfig(ConfigWriter configWriter, String path, String configFileName, Properties properties) {
-        return configWriter.createProperties(path, configFileName, properties);
-    }
-
-    private KeyStore createKeyStoreConfig(ConfigWriter configWriter, String path, String keyStoreName, String keyStorePassword) {
-        return configWriter.createKeyStore(path, keyStoreName, keyStorePassword);
     }
 }
