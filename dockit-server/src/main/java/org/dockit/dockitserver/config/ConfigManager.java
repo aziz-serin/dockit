@@ -60,14 +60,14 @@ public final class ConfigManager {
         return PropertiesManager.readProperties(path, fileName);
     }
 
-    private KeyStore loadKeystoreConfig(String path, String keyStorePassword) {
-        return KeyStoreManager.loadKeyStore(path, keyStorePassword);
+    private KeyStore loadKeystoreConfig(String keyStoreName, String path, String keyStorePassword) {
+        return KeyStoreManager.loadKeyStore(keyStoreName, path, keyStorePassword);
     }
 
     public void loadConfig(String path, String configFileName, String keyStoreName) {
         Properties properties = loadPropertiesConfig(path, configFileName);
         config = generateConfigFromProperties(properties);
-        keyStore = loadKeystoreConfig(path + keyStoreName, config.getKeyStorePassword());
+        keyStore = loadKeystoreConfig(keyStoreName, path, config.getKeyStorePassword());
     }
 
     public void createConfig(String rootPath, String directoryName, String configFileName, String keyStoreName,
