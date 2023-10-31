@@ -1,5 +1,6 @@
 package org.dockit.dockitserver.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,10 +21,13 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "username")
     private String username;
 
+    @Column(name = "password")
     private String password;
 
+    @Column(name = "privilege")
     private Role privilege;
 
     public Long getId() {
