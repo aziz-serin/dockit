@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ConfigManagerTest {
 
-
     static final String CONFIG_FILE_NAME = "test.properties";
     static final String KEY_STORE_NAME = "keystore.jks";
     static final String KEY_STORE_PASSWORD = "changeit";
