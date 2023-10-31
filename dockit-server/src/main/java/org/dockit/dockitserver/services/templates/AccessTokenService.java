@@ -4,7 +4,7 @@ import org.dockit.dockitserver.entities.AccessToken;
 
 import java.util.List;
 
-public interface TokenService {
+public interface AccessTokenService {
     void deleteById(Long id);
     void deleteExpired();
     List<AccessToken> findAll();

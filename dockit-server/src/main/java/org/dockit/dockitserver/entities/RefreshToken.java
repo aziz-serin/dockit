@@ -12,8 +12,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table("name = access_token")
-public class AccessToken {
+@Table(name = "refresh_token")
+public class RefreshToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +47,7 @@ public class AccessToken {
         return token;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setToken(String refreshToken) {
+        this.token = refreshToken;
     }
 }

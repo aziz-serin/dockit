@@ -3,7 +3,7 @@ package org.dockit.dockitserver.services;
 import org.dockit.dockitserver.entities.AccessToken;
 import org.dockit.dockitserver.repositories.AccessTokenRepository;
 import org.dockit.dockitserver.repositories.AgentRepository;
-import org.dockit.dockitserver.services.templates.TokenService;
+import org.dockit.dockitserver.services.templates.AccessTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class AccessTokenServiceImpl implements TokenService {
+public class AccessTokenServiceImpl implements AccessTokenService {
 
     private final AccessTokenRepository accessTokenRepository;
     private final AgentRepository agentRepository;
