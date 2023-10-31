@@ -26,6 +26,39 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public Optional<Admin> updateUsername(Long id, String newUsername) {
+        Optional<Admin> optionalAdmin = adminRepository.findById(id);
+        if (optionalAdmin.isPresent()) {
+            Admin admin = optionalAdmin.get();
+            admin.setUsername(newUsername);
+            return Optional.of(adminRepository.save(admin));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Admin> updatePassword(Long id, String newPassword) {
+        Optional<Admin> optionalAdmin = adminRepository.findById(id);
+        if (optionalAdmin.isPresent()) {
+            Admin admin = optionalAdmin.get();
+            admin.setPassword(newPassword);
+            return Optional.of(adminRepository.save(admin));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Admin> updateRole(Long id, Admin.Role role) {
+        Optional<Admin> optionalAdmin = adminRepository.findById(id);
+        if (optionalAdmin.isPresent()) {
+            Admin admin = optionalAdmin.get();
+            admin.setPrivilege(role);
+            return Optional.of(adminRepository.save(admin));
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public void deleteById(Long id) {
         adminRepository.deleteById(id);
     }
