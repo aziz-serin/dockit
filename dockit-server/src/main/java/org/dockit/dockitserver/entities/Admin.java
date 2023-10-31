@@ -6,6 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name= "admins")
@@ -21,12 +24,16 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(max = 512)
+    @NotEmpty
     @Column(name = "username")
     private String username;
 
+    @NotEmpty
     @Column(name = "password")
     private String password;
 
+    @NotNull
     @Column(name = "privilege")
     private Role privilege;
 
