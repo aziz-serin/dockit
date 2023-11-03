@@ -20,7 +20,7 @@ public class ConfigWriter {
 
     protected String createRootDirectory(String rootPath, String directoryName) throws ConfigWriterException {
         try {
-            Path path = Paths.get(rootPath + ConfigManager.getPathSeparator() + directoryName);
+            Path path = Paths.get(rootPath + directoryName);
 
             Files.createDirectories(path);
             logger.info("Directory '{}' is created", directoryName);
