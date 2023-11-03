@@ -3,6 +3,7 @@ package org.dockit.dockitserver.services;
 import org.dockit.dockitserver.DockitServerApplication;
 import org.dockit.dockitserver.entities.Admin;
 import org.dockit.dockitserver.services.templates.AdminService;
+import org.dockit.dockitserver.utils.EntityCreator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -38,22 +39,13 @@ public class AdminServiceTest {
 
     @BeforeAll
     public void setup() {
-        admin1 = new Admin();
-        admin1.setUsername("admin1");
-        admin1.setPassword("password1");
-        admin1.setPrivilege(Admin.Role.VIEWER);
+        admin1 = EntityCreator.createAdmin("admin1", "password1", Admin.Role.VIEWER);
         adminService.save(admin1);
 
-        admin2 = new Admin();
-        admin2.setUsername("admin2");
-        admin2.setPassword("password2");
-        admin2.setPrivilege(Admin.Role.EDITOR);
+        admin2 = EntityCreator.createAdmin("admin2", "password2", Admin.Role.EDITOR);
         adminService.save(admin2);
 
-        admin3 = new Admin();
-        admin3.setUsername("admin3");
-        admin3.setPassword("password3");
-        admin3.setPrivilege(Admin.Role.SUPER);
+        admin3 = EntityCreator.createAdmin("admin3", "password3", Admin.Role.SUPER);
         adminService.save(admin3);
     }
 
