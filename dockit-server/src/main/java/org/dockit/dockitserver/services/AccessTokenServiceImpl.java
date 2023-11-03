@@ -2,7 +2,6 @@ package org.dockit.dockitserver.services;
 
 import org.dockit.dockitserver.entities.AccessToken;
 import org.dockit.dockitserver.repositories.AccessTokenRepository;
-import org.dockit.dockitserver.repositories.AgentRepository;
 import org.dockit.dockitserver.services.templates.AccessTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,13 +16,10 @@ import java.util.List;
 public class AccessTokenServiceImpl implements AccessTokenService {
 
     private final AccessTokenRepository accessTokenRepository;
-    private final AgentRepository agentRepository;
 
     @Autowired
-    public AccessTokenServiceImpl(AccessTokenRepository accessTokenRepository,
-                                  AgentRepository agentRepository) {
+    public AccessTokenServiceImpl(AccessTokenRepository accessTokenRepository) {
         this.accessTokenRepository = accessTokenRepository;
-        this.agentRepository = agentRepository;
     }
 
     @Override
@@ -42,7 +38,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     }
 
     private void deleteAllById(List<Long> ids) {
-        agentRepository.deleteAllById(ids);
+        accessTokenRepository.deleteAllById(ids);
     }
 
     @Override
