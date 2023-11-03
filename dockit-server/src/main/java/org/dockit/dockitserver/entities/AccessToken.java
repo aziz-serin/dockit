@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table("name = access_token")
+@Table(name = "access_token")
 public class AccessToken {
 
     @Id
