@@ -63,13 +63,24 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
+    public Optional<Agent> updateLastActiveTime(Long id, LocalDateTime lastActiveTime) {
+        Optional<Agent> optionalAgent = agentRepository.findById(id);
+        if (optionalAgent.isPresent()) {
+            Agent agent = optionalAgent.get();
+            agent.setLastActiveTime(lastActiveTime);
+            return Optional.of(agentRepository.save(agent));
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public void deleteById(Long id) {
         agentRepository.deleteById(id);
     }
 
     @Override
     public Optional<Agent> findById(Long id) {
-        return Optional.empty();
+        return agentRepository.findById(id);
     }
 
     @Override
