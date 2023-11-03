@@ -10,7 +10,10 @@ import java.nio.file.Path;
 import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class ConfigWriterTest {
 
@@ -18,9 +21,7 @@ public class ConfigWriterTest {
     static final String KEY = "example_key";
     static final String VALUE = "example_value";
     static final String FILE_NAME = "test.properties";
-
     static ConfigWriter configWriter;
-    static String path;
 
     @TempDir
     static Path tempDir;
@@ -28,7 +29,6 @@ public class ConfigWriterTest {
     @BeforeAll
     public static void setup() {
         configWriter = new ConfigWriter();
-        path = tempDir.toString() + File.pathSeparator;
     }
 
     @Test
@@ -40,10 +40,11 @@ public class ConfigWriterTest {
 
     @Test
     public void createRootDirectoryCreatesDirectory() {
-        String returnedPath = configWriter.createRootDirectory(path + File.pathSeparator, DIRECTORY_NAME);
+        String path = tempDir.toString() + File.separator;
+        String returnedPath = configWriter.createRootDirectory(path, DIRECTORY_NAME);
         File createdDirectory = new File(returnedPath);
 
-        assertThat(returnedPath).isEqualTo(path + File.pathSeparator + DIRECTORY_NAME);
+        assertThat(returnedPath).isEqualTo(path + DIRECTORY_NAME);
         assertTrue(createdDirectory.isDirectory());
         assertFalse(createdDirectory.isFile());
     }
@@ -59,10 +60,11 @@ public class ConfigWriterTest {
 
     @Test
     public void createPropertiesReturnsProperties() {
+        String path = tempDir.toString() + File.separator;
         Properties propertiesToWrite = new Properties();
         propertiesToWrite.put("example_key", "example_value");
-        Properties properties = configWriter.createProperties(path + File.pathSeparator, FILE_NAME, propertiesToWrite);
-        File createdPropertiesFile = new File(path + File.pathSeparator + FILE_NAME);
+        Properties properties = configWriter.createProperties(path, FILE_NAME, propertiesToWrite);
+        File createdPropertiesFile = new File(path + FILE_NAME);
 
         assertThat(properties).hasSize(1);
         assertThat(properties).containsEntry(KEY, VALUE);

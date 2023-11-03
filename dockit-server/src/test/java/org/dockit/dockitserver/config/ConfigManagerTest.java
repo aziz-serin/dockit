@@ -30,15 +30,13 @@ public class ConfigManagerTest {
 
     static ConfigManager configManager;
     static ConfigWriter configWriter;
-    static String path;
     static Properties properties;
 
     @TempDir
-    static Path tempdir;
+    Path tempDir;
 
     @BeforeAll
     public static void setup() {
-        path = tempdir.toString();
         configManager = new ConfigManager();
         configWriter = new ConfigWriter();
         properties = new Properties();
@@ -54,12 +52,14 @@ public class ConfigManagerTest {
 
     @Test
     public void configExistsReturnsFalseGivenRootDirectoryDoesNotExist() {
+        String path = tempDir.toString() + SEPARATOR;
         assertFalse(configManager.configExists(path, CONFIG_FILE_NAME, KEY_STORE_NAME));
     }
 
     @Test
     public void configExistsReturnsFalseGivenPropertiesDoesNotExist() {
-        String rootPath = path + File.separator + ROOT_FOLDER_NAME;
+        String path = tempDir.toString() + SEPARATOR;
+        String rootPath = path + ROOT_FOLDER_NAME;
         File rootDirectory = new File(rootPath);
         boolean result = rootDirectory.mkdir();
 
@@ -69,10 +69,11 @@ public class ConfigManagerTest {
 
     @Test
     public void configExistsReturnsFalseGivenPropertiesIsDirectory() {
-        String rootPath = path + File.separator + ROOT_FOLDER_NAME;
+        String path = tempDir.toString() + SEPARATOR;
+        String rootPath = path + ROOT_FOLDER_NAME;
         File rootDirectory = new File(rootPath);
         boolean rootResult = rootDirectory.mkdir();
-        File propertiesDirectory = new File(rootPath + File.separator + CONFIG_FILE_NAME);
+        File propertiesDirectory = new File(rootPath + SEPARATOR + CONFIG_FILE_NAME);
         boolean propertiesResult = propertiesDirectory.mkdir();
 
         assertTrue(rootResult);
@@ -82,10 +83,11 @@ public class ConfigManagerTest {
 
     @Test
     public void configExistsReturnsFalseGivenKeyStoreDoesNotExist() throws IOException {
-        String rootPath = path + File.separator + ROOT_FOLDER_NAME;
+        String path = tempDir.toString() + SEPARATOR;
+        String rootPath = path + ROOT_FOLDER_NAME;
         File rootDirectory = new File(rootPath);
         boolean rootResult = rootDirectory.mkdir();
-        File propertiesFile = new File(rootPath + File.separator + CONFIG_FILE_NAME);
+        File propertiesFile = new File(rootPath + CONFIG_FILE_NAME);
         boolean propertiesResult = propertiesFile.createNewFile();
 
         assertTrue(rootResult);
@@ -95,7 +97,8 @@ public class ConfigManagerTest {
 
     @Test
     public void configExistsReturnsFalseGivenKeyStoreIsDirectory() throws IOException {
-        String rootPath = path + File.separator + ROOT_FOLDER_NAME;
+        String path = tempDir.toString() + SEPARATOR;
+        String rootPath = path + ROOT_FOLDER_NAME;
         File rootDirectory = new File(rootPath);
         boolean rootResult = rootDirectory.mkdir();
         File propertiesFile = new File(rootPath + File.separator + CONFIG_FILE_NAME);
@@ -111,7 +114,8 @@ public class ConfigManagerTest {
 
     @Test
     public void configExistsReturnsTrue() throws IOException {
-        String rootPath = path + File.separator + ROOT_FOLDER_NAME;
+        String path = tempDir.toString() + SEPARATOR;
+        String rootPath = path + ROOT_FOLDER_NAME;
         File rootDirectory = new File(rootPath);
         boolean rootResult = rootDirectory.mkdir();
         File propertiesFile = new File(rootPath + File.separator + CONFIG_FILE_NAME);
@@ -127,11 +131,12 @@ public class ConfigManagerTest {
 
     @Test
     public void loadConfigLoadsConfigAndProperties() {
+        String path = tempDir.toString() + SEPARATOR;
         String rootCreationResult = configWriter.createRootDirectory(path, ROOT_FOLDER_NAME);
-        assertThat(rootCreationResult).isEqualTo(path + File.separator + ROOT_FOLDER_NAME);
+        assertThat(rootCreationResult).isEqualTo(path + ROOT_FOLDER_NAME);
 
         KeyStore ks = configWriter
-                .createKeyStore(KEY_STORE_NAME, rootCreationResult + File.separator, KEY_STORE_PASSWORD);
+                .createKeyStore(rootCreationResult + File.separator, KEY_STORE_NAME, KEY_STORE_PASSWORD);
         assertThat(ks).isNotNull();
 
         Properties returnedProperties = configWriter
@@ -147,6 +152,7 @@ public class ConfigManagerTest {
 
     @Test
     public void createConfigCreatesConfig() {
+        String path = tempDir.toString() + SEPARATOR;
         configManager
                 .createConfig(path, ROOT_FOLDER_NAME, CONFIG_FILE_NAME, KEY_STORE_NAME, KEY_STORE_PASSWORD, properties);
 
