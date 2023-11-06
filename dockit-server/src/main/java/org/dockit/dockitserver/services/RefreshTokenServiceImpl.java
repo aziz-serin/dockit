@@ -23,6 +23,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
+    public RefreshToken save(RefreshToken token) {
+        return refreshTokenRepository.save(token);
+    }
+
+    @Override
     public void deleteById(Long id) {
         refreshTokenRepository.deleteById(id);
     }

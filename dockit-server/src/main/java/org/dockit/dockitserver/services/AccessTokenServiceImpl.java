@@ -23,6 +23,11 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     }
 
     @Override
+    public AccessToken save(AccessToken token) {
+        return accessTokenRepository.save(token);
+    }
+
+    @Override
     public void deleteById(Long id) {
         accessTokenRepository.deleteById(id);
     }

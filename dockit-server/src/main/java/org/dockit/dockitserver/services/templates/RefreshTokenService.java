@@ -5,6 +5,7 @@ import org.dockit.dockitserver.entities.RefreshToken;
 import java.util.List;
 
 public interface RefreshTokenService {
+    RefreshToken save(RefreshToken token);
     void deleteById(Long id);
     void deleteExpired();
     List<RefreshToken> findAll();
