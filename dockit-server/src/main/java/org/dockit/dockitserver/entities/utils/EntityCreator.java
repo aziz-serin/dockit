@@ -1,4 +1,4 @@
-package org.dockit.dockitserver.utils;
+package org.dockit.dockitserver.entities.utils;
 
 import org.dockit.dockitserver.entities.AccessToken;
 import org.dockit.dockitserver.entities.Admin;

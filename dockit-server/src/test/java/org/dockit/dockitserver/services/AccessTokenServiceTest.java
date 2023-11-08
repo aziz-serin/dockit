@@ -3,7 +3,7 @@ package org.dockit.dockitserver.services;
 import org.dockit.dockitserver.DockitServerApplication;
 import org.dockit.dockitserver.entities.AccessToken;
 import org.dockit.dockitserver.services.templates.AccessTokenService;
-import org.dockit.dockitserver.utils.EntityCreator;
+import org.dockit.dockitserver.entities.utils.EntityCreator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
