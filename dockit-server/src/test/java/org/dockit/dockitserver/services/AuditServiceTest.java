@@ -39,16 +39,16 @@ public class AuditServiceTest {
 
     @BeforeAll
     public void setup() {
-        audit1 = EntityCreator.createAudit("vm1", "resource_usage", LocalDateTime.now(), "data1");
+        audit1 = EntityCreator.createAudit("vm1", "resource_usage", LocalDateTime.now(), "data1").get();
         auditService.save(audit1);
 
-        audit2 = EntityCreator.createAudit("vm2", "network_usage", LocalDateTime.now().minusDays(3), "data2");
+        audit2 = EntityCreator.createAudit("vm2", "network_usage", LocalDateTime.now().minusDays(3), "data2").get();
         auditService.save(audit2);
 
-        audit3 = EntityCreator.createAudit("vm2", "running_processes", LocalDateTime.now().minusMinutes(15), "data3");
+        audit3 = EntityCreator.createAudit("vm2", "running_processes", LocalDateTime.now().minusMinutes(15), "data3").get();
         auditService.save(audit3);
 
-        audit4 = EntityCreator.createAudit("vm4", "resource_usage", LocalDateTime.now().minusHours(5), "data4");
+        audit4 = EntityCreator.createAudit("vm4", "resource_usage", LocalDateTime.now().minusHours(5), "data4").get();
         auditService.save(audit4);
     }
 

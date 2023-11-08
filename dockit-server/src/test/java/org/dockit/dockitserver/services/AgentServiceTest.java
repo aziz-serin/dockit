@@ -40,15 +40,15 @@ public class AgentServiceTest {
     @BeforeAll
     public void setup() {
         agent1 = EntityCreator.createAgent("agent1", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), true);
+                LocalDateTime.now(), LocalDateTime.now(), true).get();
         agentService.save(agent1);
 
         agent2 = EntityCreator.createAgent("agent2", "password2",
-                LocalDateTime.now().minusWeeks(1), LocalDateTime.now().minusDays(3), false);
+                LocalDateTime.now().minusWeeks(1), LocalDateTime.now().minusDays(3), false).get();
         agentService.save(agent2);
 
         agent3 = EntityCreator.createAgent("agent3", "password3",
-                LocalDateTime.now().minusDays(1), LocalDateTime.now().minusMinutes(5), true);
+                LocalDateTime.now().minusDays(1), LocalDateTime.now().minusMinutes(5), true).get();
         agentService.save(agent3);
     }
 

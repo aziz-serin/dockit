@@ -39,13 +39,13 @@ public class AdminServiceTest {
 
     @BeforeAll
     public void setup() {
-        admin1 = EntityCreator.createAdmin("admin1", "password1", Admin.Role.VIEWER);
+        admin1 = EntityCreator.createAdmin("admin1", "password1", Admin.Role.VIEWER).get();
         adminService.save(admin1);
 
-        admin2 = EntityCreator.createAdmin("admin2", "password2", Admin.Role.EDITOR);
+        admin2 = EntityCreator.createAdmin("admin2", "password2", Admin.Role.EDITOR).get();
         adminService.save(admin2);
 
-        admin3 = EntityCreator.createAdmin("admin3", "password3", Admin.Role.SUPER);
+        admin3 = EntityCreator.createAdmin("admin3", "password3", Admin.Role.SUPER).get();
         adminService.save(admin3);
     }
 

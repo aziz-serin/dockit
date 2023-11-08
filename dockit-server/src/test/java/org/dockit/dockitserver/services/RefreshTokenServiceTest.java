@@ -35,13 +35,16 @@ public class RefreshTokenServiceTest {
 
     @BeforeAll
     public void setup() {
-        refreshToken1 = EntityCreator.createRefreshToken("token1", LocalDateTime.now().plusHours(1));
+        refreshToken1 = EntityCreator.createRefreshToken("token1", LocalDateTime.now().plusHours(1)).get();
         refreshTokenService.save(refreshToken1);
 
-        refreshToken2 = EntityCreator.createRefreshToken("token2", LocalDateTime.now().minusMinutes(5));
+        // Set like this to avoid getting empty optional since expiration date is not valid
+        refreshToken2 = new RefreshToken();
+        refreshToken2.setToken("token2");
+        refreshToken2.setExpiryDate(LocalDateTime.now().minusMinutes(5));
         refreshTokenService.save(refreshToken2);
 
-        refreshToken3 = EntityCreator.createRefreshToken("token3", LocalDateTime.now().plusDays(1));
+        refreshToken3 = EntityCreator.createRefreshToken("token3", LocalDateTime.now().plusDays(1)).get();
         refreshTokenService.save(refreshToken3);
     }
 

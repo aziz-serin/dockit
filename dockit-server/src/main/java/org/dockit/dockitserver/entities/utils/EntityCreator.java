@@ -7,47 +7,63 @@ import org.dockit.dockitserver.entities.Audit;
 import org.dockit.dockitserver.entities.RefreshToken;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class EntityCreator {
-    public static Agent createAgent(String agentName, String password, LocalDateTime creationTime,
+    public static Optional<Agent> createAgent(String agentName, String password, LocalDateTime creationTime,
                                     LocalDateTime lastActiveTime, boolean isActive) {
+        if (!EntityValidator.validAgent(agentName, password, creationTime, lastActiveTime)) {
+            return Optional.empty();
+        }
         Agent agent = new Agent();
         agent.setAgentName(agentName);
         agent.setPassword(password);
         agent.setCreationTime(creationTime);
         agent.setLastActiveTime(lastActiveTime);
         agent.setActive(isActive);
-        return agent;
+        return Optional.of(agent);
     }
 
-    public static Admin createAdmin(String username, String password, Admin.Role privilege) {
+    public static Optional<Admin> createAdmin(String username, String password, Admin.Role privilege) {
+        if (!EntityValidator.validAdmin(username, password, privilege)) {
+            return Optional.empty();
+        }
         Admin admin = new Admin();
         admin.setUsername(username);
         admin.setPassword(password);
         admin.setPrivilege(privilege);
-        return admin;
+        return Optional.of(admin);
     }
 
-    public static Audit createAudit(String vmId, String category, LocalDateTime timeStamp, String data) {
+    public static Optional<Audit> createAudit(String vmId, String category, LocalDateTime timeStamp, String data) {
+        if (!EntityValidator.validAudit(vmId, category, timeStamp, data)) {
+            return Optional.empty();
+        }
         Audit audit = new Audit();
         audit.setVmId(vmId);
         audit.setCategory(category);
         audit.setTimeStamp(timeStamp);
         audit.setData(data);
-        return audit;
+        return Optional.of(audit);
     }
 
-    public static AccessToken createAccessToken(String token, LocalDateTime expiryTime) {
+    public static Optional<AccessToken> createAccessToken(String token, LocalDateTime expiryTime) {
+        if (!EntityValidator.validAccessToken(token, expiryTime)) {
+            return Optional.empty();
+        }
         AccessToken accessToken = new AccessToken();
         accessToken.setToken(token);
         accessToken.setExpiryDate(expiryTime);
-        return accessToken;
+        return Optional.of(accessToken);
     }
 
-    public static RefreshToken createRefreshToken(String token, LocalDateTime expiryTime) {
+    public static Optional<RefreshToken> createRefreshToken(String token, LocalDateTime expiryTime) {
+        if (!EntityValidator.validRefreshToken(token, expiryTime)) {
+            return Optional.empty();
+        }
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setToken(token);
         refreshToken.setExpiryDate(expiryTime);
-        return refreshToken;
+        return Optional.of(refreshToken);
     }
 }

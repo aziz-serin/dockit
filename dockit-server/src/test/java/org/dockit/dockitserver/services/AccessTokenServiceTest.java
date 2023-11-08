@@ -35,13 +35,15 @@ public class AccessTokenServiceTest {
 
     @BeforeAll
     public void setup() {
-        accessToken1 = EntityCreator.createAccessToken("token1", LocalDateTime.now().plusHours(1));
+        accessToken1 = EntityCreator.createAccessToken("token1", LocalDateTime.now().plusHours(1)).get();
         accessTokenService.save(accessToken1);
 
-        accessToken2 = EntityCreator.createAccessToken("token2", LocalDateTime.now().minusMinutes(5));
+        accessToken2 = new AccessToken();
+        accessToken2.setToken("token2");
+        accessToken2.setExpiryDate(LocalDateTime.now().minusMinutes(5));
         accessTokenService.save(accessToken2);
 
-        accessToken3 = EntityCreator.createAccessToken("token3", LocalDateTime.now().plusDays(1));
+        accessToken3 = EntityCreator.createAccessToken("token3", LocalDateTime.now().plusDays(1)).get();
         accessTokenService.save(accessToken3);
     }
 
