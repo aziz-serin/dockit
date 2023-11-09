@@ -8,31 +8,31 @@ public class ConfigBuilder {
         return new Builder();
     }
 
-    public static interface MaxAgentCacheSize {
+    public interface MaxAgentCacheSize {
         MaxAuditCacheSize maxAgentCacheSize(Long maxAgentCacheSize);
     }
 
-    public static interface MaxAuditCacheSize {
+    public interface MaxAuditCacheSize {
         MaxAdminCacheSize maxAuditCacheSize(Long maxAuditCacheSize);
     }
 
-    public static interface MaxAdminCacheSize {
+    public interface MaxAdminCacheSize {
         MaxAccessTokenCacheSize maxAdminCacheSize(Long maxAdminCacheSize);
     }
 
-    public static interface MaxAccessTokenCacheSize {
+    public interface MaxAccessTokenCacheSize {
         MaxAgentSize maxAccessTokenCacheSize(Long maxAccessTokenCacheSize);
     }
 
-    public static interface MaxAgentSize {
+    public interface MaxAgentSize {
         KeyStorePassword maxAgentSize(Integer maxAgentSize);
     }
 
-    public static interface KeyStorePassword {
+    public interface KeyStorePassword {
         Build keyStorePassword(String keyStorePassword);
     }
 
-    public static interface Build {
+    public interface Build {
         Config build();
     }
 
