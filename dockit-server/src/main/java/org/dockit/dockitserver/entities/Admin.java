@@ -12,7 +12,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name= "admins")
-public class Admin {
+public class Admin implements DTO {
 
     public enum Role {
         SUPER,

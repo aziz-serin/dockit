@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "audit")
-public class Audit {
+public class Audit implements DTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

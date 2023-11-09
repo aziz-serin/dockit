@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "refresh_token")
-public class RefreshToken {
+public class RefreshToken implements DTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
