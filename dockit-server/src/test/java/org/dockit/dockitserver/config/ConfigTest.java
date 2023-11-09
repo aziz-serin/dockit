@@ -11,21 +11,41 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ConfigTest {
     static Config config;
     static final Integer MAX_AGENT_SIZE = 5;
-    static final Integer MAX_DB_CACHE_SIZE = 128;
+    static final Long MAX_CACHE_SIZE = 128L;
     static final String KEYSTORE_PASSWORD = "password";
 
     @BeforeAll
     public static void setup() {
-        config = new Config.ConfigBuilder().setKeyStorePassword(KEYSTORE_PASSWORD)
-                .setMaxAgentSize(MAX_AGENT_SIZE)
-                .setMaxDBCacheSize(MAX_DB_CACHE_SIZE)
+        config = ConfigBuilder.newBuilder()
+                .maxAgentCacheSize(MAX_CACHE_SIZE)
+                .maxAuditCacheSize(MAX_CACHE_SIZE)
+                .maxAdminCacheSize(MAX_CACHE_SIZE)
+                .maxAccessTokenCacheSize(MAX_CACHE_SIZE)
+                .maxAgentSize(MAX_AGENT_SIZE)
+                .keyStorePassword(KEYSTORE_PASSWORD)
                 .build();
     }
 
     @Test
-    public void getCacheSizeReturnsRightCacheSize() {
-        assertThat(MAX_DB_CACHE_SIZE).isEqualTo(config.getMaxDBCacheSize());
+    public void getMaxAgentCacheSizeReturnsRightCacheSize() {
+        assertThat(MAX_CACHE_SIZE).isEqualTo(config.getMaxAgentCacheSize());
     }
+
+    @Test
+    public void getMaxAuditCacheSizeReturnsRightCacheSize() {
+        assertThat(MAX_CACHE_SIZE).isEqualTo(config.getMaxAuditCacheSize());
+    }
+
+    @Test
+    public void getMaxAdminCacheSizeReturnsRightCacheSize() {
+        assertThat(MAX_CACHE_SIZE).isEqualTo(config.getMaxAdminCacheSize());
+    }
+
+    @Test
+    public void getMaxAccessTokenCacheSizeReturnsRightCacheSize() {
+        assertThat(MAX_CACHE_SIZE).isEqualTo(config.getMaxAccessTokenCacheSize());
+    }
+
 
     @Test
     public void getMaxAgentSizeReturnAgentSize() {
@@ -48,7 +68,13 @@ public class ConfigTest {
         assertThat(properties.getProperty(ConfigConstants.KEYSTORE_PASSWORD.toString())).isEqualTo(KEYSTORE_PASSWORD);
         assertThat(properties.getProperty(ConfigConstants.MAX_AGENT_AMOUNT.toString()))
                 .isEqualTo(MAX_AGENT_SIZE.toString());
-        assertThat(properties.getProperty(ConfigConstants.DB_CONNECTION_CACHE_SIZE.toString()))
-                .isEqualTo(MAX_DB_CACHE_SIZE.toString());
+        assertThat(properties.getProperty(ConfigConstants.AGENT_CACHE_SIZE.toString()))
+                .isEqualTo(MAX_CACHE_SIZE.toString());
+        assertThat(properties.getProperty(ConfigConstants.ADMIN_CACHE_SIZE.toString()))
+                .isEqualTo(MAX_CACHE_SIZE.toString());
+        assertThat(properties.getProperty(ConfigConstants.AUDIT_CACHE_SIZE.toString()))
+                .isEqualTo(MAX_CACHE_SIZE.toString());
+        assertThat(properties.getProperty(ConfigConstants.ACCESS_TOKEN_CACHE_SIZE.toString()))
+                .isEqualTo(MAX_CACHE_SIZE.toString());
     }
 }

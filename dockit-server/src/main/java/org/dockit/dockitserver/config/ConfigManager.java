@@ -3,7 +3,6 @@ package org.dockit.dockitserver.config;
 import org.dockit.dockitserver.exceptions.config.ConfigWriterException;
 import org.dockit.dockitserver.security.keystore.KeyStoreManager;
 import org.dockit.dockitserver.utils.OSUtils;
-import org.dockit.dockitserver.utils.PropertiesManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +10,7 @@ import java.io.File;
 import java.security.KeyStore;
 import java.util.Properties;
 
-import static org.dockit.dockitserver.utils.PropertiesManager.generateConfigFromProperties;
+import static org.dockit.dockitserver.config.PropertiesManager.generateConfigFromProperties;
 
 public final class ConfigManager {
 

@@ -20,12 +20,15 @@ public class ConfigManagerTest {
     static final String KEY_STORE_NAME = "keystore.jks";
     static final String KEY_STORE_PASSWORD = "changeit";
     static final String ROOT_FOLDER_NAME = ".dockit";
-    final static String KEY_1 = ConfigConstants.DB_CONNECTION_CACHE_SIZE.toString();
-    final static String KEY_2 = ConfigConstants.KEYSTORE_PASSWORD.toString();
-    final static String KEY_3 = ConfigConstants.MAX_AGENT_AMOUNT.toString();
-    final static String VALUE_1 = "15";
-    final static String VALUE_2 = "changeit";
-    final static String VALUE_3 = "12";
+    final static String AGENT_CACHE_SIZE_KEY = ConfigConstants.AGENT_CACHE_SIZE.toString();
+    final static String AUDIT_CACHE_SIZE_KEY = ConfigConstants.AUDIT_CACHE_SIZE.toString();
+    final static String ADMIN_CACHE_SIZE_KEY = ConfigConstants.ADMIN_CACHE_SIZE.toString();
+    final static String TOKEN_CACHE_SIZE_KEY = ConfigConstants.ACCESS_TOKEN_CACHE_SIZE.toString();
+    final static String KEY_STORE_PASSWORD_KEY = ConfigConstants.KEYSTORE_PASSWORD.toString();
+    final static String MAX_AGENT_KEY = ConfigConstants.MAX_AGENT_AMOUNT.toString();
+    final static String CACHE_SIZE_VALUE = "15";
+    final static String PASSWORD_VALUE = "changeit";
+    final static String MAX_AGENT_SIZE_VALUE = "12";
     static final String SEPARATOR = File.separator;
 
     static ConfigManager configManager;
@@ -40,9 +43,12 @@ public class ConfigManagerTest {
         configManager = new ConfigManager();
         configWriter = new ConfigWriter();
         properties = new Properties();
-        properties.put(KEY_1, VALUE_1);
-        properties.put(KEY_2, VALUE_2);
-        properties.put(KEY_3, VALUE_3);
+        properties.put(AGENT_CACHE_SIZE_KEY, CACHE_SIZE_VALUE);
+        properties.put(AUDIT_CACHE_SIZE_KEY, CACHE_SIZE_VALUE);
+        properties.put(ADMIN_CACHE_SIZE_KEY, CACHE_SIZE_VALUE);
+        properties.put(TOKEN_CACHE_SIZE_KEY, CACHE_SIZE_VALUE);
+        properties.put(KEY_STORE_PASSWORD_KEY, PASSWORD_VALUE);
+        properties.put(MAX_AGENT_KEY, MAX_AGENT_SIZE_VALUE);
     }
 
     @Test
@@ -142,7 +148,7 @@ public class ConfigManagerTest {
         Properties returnedProperties = configWriter
                 .createProperties(rootCreationResult + File.separator, CONFIG_FILE_NAME, properties);
         assertThat(returnedProperties).isNotNull();
-        assertThat(returnedProperties).hasSize(3);
+        assertThat(returnedProperties).hasSize(6);
 
         configManager.loadConfig(rootCreationResult + File.separator, CONFIG_FILE_NAME, KEY_STORE_NAME);
 
