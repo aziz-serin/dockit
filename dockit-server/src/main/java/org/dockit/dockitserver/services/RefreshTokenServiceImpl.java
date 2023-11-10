@@ -24,6 +24,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshToken save(RefreshToken token) {
+        // TODO: Encrypt Token
         return refreshTokenRepository.save(token);
     }
 

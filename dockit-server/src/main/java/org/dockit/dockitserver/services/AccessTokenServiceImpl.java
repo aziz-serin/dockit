@@ -24,6 +24,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
 
     @Override
     public AccessToken save(AccessToken token) {
+        // TODO: Encrypt Token
         return accessTokenRepository.save(token);
     }
 

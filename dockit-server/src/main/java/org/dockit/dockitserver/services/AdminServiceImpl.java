@@ -22,6 +22,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Admin save(Admin admin) {
+        // TODO encrypt username and password fields
         return adminRepository.save(admin);
     }
 
