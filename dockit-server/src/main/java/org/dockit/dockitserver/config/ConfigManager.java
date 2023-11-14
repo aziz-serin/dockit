@@ -62,7 +62,7 @@ public final class ConfigManager {
     }
 
     private Properties loadPropertiesConfig(String path, String fileName) {
-        return PropertiesManager.readProperties(path, fileName);
+        return PropertiesManager.readProperties(path + PATH_SEPARATOR, fileName);
     }
 
     private KeyStore loadKeystoreConfig(String keyStoreName, String path, String keyStorePassword) {
