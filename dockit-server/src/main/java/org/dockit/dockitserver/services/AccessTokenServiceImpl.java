@@ -1,9 +1,14 @@
 package org.dockit.dockitserver.services;
 
+import org.dockit.dockitserver.caching.CacheNames;
 import org.dockit.dockitserver.entities.AccessToken;
 import org.dockit.dockitserver.repositories.AccessTokenRepository;
 import org.dockit.dockitserver.services.templates.AccessTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,6 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
+@CacheConfig(cacheNames = {CacheNames.ACCESS_TOKEN})
 public class AccessTokenServiceImpl implements AccessTokenService {
 
     private final AccessTokenRepository accessTokenRepository;
@@ -23,17 +29,20 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     }
 
     @Override
+    @CachePut(key = "#token.id")
     public AccessToken save(AccessToken token) {
         // TODO: Encrypt Token
         return accessTokenRepository.save(token);
     }
 
     @Override
+    @CacheEvict(key = "#id")
     public void deleteById(Long id) {
         accessTokenRepository.deleteById(id);
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public void deleteExpired() {
         List<AccessToken> tokens = accessTokenRepository.findAll();
         List<Long> expiredTokenIds = tokens.stream()

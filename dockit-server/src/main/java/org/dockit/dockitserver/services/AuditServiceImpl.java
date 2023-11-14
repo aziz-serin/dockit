@@ -1,9 +1,14 @@
 package org.dockit.dockitserver.services;
 
+import org.dockit.dockitserver.caching.CacheNames;
 import org.dockit.dockitserver.entities.Audit;
 import org.dockit.dockitserver.repositories.AuditRepository;
 import org.dockit.dockitserver.services.templates.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@CacheConfig(cacheNames = {CacheNames.AUDIT})
 public class AuditServiceImpl implements AuditService {
 
     private final AuditRepository auditRepository;
@@ -24,16 +30,19 @@ public class AuditServiceImpl implements AuditService {
     }
 
     @Override
+    @CachePut(key = "#audit.id")
     public Audit save(Audit audit) {
         return auditRepository.save(audit);
     }
 
     @Override
+    @CacheEvict(key = "#id")
     public void deleteById(Long id) {
         auditRepository.deleteById(id);
     }
 
     @Override
+    @Cacheable(key = "#id")
     public Optional<Audit> findById(Long id) {
         return auditRepository.findById(id);
     }
