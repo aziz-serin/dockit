@@ -34,7 +34,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    @CachePut(key = "id")
+    @CachePut(key = "#id")
     public Optional<Admin> updateUsername(Long id, String newUsername) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if (optionalAdmin.isPresent()) {
@@ -46,7 +46,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    @CachePut(key = "id")
+    @CachePut(key = "#id")
     public Optional<Admin> updatePassword(Long id, String newPassword) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if (optionalAdmin.isPresent()) {
@@ -58,7 +58,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    @CachePut(key = "id")
+    @CachePut(key = "#id")
     public Optional<Admin> updateRole(Long id, Admin.Role role) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if (optionalAdmin.isPresent()) {

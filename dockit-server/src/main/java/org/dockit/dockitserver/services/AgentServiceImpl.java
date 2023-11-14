@@ -38,7 +38,7 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    @CachePut(key = "id")
+    @CachePut(key = "#id")
     public Optional<Agent> updateAgentName(Long id, String newAgentName) {
         Optional<Agent> optionalAgent = agentRepository.findById(id);
         if (optionalAgent.isPresent()) {
@@ -50,7 +50,7 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    @CachePut(key = "id")
+    @CachePut(key = "#id")
     public Optional<Agent> updatePassword(Long id, String newPassword) {
         Optional<Agent> optionalAgent = agentRepository.findById(id);
         if (optionalAgent.isPresent()) {
@@ -62,7 +62,7 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    @CachePut(key = "id")
+    @CachePut(key = "#id")
     public Optional<Agent> updateIsActive(Long id, Boolean isActive) {
         Optional<Agent> optionalAgent = agentRepository.findById(id);
         if (optionalAgent.isPresent()) {
@@ -74,7 +74,7 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    @CachePut(key = "id")
+    @CachePut(key = "#id")
     public Optional<Agent> updateLastActiveTime(Long id, LocalDateTime lastActiveTime) {
         Optional<Agent> optionalAgent = agentRepository.findById(id);
         if (optionalAgent.isPresent()) {
