@@ -26,6 +26,17 @@ public class PropertiesManager {
         return properties;
     }
 
+    public static Properties generateDefaultProperties() {
+        Properties properties = new Properties();
+        properties.put(ConfigConstants.MAX_AGENT_AMOUNT.toString(), ConfigConstants.DEFAULT_MAX_AGENT_AMOUNT.toString());
+        properties.put(ConfigConstants.AGENT_CACHE_SIZE.toString(), ConfigConstants.DEFAULT_AGENT_CACHE_SIZE.toString());
+        properties.put(ConfigConstants.AUDIT_CACHE_SIZE.toString(), ConfigConstants.DEFAULT_AUDIT_CACHE_SIZE.toString());
+        properties.put(ConfigConstants.ADMIN_CACHE_SIZE.toString(), ConfigConstants.DEFAULT_ADMIN_CACHE_SIZE.toString());
+        properties.put(ConfigConstants.ACCESS_TOKEN_CACHE_SIZE.toString(), ConfigConstants.DEFAULT_ACCESS_TOKEN_CACHE_SIZE.toString());
+        properties.put(ConfigConstants.KEYSTORE_PASSWORD.toString(), ConfigConstants.DEFAULT_KEYSTORE_PASSWORD.toString());
+        return properties;
+    }
+
     public static Config generateConfigFromProperties(Properties properties) throws InvalidPropertyException {
         String maxAgentCacheSize = properties.getProperty(ConfigConstants.AGENT_CACHE_SIZE.toString());
         String maxAuditCacheSize = properties.getProperty(ConfigConstants.AUDIT_CACHE_SIZE.toString());

@@ -18,12 +18,12 @@ public class ConfigWriter {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigWriter.class);
 
-    protected String createRootDirectory(String rootPath, String directoryName) throws ConfigWriterException {
+    protected String createRootDirectory(String rootPath) throws ConfigWriterException {
         try {
-            Path path = Paths.get(rootPath + directoryName);
+            Path path = Paths.get(rootPath);
 
             Files.createDirectories(path);
-            logger.info("Directory '{}' is created", directoryName);
+            logger.info("Directory '{}' is created", rootPath);
             return path.toString();
         } catch (IOException e) {
             logger.error("Failed to create directory!" + e.getMessage());

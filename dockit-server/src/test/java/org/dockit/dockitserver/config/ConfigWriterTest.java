@@ -34,14 +34,14 @@ public class ConfigWriterTest {
     @Test
     public void createRootDirectoryThrowsException() {
         assertThrows(ConfigWriterException.class, () -> {
-            configWriter.createRootDirectory("/", DIRECTORY_NAME);
+            configWriter.createRootDirectory("/" + DIRECTORY_NAME);
         });
     }
 
     @Test
     public void createRootDirectoryCreatesDirectory() {
         String path = tempDir.toString() + File.separator;
-        String returnedPath = configWriter.createRootDirectory(path, DIRECTORY_NAME);
+        String returnedPath = configWriter.createRootDirectory(path + DIRECTORY_NAME);
         File createdDirectory = new File(returnedPath);
 
         assertThat(returnedPath).isEqualTo(path + DIRECTORY_NAME);

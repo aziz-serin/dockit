@@ -137,8 +137,8 @@ public class ConfigManagerTest {
 
     @Test
     public void loadConfigLoadsConfigAndProperties() {
-        String path = tempDir.toString() + SEPARATOR;
-        String rootCreationResult = configWriter.createRootDirectory(path, ROOT_FOLDER_NAME);
+        String path = tempDir.toString() + SEPARATOR  + ROOT_FOLDER_NAME;
+        String rootCreationResult = configWriter.createRootDirectory(path);
         assertThat(rootCreationResult).isEqualTo(path + ROOT_FOLDER_NAME);
 
         KeyStore ks = configWriter
@@ -152,17 +152,17 @@ public class ConfigManagerTest {
 
         configManager.loadConfig(rootCreationResult + File.separator, CONFIG_FILE_NAME, KEY_STORE_NAME);
 
-        assertThat(ConfigManager.getConfig()).isInstanceOf(Config.class);
-        assertThat(ConfigManager.getKeyStore()).isInstanceOf(KeyStore.class);
+        assertThat(configManager.getConfig()).isInstanceOf(Config.class);
+        assertThat(configManager.getKeyStore()).isInstanceOf(KeyStore.class);
     }
 
     @Test
     public void createConfigCreatesConfig() {
         String path = tempDir.toString() + SEPARATOR;
         configManager
-                .createConfig(path, ROOT_FOLDER_NAME, CONFIG_FILE_NAME, KEY_STORE_NAME, KEY_STORE_PASSWORD, properties);
+                .createConfig(path + ROOT_FOLDER_NAME, CONFIG_FILE_NAME, KEY_STORE_NAME, KEY_STORE_PASSWORD, properties);
 
-        assertThat(ConfigManager.getConfig()).isInstanceOf(Config.class);
-        assertThat(ConfigManager.getKeyStore()).isInstanceOf(KeyStore.class);
+        assertThat(configManager.getConfig()).isInstanceOf(Config.class);
+        assertThat(configManager.getKeyStore()).isInstanceOf(KeyStore.class);
     }
 }

@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "dockit.server.config.keystore.name",
+      "type": "java.lang.String",
+      "description": "Specifies the name of the keystore needed for the server."
+    },
+    {
+      "name": "dockit.server.config.file.name",
+      "type": "java.lang.String",
+      "description": "Specifies the name of the config file needed for the server."
+    },
+    {
+      "name": "dockit.server.config.directory.path",
+      "type": "java.lang.String",
+      "description": "Directory containing the keystore and config file."
+    }
+  ] }

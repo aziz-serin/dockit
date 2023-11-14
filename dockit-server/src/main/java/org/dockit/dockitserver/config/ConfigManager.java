@@ -5,7 +5,6 @@ import org.dockit.dockitserver.security.keystore.KeyStoreManager;
 import org.dockit.dockitserver.utils.OSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.security.KeyStore;
 import java.util.Properties;
@@ -13,9 +12,8 @@ import java.util.Properties;
 import static org.dockit.dockitserver.config.PropertiesManager.generateConfigFromProperties;
 
 public final class ConfigManager {
-
-    private static Config config;
-    private static KeyStore keyStore;
+    private Config config;
+    private KeyStore keyStore;
     private static String PATH_SEPARATOR;
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
@@ -26,17 +24,18 @@ public final class ConfigManager {
         } else {
             PATH_SEPARATOR = "/";
         }
+
     }
 
     public static String getPathSeparator() {
         return PATH_SEPARATOR;
     }
 
-    public static KeyStore getKeyStore() {
+    public KeyStore getKeyStore() {
         return keyStore;
     }
 
-    public static Config getConfig() {
+    public Config getConfig() {
         return config;
     }
 
@@ -76,10 +75,10 @@ public final class ConfigManager {
         keyStore = loadKeystoreConfig(keyStoreName, path, config.getKeyStorePassword());
     }
 
-    public void createConfig(String rootPath, String directoryName, String configFileName, String keyStoreName,
+    public void createConfig(String rootPath, String configFileName, String keyStoreName,
                              String keyStorePassword, Properties properties) throws ConfigWriterException {
         ConfigWriter configWriter = new ConfigWriter();
-        String path = configWriter.createRootDirectory(rootPath, directoryName);
+        String path = configWriter.createRootDirectory(rootPath);
         Properties savedProperties = configWriter.createProperties(path + PATH_SEPARATOR, configFileName, properties);
         KeyStore ks = configWriter.createKeyStore(path + PATH_SEPARATOR, keyStoreName, keyStorePassword);
         if (savedProperties != null && ks != null) {

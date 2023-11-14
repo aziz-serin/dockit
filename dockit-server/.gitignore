@@ -30,3 +30,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Server Config ###
+.dockit
