@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DockitServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DockitServerApplication.class, args);
         OSUtils.OSDetector.getOS();
+        SpringApplication.run(DockitServerApplication.class, args);
     }
 
 }

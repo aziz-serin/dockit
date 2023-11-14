@@ -2,6 +2,8 @@ package org.dockit.dockitserver.caching;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import org.dockit.dockitserver.config.Config;
+import org.dockit.dockitserver.config.ConfigContainer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -14,21 +16,21 @@ import java.util.concurrent.TimeUnit;
 @EnableCaching
 public class CacheConfig {
 
-    // TODO: Update these values with the configuration ones
     @Bean
-    public CacheManager cacheManager() {
+    public CacheManager cacheManager(ConfigContainer configContainer) {
+        Config config = configContainer.getConfig();
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.registerCustomCache(CacheNames.AUDIT,
-                buildCache(200,1000, 1));
+                buildCache(200, config.getMaxAuditCacheSize().intValue(), 1));
 
         cacheManager.registerCustomCache(CacheNames.AGENT,
-                buildCache(15,50, 5));
+                buildCache(15, config.getMaxAgentCacheSize().intValue(), 5));
 
         cacheManager.registerCustomCache(CacheNames.ADMIN,
-                buildCache(15,50, 5));
+                buildCache(15, config.getMaxAdminCacheSize().intValue(), 5));
 
         cacheManager.registerCustomCache(CacheNames.ACCESS_TOKEN,
-                buildCache(100,500, 1));
+                buildCache(15, config.getMaxAdminCacheSize().intValue(), 1));
         return cacheManager;
     }
 
