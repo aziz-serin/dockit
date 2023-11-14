@@ -139,7 +139,7 @@ public class ConfigManagerTest {
     public void loadConfigLoadsConfigAndProperties() {
         String path = tempDir.toString() + SEPARATOR  + ROOT_FOLDER_NAME;
         String rootCreationResult = configWriter.createRootDirectory(path);
-        assertThat(rootCreationResult).isEqualTo(path + ROOT_FOLDER_NAME);
+        assertThat(rootCreationResult).isEqualTo(path);
 
         KeyStore ks = configWriter
                 .createKeyStore(rootCreationResult + File.separator, KEY_STORE_NAME, KEY_STORE_PASSWORD);
