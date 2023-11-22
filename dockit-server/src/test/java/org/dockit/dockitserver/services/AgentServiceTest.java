@@ -1,6 +1,7 @@
 package org.dockit.dockitserver.services;
 
 import org.dockit.dockitserver.DockitServerApplication;
+import org.dockit.dockitserver.caching.CacheNames;
 import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.services.templates.AgentService;
 import org.dockit.dockitserver.entities.utils.EntityCreator;
@@ -10,12 +11,15 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,9 +33,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AgentServiceTest {
 
+    private static final String CACHE_NAME = CacheNames.AGENT;
+
     @Autowired
     private AgentService agentService;
 
+    @Autowired
+    private CacheManager cacheManager;
+
+    private Cache cache;
     private Agent agent1;
     private Agent agent2;
     private Agent agent3;
@@ -50,6 +60,8 @@ public class AgentServiceTest {
         agent3 = EntityCreator.createAgent("agent3", "password3",
                 LocalDateTime.now().minusDays(1), LocalDateTime.now().minusMinutes(5), true).get();
         agentService.save(agent3);
+
+        cache = Objects.requireNonNull(cacheManager.getCache(CACHE_NAME));
     }
 
     @Test
@@ -202,5 +214,123 @@ public class AgentServiceTest {
 
         // Undo the update
         agentService.updateLastActiveTime(agent2.getId(), beforeUpdate);
+    }
+
+    @Test
+    public void saveCachesResult() {
+        Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
+                LocalDateTime.now(), LocalDateTime.now(), true).get();
+        agentService.save(tempAgent);
+
+        Agent cachedAgent = (Agent) cache.get(tempAgent.getId()).get();
+
+        assertThat(Objects.requireNonNull(cachedAgent).getId()).isEqualTo(tempAgent.getId());
+
+        //Undo the effects
+        agentService.deleteById(tempAgent.getId());
+    }
+
+    @Test
+    public void updateAgentNameUpdatesCachedValue() {
+        Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
+                LocalDateTime.now(), LocalDateTime.now(), true).get();
+        agentService.save(tempAgent);
+
+        String newValue = "newUserName";
+        agentService.updateAgentName(tempAgent.getId(), newValue);
+
+        Agent cachedAgent = (Agent) cache.get(tempAgent.getId()).get();
+
+        assertThat(Objects.requireNonNull(cachedAgent).getId()).isEqualTo(tempAgent.getId());
+        assertThat(Objects.requireNonNull(cachedAgent).getAgentName()).isEqualTo(newValue);
+
+        //Undo the effects
+        agentService.deleteById(tempAgent.getId());
+    }
+
+    @Test
+    public void updatePasswordUpdatesCachedValue() {
+        Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
+                LocalDateTime.now(), LocalDateTime.now(), true).get();
+        agentService.save(tempAgent);
+
+        String newValue = "newPassword";
+        agentService.updatePassword(tempAgent.getId(), newValue);
+
+        Agent cachedAgent = (Agent) cache.get(tempAgent.getId()).get();
+
+        assertThat(Objects.requireNonNull(cachedAgent).getId()).isEqualTo(tempAgent.getId());
+        assertThat(Objects.requireNonNull(cachedAgent).getPassword()).isEqualTo(newValue);
+
+        //Undo the effects
+        agentService.deleteById(tempAgent.getId());
+    }
+
+    @Test
+    public void updateIsActiveUpdatesCachedValue() {
+        Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
+                LocalDateTime.now(), LocalDateTime.now(), true).get();
+        agentService.save(tempAgent);
+
+        agentService.updateIsActive(tempAgent.getId(), false);
+
+        Agent cachedAgent = (Agent) cache.get(tempAgent.getId()).get();
+
+        assertThat(Objects.requireNonNull(cachedAgent).getId()).isEqualTo(tempAgent.getId());
+        assertFalse(Objects.requireNonNull(cachedAgent).getActive());
+
+        //Undo the effects
+        agentService.deleteById(tempAgent.getId());
+    }
+
+    @Test
+    public void updateLastActiveTimeUpdatesCachedValue() {
+        Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
+                LocalDateTime.now(), LocalDateTime.now().minusMinutes(15), true).get();
+        agentService.save(tempAgent);
+
+        LocalDateTime newTime = LocalDateTime.now();
+        agentService.updateLastActiveTime(tempAgent.getId(), newTime);
+
+        Agent cachedAgent = (Agent) cache.get(tempAgent.getId()).get();
+
+        assertThat(Objects.requireNonNull(cachedAgent).getId()).isEqualTo(tempAgent.getId());
+        assertThat(Objects.requireNonNull(cachedAgent).getLastActiveTime()).isEqualTo(newTime);
+
+        //Undo the effects
+        agentService.deleteById(tempAgent.getId());
+    }
+
+    @Test
+    public void deleteEvictsDeletedValue() {
+        Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
+                LocalDateTime.now(), LocalDateTime.now().minusMinutes(15), true).get();
+        agentService.save(tempAgent);
+
+        agentService.deleteById(tempAgent.getId());
+        Object cachedAgent = cache.get(tempAgent.getId());
+
+        assertThat(cachedAgent).isNull();
+    }
+
+    @Test
+    public void findByCachesSuccessfulFind() {
+        // Place agent1 into cache
+        agentService.findById(agent1.getId());
+
+        Agent cachedAgent = (Agent) cache.get(agent1.getId()).get();
+
+        assertThat(Objects.requireNonNull(cachedAgent).getId()).isEqualTo(agent1.getId());
+    }
+
+    @Test
+    public void findByDoesNotCacheFailedFind() {
+        Long id = 9999L;
+        // Place agent1 into cache
+        agentService.findById(id);
+
+        Object cachedAgent = cache.get(id).get();
+
+        assertThat(cachedAgent).isNull();
     }
 }
