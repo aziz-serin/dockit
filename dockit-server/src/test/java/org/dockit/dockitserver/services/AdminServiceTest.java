@@ -1,15 +1,19 @@
 package org.dockit.dockitserver.services;
 
 import org.dockit.dockitserver.DockitServerApplication;
+import org.dockit.dockitserver.caching.CacheNames;
 import org.dockit.dockitserver.entities.Admin;
 import org.dockit.dockitserver.services.templates.AdminService;
 import org.dockit.dockitserver.entities.utils.EntityCreator;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,6 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,12 +35,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AdminServiceTest {
 
+    private static final String CACHE_NAME = CacheNames.ADMIN;
+
+    @Autowired
+    private CacheManager cacheManager;
+
     @Autowired
     private AdminService adminService;
 
     private Admin admin1;
     private Admin admin2;
     private Admin admin3;
+    private Cache cache;
 
     @BeforeAll
     public void setup() {
@@ -47,6 +58,12 @@ public class AdminServiceTest {
 
         admin3 = EntityCreator.createAdmin("admin3", "password3", Admin.Role.SUPER).get();
         adminService.save(admin3);
+        cache = Objects.requireNonNull(cacheManager.getCache(CACHE_NAME));
+    }
+
+    @AfterEach
+    public void clearCache() {
+        Objects.requireNonNull(cacheManager.getCache(CACHE_NAME)).clear();
     }
 
     @Test
@@ -166,5 +183,95 @@ public class AdminServiceTest {
 
         // Undo the effects of the test
         adminService.updateRole(admin1.getId(), Admin.Role.VIEWER);
+    }
+
+    @Test
+    public void saveUpdatesCache() {
+        Admin tempAdmin = EntityCreator.createAdmin("tempAdmin", "password2", Admin.Role.EDITOR).get();
+        adminService.save(tempAdmin);
+
+        Admin cachedAdmin = (Admin) cache.get(tempAdmin.getId()).get();
+
+        assertThat(Objects.requireNonNull(cachedAdmin).getId()).isEqualTo(tempAdmin.getId());
+
+        //Undo the effects of this test
+        adminService.deleteById(tempAdmin.getId());
+    }
+
+    @Test
+    public void updateUserNameUpdatesCachedValue() {
+        Admin tempAdmin = EntityCreator.createAdmin("tempAdmin", "password2", Admin.Role.EDITOR).get();
+        adminService.save(tempAdmin);
+        String newUsername = "newTempId";
+
+        adminService.updateUsername(tempAdmin.getId(), newUsername);
+
+        Admin cachedAdmin = (Admin) cache.get(tempAdmin.getId()).get();
+        assertThat(Objects.requireNonNull(cachedAdmin).getId()).isEqualTo(tempAdmin.getId());
+        assertThat(Objects.requireNonNull(cachedAdmin).getUsername()).isEqualTo(newUsername);
+
+        //Undo the effects of this test
+        adminService.deleteById(tempAdmin.getId());
+    }
+
+    @Test
+    public void updatePasswordUpdatesCachedValue() {
+        Admin tempAdmin = EntityCreator.createAdmin("tempAdmin", "password2", Admin.Role.EDITOR).get();
+        adminService.save(tempAdmin);
+        String newPassword = "newPassword";
+
+        adminService.updatePassword(tempAdmin.getId(), newPassword);
+
+        Admin cachedAdmin = (Admin) cache.get(tempAdmin.getId()).get();
+        assertThat(Objects.requireNonNull(cachedAdmin).getId()).isEqualTo(tempAdmin.getId());
+        assertThat(Objects.requireNonNull(cachedAdmin).getPassword()).isEqualTo(newPassword);
+
+        //Undo the effects of this test
+        adminService.deleteById(tempAdmin.getId());
+    }
+
+    @Test
+    public void updateRoleUpdatesCachedValue() {
+        Admin tempAdmin = EntityCreator.createAdmin("tempAdmin", "password2", Admin.Role.EDITOR).get();
+        adminService.save(tempAdmin);
+        Admin.Role newRole = Admin.Role.SUPER;
+
+        adminService.updateRole(tempAdmin.getId(), newRole);
+
+        Admin cachedAdmin = (Admin) cache.get(tempAdmin.getId()).get();
+        assertThat(Objects.requireNonNull(cachedAdmin).getId()).isEqualTo(tempAdmin.getId());
+        assertThat(Objects.requireNonNull(cachedAdmin).getPrivilege()).isEqualTo(newRole);
+
+        //Undo the effects of this test
+        adminService.deleteById(tempAdmin.getId());
+    }
+
+    @Test
+    public void deleteByIdEvictsItemFromCache() {
+        Admin tempAdmin = EntityCreator.createAdmin("tempAdmin", "password2", Admin.Role.EDITOR).get();
+        adminService.save(tempAdmin);
+
+        adminService.deleteById(tempAdmin.getId());
+
+        Object cachedAdmin = cache.get(tempAdmin.getId());
+        assertThat(cachedAdmin).isNull();
+    }
+
+    @Test
+    public void findByIdCachesResultForSuccessfulFind() {
+        //Cache the admin using findById
+        adminService.findById(admin3.getId()).get();
+
+        Admin cachedAdmin = (Admin) cache.get(admin3.getId()).get();
+        assertThat(Objects.requireNonNull(cachedAdmin).getId()).isEqualTo(admin3.getId());
+    }
+
+    @Test
+    public void findByIdDoesNotCacheResultForFailedFind() {
+        //Cache the admin using findById
+        adminService.findById(9999L);
+
+        Object admin =  cache.get(admin3.getId());
+        assertThat(admin).isNull();
     }
 }
