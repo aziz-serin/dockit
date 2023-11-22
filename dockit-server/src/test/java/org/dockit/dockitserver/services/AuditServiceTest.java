@@ -1,6 +1,7 @@
 package org.dockit.dockitserver.services;
 
 import org.dockit.dockitserver.DockitServerApplication;
+import org.dockit.dockitserver.caching.CacheNames;
 import org.dockit.dockitserver.entities.Audit;
 import org.dockit.dockitserver.services.templates.AuditService;
 import org.dockit.dockitserver.entities.utils.EntityCreator;
@@ -10,12 +11,15 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,9 +33,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AuditServiceTest {
 
+    private static final String CACHE_NAME = CacheNames.AUDIT;
+
     @Autowired
     private AuditService auditService;
+    @Autowired
+    private CacheManager cacheManager;
 
+    private Cache cache;
     private Audit audit1;
     private Audit audit2;
     private Audit audit3;
@@ -50,6 +59,8 @@ public class AuditServiceTest {
 
         audit4 = EntityCreator.createAudit("vm4", "resource_usage", LocalDateTime.now().minusHours(5), "data4").get();
         auditService.save(audit4);
+
+        cache = Objects.requireNonNull(cacheManager.getCache(CACHE_NAME));
     }
 
     @Test
@@ -187,5 +198,56 @@ public class AuditServiceTest {
         assertThat(audits).hasSize(1);
         assertThat(audits.get(0).getVmId()).isEqualTo(audit2.getVmId());
         assertThat(audits.get(0).getTimeStamp()).isBetween(startInterval, endInterval);
+    }
+
+    @Test
+    public void saveCachesAudit() {
+        Audit tempAudit = EntityCreator.createAudit("vm4",
+                "resource_usage",
+                LocalDateTime.now().minusHours(5),
+                "data4").get();
+        auditService.save(tempAudit);
+
+        Audit cachedAudit = (Audit) cache.get(tempAudit.getId()).get();
+
+        assertThat(Objects.requireNonNull(cachedAudit).getId()).isEqualTo(tempAudit.getId());
+
+        //Undo changes
+        auditService.deleteById(tempAudit.getId());
+    }
+
+    @Test
+    public void deleteByIdEvictsFromCache() {
+        Audit tempAudit = EntityCreator.createAudit("vm4",
+                "resource_usage",
+                LocalDateTime.now().minusHours(5),
+                "data4").get();
+        auditService.save(tempAudit);
+
+        auditService.deleteById(tempAudit.getId());
+
+        Object cachedAudit = cache.get(tempAudit.getId());
+
+        assertThat(cachedAudit).isNull();
+    }
+
+    @Test
+    public void findByIdCachesResultOnSuccessfulFind() {
+        // Place audit1 in the cache
+        auditService.findById(audit1.getId());
+
+        Audit cachedAudit = (Audit) cache.get(audit1.getId()).get();
+
+        assertThat(Objects.requireNonNull(cachedAudit).getId()).isEqualTo(audit1.getId());
+    }
+
+    @Test
+    public void findByIdDoesNotCacheResultOnFailedFind() {
+        // Place audit1 in the cache
+        auditService.findById(999L);
+
+        Object cachedAudit = cache.get(999L).get();
+
+        assertThat(cachedAudit).isNull();
     }
 }
