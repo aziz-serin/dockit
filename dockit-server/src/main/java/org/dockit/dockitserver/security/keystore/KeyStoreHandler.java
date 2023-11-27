@@ -17,7 +17,7 @@ import java.util.Optional;
 @Component
 public class KeyStoreHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(KeyStoreHandler.class)
+    private static final Logger logger = LoggerFactory.getLogger(KeyStoreHandler.class);
     private final KeyStore keyStore;
 
     @Autowired
