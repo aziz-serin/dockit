@@ -39,7 +39,7 @@ public class Config {
         properties.put(ConfigConstants.AGENT_CACHE_SIZE.toString(), maxAgentCacheSize.toString());
         properties.put(ConfigConstants.AUDIT_CACHE_SIZE.toString(), maxAuditCacheSize.toString());
         properties.put(ConfigConstants.ADMIN_CACHE_SIZE.toString(), maxAdminCacheSize.toString());
-        properties.put(ConfigConstants.ACCESS_TOKEN_CACHE_SIZE.toString(), maxAccessTokenCacheSize.toString());
+        properties.put(ConfigConstants.API_KEY_CACHE_SIZE.toString(), maxAccessTokenCacheSize.toString());
         properties.put(ConfigConstants.MAX_AGENT_AMOUNT.toString(), maxAgentSize.toString());
         properties.put(ConfigConstants.KEYSTORE_PASSWORD.toString(), keyStorePassword);
         return properties;

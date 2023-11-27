@@ -74,7 +74,7 @@ public class ConfigTest {
                 .isEqualTo(MAX_CACHE_SIZE.toString());
         assertThat(properties.getProperty(ConfigConstants.AUDIT_CACHE_SIZE.toString()))
                 .isEqualTo(MAX_CACHE_SIZE.toString());
-        assertThat(properties.getProperty(ConfigConstants.ACCESS_TOKEN_CACHE_SIZE.toString()))
+        assertThat(properties.getProperty(ConfigConstants.API_KEY_CACHE_SIZE.toString()))
                 .isEqualTo(MAX_CACHE_SIZE.toString());
     }
 }

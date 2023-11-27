@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Properties;
 
 public class PropertiesManager {
@@ -32,7 +31,7 @@ public class PropertiesManager {
         properties.put(ConfigConstants.AGENT_CACHE_SIZE.toString(), ConfigConstants.DEFAULT_AGENT_CACHE_SIZE.toString());
         properties.put(ConfigConstants.AUDIT_CACHE_SIZE.toString(), ConfigConstants.DEFAULT_AUDIT_CACHE_SIZE.toString());
         properties.put(ConfigConstants.ADMIN_CACHE_SIZE.toString(), ConfigConstants.DEFAULT_ADMIN_CACHE_SIZE.toString());
-        properties.put(ConfigConstants.ACCESS_TOKEN_CACHE_SIZE.toString(), ConfigConstants.DEFAULT_ACCESS_TOKEN_CACHE_SIZE.toString());
+        properties.put(ConfigConstants.API_KEY_CACHE_SIZE.toString(), ConfigConstants.DEFAULT_API_KEY_CACHE_SIZE.toString());
         properties.put(ConfigConstants.KEYSTORE_PASSWORD.toString(), ConfigConstants.DEFAULT_KEYSTORE_PASSWORD.toString());
         return properties;
     }

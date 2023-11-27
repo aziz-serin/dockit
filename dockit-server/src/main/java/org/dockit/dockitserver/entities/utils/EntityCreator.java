@@ -1,6 +1,6 @@
 package org.dockit.dockitserver.entities.utils;
 
-import org.dockit.dockitserver.entities.AccessToken;
+import org.dockit.dockitserver.entities.APIKey;
 import org.dockit.dockitserver.entities.Admin;
 import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.Audit;
@@ -46,13 +46,14 @@ public class EntityCreator {
         return Optional.of(audit);
     }
 
-    public static Optional<AccessToken> createAccessToken(String token, LocalDateTime expiryTime) {
-        if (!EntityValidator.validAccessToken(token, expiryTime)) {
+    public static Optional<APIKey> createAPIKey(String token, LocalDateTime expiryTime, Agent agent) {
+        if (!EntityValidator.validAPIKey(token, expiryTime, agent)) {
             return Optional.empty();
         }
-        AccessToken accessToken = new AccessToken();
-        accessToken.setToken(token);
-        accessToken.setExpiryDate(expiryTime);
-        return Optional.of(accessToken);
+        APIKey APIKey = new APIKey();
+        APIKey.setToken(token);
+        APIKey.setExpiryDate(expiryTime);
+        APIKey.setAgent(agent);
+        return Optional.of(APIKey);
     }
 }

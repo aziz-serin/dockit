@@ -20,7 +20,7 @@ public class PropertiesManagerTest {
     final static String AGENT_CACHE_SIZE_KEY = ConfigConstants.AGENT_CACHE_SIZE.toString();
     final static String AUDIT_CACHE_SIZE_KEY = ConfigConstants.AUDIT_CACHE_SIZE.toString();
     final static String ADMIN_CACHE_SIZE_KEY = ConfigConstants.ADMIN_CACHE_SIZE.toString();
-    final static String TOKEN_CACHE_SIZE_KEY = ConfigConstants.ACCESS_TOKEN_CACHE_SIZE.toString();
+    final static String TOKEN_CACHE_SIZE_KEY = ConfigConstants.API_KEY_CACHE_SIZE.toString();
     final static String KEY_STORE_PASSWORD_KEY = ConfigConstants.KEYSTORE_PASSWORD.toString();
     final static String MAX_AGENT_KEY = ConfigConstants.MAX_AGENT_AMOUNT.toString();
     final static String CACHE_SIZE_VALUE = "15";

@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -12,12 +14,17 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "access_token")
-public class AccessToken implements DTO {
+@Table(name = "api_key")
+public class APIKey implements DTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "agent_id")
+    private Agent agent;
 
     @NotNull
     @Column(name = "expiry_date")
@@ -27,12 +34,21 @@ public class AccessToken implements DTO {
     @Column(name = "token")
     private String token;
 
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
     public LocalDateTime getExpiryDate() {

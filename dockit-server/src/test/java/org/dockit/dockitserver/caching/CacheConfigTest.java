@@ -37,7 +37,7 @@ public class CacheConfigTest {
         assertThat(cacheManager.getCacheNames()).hasSize(4);
         assertThat(cacheManager.getCacheNames()).containsAll(List.of(
                 CacheNames.AUDIT,
-                CacheNames.ACCESS_TOKEN,
+                CacheNames.API_KEY,
                 CacheNames.AGENT,
                 CacheNames.ADMIN
         ));

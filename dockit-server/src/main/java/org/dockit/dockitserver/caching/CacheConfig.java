@@ -29,7 +29,7 @@ public class CacheConfig {
         cacheManager.registerCustomCache(CacheNames.ADMIN,
                 buildCache(15, config.getMaxAdminCacheSize().intValue(), 5));
 
-        cacheManager.registerCustomCache(CacheNames.ACCESS_TOKEN,
+        cacheManager.registerCustomCache(CacheNames.API_KEY,
                 buildCache(15, config.getMaxAdminCacheSize().intValue(), 1));
         return cacheManager;
     }

@@ -1,6 +1,7 @@
 package org.dockit.dockitserver.entities.utils;
 
 import org.dockit.dockitserver.entities.Admin;
+import org.dockit.dockitserver.entities.Agent;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +19,7 @@ public class EntityValidator {
         return vmId != null && category != null && timeStamp.isBefore(LocalDateTime.now()) && data != null;
     }
 
-    protected static boolean validAccessToken(String token, LocalDateTime expiryTime) {
-        return token != null && expiryTime.isAfter(LocalDateTime.now());
+    protected static boolean validAPIKey(String token, LocalDateTime expiryTime, Agent agent) {
+        return token != null && expiryTime.isAfter(LocalDateTime.now()) && agent != null;
     }
 }

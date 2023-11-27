@@ -9,8 +9,8 @@ public enum ConfigConstants {
     DEFAULT_AUDIT_CACHE_SIZE,
     ADMIN_CACHE_SIZE,
     DEFAULT_ADMIN_CACHE_SIZE,
-    ACCESS_TOKEN_CACHE_SIZE,
-    DEFAULT_ACCESS_TOKEN_CACHE_SIZE,
+    API_KEY_CACHE_SIZE,
+    DEFAULT_API_KEY_CACHE_SIZE,
     KEYSTORE_PASSWORD,
     DEFAULT_INSTALL_LOCATION,
     DEFAULT_KEYSTORE_NAME,
@@ -27,8 +27,8 @@ public enum ConfigConstants {
             case DEFAULT_AUDIT_CACHE_SIZE -> "5000";
             case ADMIN_CACHE_SIZE -> "admin_cache_size";
             case DEFAULT_ADMIN_CACHE_SIZE -> "50";
-            case ACCESS_TOKEN_CACHE_SIZE -> "access_token_cache_size";
-            case DEFAULT_ACCESS_TOKEN_CACHE_SIZE -> "50";
+            case API_KEY_CACHE_SIZE -> "api_key_cache_size";
+            case DEFAULT_API_KEY_CACHE_SIZE -> "50";
             case KEYSTORE_PASSWORD -> "keystore_password";
             case DEFAULT_INSTALL_LOCATION -> ".dockit";
             case DEFAULT_KEYSTORE_NAME -> "keystore.jks";
