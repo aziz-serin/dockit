@@ -4,7 +4,6 @@ import org.dockit.dockitserver.entities.AccessToken;
 import org.dockit.dockitserver.entities.Admin;
 import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.Audit;
-import org.dockit.dockitserver.entities.RefreshToken;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -55,15 +54,5 @@ public class EntityCreator {
         accessToken.setToken(token);
         accessToken.setExpiryDate(expiryTime);
         return Optional.of(accessToken);
-    }
-
-    public static Optional<RefreshToken> createRefreshToken(String token, LocalDateTime expiryTime) {
-        if (!EntityValidator.validRefreshToken(token, expiryTime)) {
-            return Optional.empty();
-        }
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setToken(token);
-        refreshToken.setExpiryDate(expiryTime);
-        return Optional.of(refreshToken);
     }
 }

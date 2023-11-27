@@ -21,8 +21,4 @@ public class EntityValidator {
     protected static boolean validAccessToken(String token, LocalDateTime expiryTime) {
         return token != null && expiryTime.isAfter(LocalDateTime.now());
     }
-
-    protected static boolean validRefreshToken(String token, LocalDateTime expiryTime) {
-        return token != null && expiryTime.isAfter(LocalDateTime.now());
-    }
 }
