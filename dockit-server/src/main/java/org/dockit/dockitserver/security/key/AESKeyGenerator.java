@@ -15,9 +15,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 
 public class AESKeyGenerator {
-
     private static final Logger logger = LoggerFactory.getLogger(AESKeyGenerator.class);
-
 
     protected static Optional<Key> generateKey(String algorithm) {
         try {

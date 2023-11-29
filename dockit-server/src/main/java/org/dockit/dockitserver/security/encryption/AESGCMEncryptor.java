@@ -42,7 +42,6 @@ public class AESGCMEncryptor {
         return Base64.getEncoder().encodeToString(cipherByte);
     }
 
-
     public String decrypt(String data, String authenticationTagData, SecretKey key) throws
             InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,
             IllegalBlockSizeException, BadPaddingException {

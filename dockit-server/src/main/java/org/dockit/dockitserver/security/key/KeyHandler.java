@@ -39,6 +39,4 @@ public class KeyHandler {
             throw new AgentKeyCreationException("Something went wrong saving the key!");
         }
     }
-
-
 }

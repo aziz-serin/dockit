@@ -45,5 +45,4 @@ public class AESCBCEncryptor {
                 .decode(cipherText));
         return new String(plainText);
     }
-
 }
