@@ -29,7 +29,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @CachePut(key = "#admin.id")
     public Admin save(Admin admin) {
-        // TODO encrypt username and password fields
+        // TODO Hash username and password fields
         return adminRepository.save(admin);
     }
 

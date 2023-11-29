@@ -33,7 +33,7 @@ public class AgentServiceImpl implements AgentService {
     @Override
     @CachePut(key = "#agent.id")
     public Agent save(Agent agent) {
-        // `TODO: Encrypt agentName and agentPassword
+        // `TODO: Hash agentName and agentPassword
         return agentRepository.save(agent);
     }
 
