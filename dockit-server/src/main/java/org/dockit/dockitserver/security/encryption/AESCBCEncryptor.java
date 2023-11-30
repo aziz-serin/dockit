@@ -15,15 +15,14 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-@Component
 public class AESCBCEncryptor {
-    private IvParameterSpec generateIv() {
+    private static IvParameterSpec generateIv() {
         byte[] iv = new byte[KeyConstants.IV_SIZE_CBC];
         new SecureRandom().nextBytes(iv);
         return new IvParameterSpec(iv);
     }
 
-    public String encrypt(String input, SecretKey key) throws NoSuchPaddingException, NoSuchAlgorithmException,
+    public static String encrypt(String input, SecretKey key) throws NoSuchPaddingException, NoSuchAlgorithmException,
             InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
 
         IvParameterSpec iv = generateIv();
@@ -35,7 +34,7 @@ public class AESCBCEncryptor {
         return Base64.getEncoder().encodeToString(cipherText);
     }
 
-    public String decrypt(String cipherText, SecretKey key) throws NoSuchPaddingException, NoSuchAlgorithmException,
+    public static String decrypt(String cipherText, SecretKey key) throws NoSuchPaddingException, NoSuchAlgorithmException,
             InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
         IvParameterSpec iv = generateIv();

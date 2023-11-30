@@ -18,10 +18,10 @@ import java.util.Base64;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-@Component
+
 public class AESGCMEncryptor {
 
-    public String encrypt(String data, String authenticationTagData, SecretKey key) throws NoSuchPaddingException,
+    public static String encrypt(String data, String authenticationTagData, SecretKey key) throws NoSuchPaddingException,
             NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException,
             BadPaddingException {
 
@@ -42,7 +42,7 @@ public class AESGCMEncryptor {
         return Base64.getEncoder().encodeToString(cipherByte);
     }
 
-    public String decrypt(String data, String authenticationTagData, SecretKey key) throws
+    public static String decrypt(String data, String authenticationTagData, SecretKey key) throws
             InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,
             IllegalBlockSizeException, BadPaddingException {
         byte[] decodedToDecrypt = Base64.getDecoder().decode(data);
@@ -62,13 +62,13 @@ public class AESGCMEncryptor {
         return Base64.getEncoder().encodeToString(decryptedBytes);
     }
 
-    private byte[] getRandomBytes(int length) {
+    private static byte[] getRandomBytes(int length) {
         byte[] nonce = new byte[length];
         new SecureRandom().nextBytes(nonce);
         return nonce;
     }
 
-    private Cipher initCipher(int mode, SecretKey secretKey, byte[] iv) throws InvalidKeyException,
+    private static Cipher initCipher(int mode, SecretKey secretKey, byte[] iv) throws InvalidKeyException,
             InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchAlgorithmException {
         Cipher cipher = Cipher.getInstance(KeyConstants.AES_GCM_CIPHER);
         cipher.init(mode, secretKey, new GCMParameterSpec(KeyConstants.GCM_TAG_LENGTH, iv));
