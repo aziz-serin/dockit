@@ -35,7 +35,7 @@ public class KeyStoreHandler {
             keyStore.setEntry(alias, secret, password);
             return true;
         } catch (KeyStoreException e) {
-            logger.debug("Invalid password, check the exception: {}", e.getMessage());
+            logger.debug("Possibly invalid password, check the exception: {}", e.getMessage());
             return false;
         }
     }
@@ -43,12 +43,15 @@ public class KeyStoreHandler {
     public Optional<Key> getKey(String alias, char[] pwdArray) {
         KeyStore keyStore = configContainer.getKeyStore();
         try {
-            return Optional.of(keyStore.getKey(alias, pwdArray));
+            return Optional.ofNullable(keyStore.getKey(alias, pwdArray));
         } catch (KeyStoreException | NoSuchAlgorithmException e) {
             logger.debug("Could not retrieve the key {} from keystore, check the exception: {}", alias, e.getMessage());
             return Optional.empty();
         } catch (UnrecoverableKeyException e) {
             logger.debug("Possibly wrong password, check: {}", e.getMessage());
+            return Optional.empty();
+        } catch (IllegalArgumentException e) {
+            logger.debug(e.getMessage());
             return Optional.empty();
         }
     }
