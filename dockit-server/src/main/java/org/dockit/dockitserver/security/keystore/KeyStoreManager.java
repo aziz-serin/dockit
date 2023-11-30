@@ -57,7 +57,7 @@ public class KeyStoreManager {
             return null;
         }
         try {
-            KeyStore keyStore = KeyStore.getInstance("JKS");
+            KeyStore keyStore = KeyStore.getInstance("JCEKS");
             char[] pwdArray = password.toCharArray();
             // This creates the keyStore
             if (path == null) {
