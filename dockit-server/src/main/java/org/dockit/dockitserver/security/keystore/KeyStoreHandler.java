@@ -18,11 +18,11 @@ import java.util.Optional;
 public class KeyStoreHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(KeyStoreHandler.class);
-    private final KeyStore keyStore;
+    private final ConfigContainer configContainer;
 
     @Autowired
     public KeyStoreHandler(ConfigContainer configContainer) {
-        this.keyStore = configContainer.getKeyStore();
+        this.configContainer = configContainer;
     }
 
     public boolean saveKey(String alias, SecretKey secretKey, char[] pwdArray) {
@@ -30,6 +30,7 @@ public class KeyStoreHandler {
                 = new KeyStore.SecretKeyEntry(secretKey);
         KeyStore.ProtectionParameter password
                 = new KeyStore.PasswordProtection(pwdArray);
+        KeyStore keyStore= configContainer.getKeyStore();
         try {
             keyStore.setEntry("alias", secret, password);
             return true;
@@ -40,6 +41,7 @@ public class KeyStoreHandler {
     }
 
     public Optional<Key> getKey(String alias, char[] pwdArray) {
+        KeyStore keyStore= configContainer.getKeyStore();
         try {
             return Optional.of(keyStore.getKey(alias, pwdArray));
         } catch (KeyStoreException | NoSuchAlgorithmException e) {
@@ -52,6 +54,7 @@ public class KeyStoreHandler {
     }
 
     public boolean keyExists(String alias) {
+        KeyStore keyStore= configContainer.getKeyStore();
         try {
             return keyStore.containsAlias(alias);
         } catch (KeyStoreException e) {
@@ -61,6 +64,7 @@ public class KeyStoreHandler {
     }
 
     public void deleteKey(String alias) {
+        KeyStore keyStore= configContainer.getKeyStore();
         try {
             keyStore.deleteEntry(alias);
         } catch (KeyStoreException e) {
