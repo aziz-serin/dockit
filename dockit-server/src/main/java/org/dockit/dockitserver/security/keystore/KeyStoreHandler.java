@@ -30,9 +30,9 @@ public class KeyStoreHandler {
                 = new KeyStore.SecretKeyEntry(secretKey);
         KeyStore.ProtectionParameter password
                 = new KeyStore.PasswordProtection(pwdArray);
-        KeyStore keyStore= configContainer.getKeyStore();
+        KeyStore keyStore = configContainer.getKeyStore();
         try {
-            keyStore.setEntry("alias", secret, password);
+            keyStore.setEntry(alias, secret, password);
             return true;
         } catch (KeyStoreException e) {
             logger.debug("Invalid password, check the exception: {}", e.getMessage());
@@ -41,7 +41,7 @@ public class KeyStoreHandler {
     }
 
     public Optional<Key> getKey(String alias, char[] pwdArray) {
-        KeyStore keyStore= configContainer.getKeyStore();
+        KeyStore keyStore = configContainer.getKeyStore();
         try {
             return Optional.of(keyStore.getKey(alias, pwdArray));
         } catch (KeyStoreException | NoSuchAlgorithmException e) {
@@ -54,7 +54,7 @@ public class KeyStoreHandler {
     }
 
     public boolean keyExists(String alias) {
-        KeyStore keyStore= configContainer.getKeyStore();
+        KeyStore keyStore = configContainer.getKeyStore();
         try {
             return keyStore.containsAlias(alias);
         } catch (KeyStoreException e) {
@@ -64,7 +64,7 @@ public class KeyStoreHandler {
     }
 
     public void deleteKey(String alias) {
-        KeyStore keyStore= configContainer.getKeyStore();
+        KeyStore keyStore = configContainer.getKeyStore();
         try {
             keyStore.deleteEntry(alias);
         } catch (KeyStoreException e) {
