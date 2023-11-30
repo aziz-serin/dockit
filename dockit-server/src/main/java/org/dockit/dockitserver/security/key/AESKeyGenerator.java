@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -12,6 +11,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.util.Optional;
 
 public class AESKeyGenerator {
@@ -44,14 +44,18 @@ public class AESKeyGenerator {
         return keyGenerator.generateKey();
     }
 
-    private static Key generatePasswordBasedAESKey(String cipher, int keySize, char[] password) throws NoSuchAlgorithmException,
+    private static Key generatePasswordBasedAESKey(String algorithm, int keySize, char[] password) throws NoSuchAlgorithmException,
             InvalidKeySpecException {
-        byte[] salt = new byte[100];
+        if (!algorithm.contains("AES")) {
+            throw new NoSuchAlgorithmException();
+        }
+        byte[] salt = new byte[128];
         SecureRandom random = new SecureRandom();
         random.nextBytes(salt);
-        PBEKeySpec pbeKeySpec = new PBEKeySpec(password, salt, 1000, keySize);
-        SecretKey pbeKey = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(pbeKeySpec);
-        return new SecretKeySpec(pbeKey.getEncoded(), cipher);
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+        KeySpec spec = new PBEKeySpec(password, salt, 65536, keySize);
+        return new SecretKeySpec(factory.generateSecret(spec)
+                .getEncoded(), algorithm);
     }
 
 }

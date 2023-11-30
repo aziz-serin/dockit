@@ -5,7 +5,7 @@ public class KeyConstants {
     public static final String AES_CIPHER = "AES";
 
     // AES key size in bits
-    public static final int KEY_SIZE = 256;
+    public static final int KEY_SIZE = 128;
 
     // Initialisation vector size for encryption in bytes, so 12 * 8 = 96 bits.
     public static final int IV_SIZE_GCM = 12;
