@@ -37,6 +37,11 @@ public class AESKeyGeneratorTest {
     }
 
     @Test
+    public void generateKeyWithPasswordFailsGivenNullPassword() {
+        assertTrue(AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, null).isEmpty());
+    }
+
+    @Test
     public void generateKeyWithPasswordReturnsValidKey() {
         Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, PASSWORD);
 

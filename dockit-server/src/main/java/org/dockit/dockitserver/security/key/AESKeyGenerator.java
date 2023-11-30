@@ -27,6 +27,10 @@ public class AESKeyGenerator {
     }
 
     protected static Optional<Key> generateKey(String algorithm, String password) {
+        if (password == null) {
+            logger.debug("Password cannot be null when creating key!");
+            return Optional.empty();
+        }
         try {
             return Optional.of(generatePasswordBasedAESKey(algorithm, KeyConstants.KEY_SIZE, password.toCharArray()));
         } catch (NoSuchAlgorithmException e) {
