@@ -1,7 +1,7 @@
 package org.dockit.dockitserver.security.encryption;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.dockit.dockitserver.security.key.KeyConstants;
-import org.springframework.stereotype.Component;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -9,57 +9,51 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
-import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-
 public class AESGCMEncryptor {
 
-    public static String encrypt(String data, String authenticationTagData, SecretKey key) throws NoSuchPaddingException,
+    public static String encrypt(String data, String aad, SecretKey key) throws NoSuchPaddingException,
             NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException,
             BadPaddingException {
 
+        if (data == null || aad == null || key == null) {
+            throw new IllegalArgumentException();
+        }
+
         byte[] IV = getRandomBytes(KeyConstants.IV_SIZE_GCM);
-        byte[] authenticationTagDataBytes = authenticationTagData.getBytes();
 
         Cipher cipher = initCipher(Cipher.ENCRYPT_MODE, key, IV);
+        cipher.updateAAD(Base64.getDecoder().decode(aad));
 
-        cipher.updateAAD(authenticationTagDataBytes);
-        byte[] encryptedBytes = cipher.doFinal(data.getBytes(UTF_8));
-
-        byte[] cipherByte = ByteBuffer
-                .allocate(IV.length + authenticationTagDataBytes.length + encryptedBytes.length)
-                .put(IV)
-                .put(authenticationTagDataBytes)
-                .put(encryptedBytes)
-                .array();
+        byte[] encryptedBytes = cipher.doFinal(data.getBytes());
+        byte[] cipherByte = ArrayUtils.addAll(IV, encryptedBytes);
         return Base64.getEncoder().encodeToString(cipherByte);
     }
 
-    public static String decrypt(String data, String authenticationTagData, SecretKey key) throws
+    public static String decrypt(String data, String aad, SecretKey key) throws
             InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,
             IllegalBlockSizeException, BadPaddingException {
-        byte[] decodedToDecrypt = Base64.getDecoder().decode(data);
-        byte[] IV = new byte[KeyConstants.IV_SIZE_GCM];
-        byte[] authenticationTagDataBytes = authenticationTagData.getBytes();
 
-        System.arraycopy(decodedToDecrypt, 0, IV, 0, IV.length);
+        if (data == null || aad == null || key == null) {
+            throw new IllegalArgumentException();
+        }
+
+        byte[] dataBytes = Base64.getDecoder().decode(data);
+        byte[] IV = ArrayUtils.subarray(dataBytes, 0, KeyConstants.IV_SIZE_GCM);
+        byte[] encryptedBytes = ArrayUtils.subarray(dataBytes, KeyConstants.IV_SIZE_GCM, dataBytes.length);
 
         Cipher cipher = initCipher(Cipher.DECRYPT_MODE, key, IV);
+        cipher.updateAAD(Base64.getDecoder().decode(aad));
 
-        byte[] encryptedBytes = new byte[decodedToDecrypt.length - IV.length];
-        System.arraycopy(decodedToDecrypt, IV.length, encryptedBytes, 0, encryptedBytes.length);
-
-        cipher.updateAAD(authenticationTagDataBytes);
         byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
 
-        return Base64.getEncoder().encodeToString(decryptedBytes);
+        return new String(decryptedBytes, StandardCharsets.UTF_8);
     }
 
     private static byte[] getRandomBytes(int length) {
