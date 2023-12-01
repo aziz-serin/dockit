@@ -17,7 +17,7 @@ import java.util.Optional;
 public class AESKeyGenerator {
     private static final Logger logger = LoggerFactory.getLogger(AESKeyGenerator.class);
 
-    protected static Optional<Key> generateKey(String algorithm) {
+    public static Optional<Key> generateKey(String algorithm) {
         try {
             return Optional.of(generateAESKey(algorithm, KeyConstants.KEY_SIZE));
         } catch (NoSuchAlgorithmException e) {
@@ -26,7 +26,7 @@ public class AESKeyGenerator {
         }
     }
 
-    protected static Optional<Key> generateKey(String algorithm, String password) {
+    public static Optional<Key> generateKey(String algorithm, String password) {
         if (password == null) {
             logger.debug("Password cannot be null when creating key!");
             return Optional.empty();

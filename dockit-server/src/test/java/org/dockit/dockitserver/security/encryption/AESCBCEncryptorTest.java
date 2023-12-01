@@ -3,7 +3,6 @@ package org.dockit.dockitserver.security.encryption;
 import org.dockit.dockitserver.security.key.KeyConstants;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
