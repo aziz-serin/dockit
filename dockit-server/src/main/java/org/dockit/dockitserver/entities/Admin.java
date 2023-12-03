@@ -22,6 +22,7 @@ public class Admin implements DTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "admin_id")
     private Long id;
 
     @Size(max = 512)
