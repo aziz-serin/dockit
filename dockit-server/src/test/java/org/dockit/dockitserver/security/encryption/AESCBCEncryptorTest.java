@@ -72,7 +72,7 @@ public class AESCBCEncryptorTest {
 
     @Test
     public void decryptThrowsExceptionGivenInvalidKey() {
-        assertThrows(InvalidKeyException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             AESCBCEncryptor.decrypt(DATA, invalidKey);
         });
     }
