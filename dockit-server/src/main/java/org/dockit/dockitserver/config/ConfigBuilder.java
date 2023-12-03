@@ -29,7 +29,19 @@ public class ConfigBuilder {
     }
 
     public interface KeyStorePassword {
-        Build keyStorePassword(String keyStorePassword);
+        JwtIssuer keyStorePassword(String keyStorePassword);
+    }
+
+    public interface JwtIssuer {
+        JwtSecretAlias jwtIssuer(String jwtIssuer);
+    }
+
+    public interface JwtSecretAlias {
+        JwtExpirationTime jwtSecretAlias(String jwtSecretAlias);
+    }
+
+    public interface JwtExpirationTime {
+        Build jwtExpirationTime(Integer jwtExpirationTime);
     }
 
     public interface Build {
@@ -37,7 +49,8 @@ public class ConfigBuilder {
     }
 
     private static class Builder implements MaxAgentCacheSize, MaxAuditCacheSize, MaxAdminCacheSize,
-            MaxAccessTokenCacheSize, MaxAgentSize, KeyStorePassword, Build {
+            MaxAccessTokenCacheSize, MaxAgentSize, KeyStorePassword, JwtIssuer, JwtSecretAlias, JwtExpirationTime,
+            Build {
 
         private Long maxAgentCacheSize;
         private Long maxAuditCacheSize;
@@ -45,6 +58,9 @@ public class ConfigBuilder {
         private Long maxAccessTokenCacheSize;
         private Integer maxAgentSize;
         private String keyStorePassword;
+        private String jwtIssuer;
+        private String jwtSecretAlias;
+        private Integer jwtExpirationTime;
 
         @Override
         public MaxAuditCacheSize maxAgentCacheSize(Long maxAgentCacheSize) {
@@ -77,8 +93,26 @@ public class ConfigBuilder {
         }
 
         @Override
-        public Build keyStorePassword(String keyStorePassword) {
+        public JwtIssuer keyStorePassword(String keyStorePassword) {
             this.keyStorePassword = keyStorePassword;
+            return this;
+        }
+
+        @Override
+        public JwtSecretAlias jwtIssuer(String jwtIssuer) {
+            this.jwtIssuer = jwtIssuer;
+            return this;
+        }
+
+        @Override
+        public JwtExpirationTime jwtSecretAlias(String jwtSecretAlias) {
+            this.jwtSecretAlias = jwtSecretAlias;
+            return this;
+        }
+
+        @Override
+        public Build jwtExpirationTime(Integer jwtExpirationTime) {
+            this.jwtExpirationTime = jwtExpirationTime;
             return this;
         }
 
@@ -90,7 +124,10 @@ public class ConfigBuilder {
                     this.maxAdminCacheSize,
                     this.maxAccessTokenCacheSize,
                     this.maxAgentSize,
-                    this.keyStorePassword
+                    this.keyStorePassword,
+                    this.jwtIssuer,
+                    this.jwtSecretAlias,
+                    this.jwtExpirationTime
             );
         }
     }

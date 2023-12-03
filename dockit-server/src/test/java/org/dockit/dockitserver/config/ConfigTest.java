@@ -7,12 +7,14 @@ import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class ConfigTest {
     static Config config;
     static final Integer MAX_AGENT_SIZE = 5;
     static final Long MAX_CACHE_SIZE = 128L;
     static final String KEYSTORE_PASSWORD = "password";
+    static final String JWT_ISSUER = "http://dockit.server.io";
+    static final String JWT_SECRET_ALIAS = "jwtsecret";
+    static final Integer JWT_EXPIRATION_TIME = 60;
 
     @BeforeAll
     public static void setup() {
@@ -23,6 +25,9 @@ public class ConfigTest {
                 .maxAccessTokenCacheSize(MAX_CACHE_SIZE)
                 .maxAgentSize(MAX_AGENT_SIZE)
                 .keyStorePassword(KEYSTORE_PASSWORD)
+                .jwtIssuer(JWT_ISSUER)
+                .jwtSecretAlias(JWT_SECRET_ALIAS)
+                .jwtExpirationTime(JWT_EXPIRATION_TIME)
                 .build();
     }
 
@@ -46,6 +51,20 @@ public class ConfigTest {
         assertThat(MAX_CACHE_SIZE).isEqualTo(config.getMaxAccessTokenCacheSize());
     }
 
+    @Test
+    public void getJwtIssuerReturnsRightCacheSize() {
+        assertThat(JWT_ISSUER).isEqualTo(config.getJwtIssuer());
+    }
+
+    @Test
+    public void getJwtSecretAliasReturnsRightCacheSize() {
+        assertThat(JWT_SECRET_ALIAS).isEqualTo(config.getJwtSecretAlias());
+    }
+
+    @Test
+    public void getJwtExpirationTimeReturnsRightCacheSize() {
+        assertThat(JWT_EXPIRATION_TIME).isEqualTo(config.getJwtExpirationTime());
+    }
 
     @Test
     public void getMaxAgentSizeReturnAgentSize() {
@@ -76,5 +95,11 @@ public class ConfigTest {
                 .isEqualTo(MAX_CACHE_SIZE.toString());
         assertThat(properties.getProperty(ConfigConstants.API_KEY_CACHE_SIZE.toString()))
                 .isEqualTo(MAX_CACHE_SIZE.toString());
+        assertThat(properties.getProperty(ConfigConstants.JWT_ISSUER.toString()))
+                .isEqualTo(JWT_ISSUER);
+        assertThat(properties.getProperty(ConfigConstants.JWT_SECRET_ALIAS.toString()))
+                .isEqualTo(JWT_SECRET_ALIAS);
+        assertThat(properties.getProperty(ConfigConstants.JWT_EXPIRATION_TIME.toString()))
+                .isEqualTo(JWT_EXPIRATION_TIME.toString());
     }
 }

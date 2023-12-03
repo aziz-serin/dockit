@@ -3,12 +3,30 @@ package org.dockit.dockitserver.config;
 import java.util.Properties;
 
 public class Config {
+
     private final Long maxAgentCacheSize;
     private final Long maxAuditCacheSize;
     private final Long maxAdminCacheSize;
     private final Long maxAccessTokenCacheSize;
     private final Integer maxAgentSize;
     private final String keyStorePassword;
+    private final String jwtIssuer;
+    private final String jwtSecretAlias;
+    private final Integer jwtExpirationTime;
+
+    protected Config(Long maxAgentCacheSize, Long maxAuditCacheSize, Long maxAdminCacheSize, Long maxAccessTokenCacheSize,
+                     Integer maxAgentSize, String keyStorePassword, String jwtIssuer, String jwtSecretAlias,
+                     Integer jwtExpirationTime) {
+        this.maxAgentCacheSize = maxAgentCacheSize;
+        this.maxAuditCacheSize = maxAuditCacheSize;
+        this.maxAdminCacheSize = maxAdminCacheSize;
+        this.maxAccessTokenCacheSize = maxAccessTokenCacheSize;
+        this.maxAgentSize = maxAgentSize;
+        this.keyStorePassword = keyStorePassword;
+        this.jwtIssuer = jwtIssuer;
+        this.jwtSecretAlias = jwtSecretAlias;
+        this.jwtExpirationTime = jwtExpirationTime;
+    }
 
     public Long getMaxAgentCacheSize() {
         return maxAgentCacheSize;
@@ -34,6 +52,18 @@ public class Config {
         return keyStorePassword;
     }
 
+    public String getJwtIssuer() {
+        return jwtIssuer;
+    }
+
+    public String getJwtSecretAlias() {
+        return jwtSecretAlias;
+    }
+
+    public Integer getJwtExpirationTime() {
+        return jwtExpirationTime;
+    }
+
     public Properties toProperties() {
         Properties properties = new Properties();
         properties.put(ConfigConstants.AGENT_CACHE_SIZE.toString(), maxAgentCacheSize.toString());
@@ -42,16 +72,9 @@ public class Config {
         properties.put(ConfigConstants.API_KEY_CACHE_SIZE.toString(), maxAccessTokenCacheSize.toString());
         properties.put(ConfigConstants.MAX_AGENT_AMOUNT.toString(), maxAgentSize.toString());
         properties.put(ConfigConstants.KEYSTORE_PASSWORD.toString(), keyStorePassword);
+        properties.put(ConfigConstants.JWT_ISSUER.toString(), jwtIssuer);
+        properties.put(ConfigConstants.JWT_SECRET_ALIAS.toString(), jwtSecretAlias);
+        properties.put(ConfigConstants.JWT_EXPIRATION_TIME.toString(), jwtExpirationTime.toString());
         return properties;
-    }
-
-    protected Config(Long maxAgentCacheSize, Long maxAuditCacheSize, Long maxAdminCacheSize, Long maxAccessTokenCacheSize,
-                   Integer maxAgentSize, String keyStorePassword) {
-        this.maxAgentCacheSize = maxAgentCacheSize;
-        this.maxAuditCacheSize = maxAuditCacheSize;
-        this.maxAdminCacheSize = maxAdminCacheSize;
-        this.maxAccessTokenCacheSize = maxAccessTokenCacheSize;
-        this.maxAgentSize = maxAgentSize;
-        this.keyStorePassword = keyStorePassword;
     }
 }

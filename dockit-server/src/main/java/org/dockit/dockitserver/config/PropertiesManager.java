@@ -33,6 +33,9 @@ public class PropertiesManager {
         properties.put(ConfigConstants.ADMIN_CACHE_SIZE.toString(), ConfigConstants.DEFAULT_ADMIN_CACHE_SIZE.toString());
         properties.put(ConfigConstants.API_KEY_CACHE_SIZE.toString(), ConfigConstants.DEFAULT_API_KEY_CACHE_SIZE.toString());
         properties.put(ConfigConstants.KEYSTORE_PASSWORD.toString(), ConfigConstants.DEFAULT_KEYSTORE_PASSWORD.toString());
+        properties.put(ConfigConstants.JWT_ISSUER.toString(), ConfigConstants.DEFAULT_JWT_ISSUER.toString());
+        properties.put(ConfigConstants.JWT_SECRET_ALIAS.toString(), ConfigConstants.DEFAULT_JWT_SECRET_ALIAS.toString());
+        properties.put(ConfigConstants.JWT_EXPIRATION_TIME.toString(), ConfigConstants.DEFAULT_JWT_EXPIRATION_TIME.toString());
         return properties;
     }
 
@@ -43,8 +46,12 @@ public class PropertiesManager {
         String maxAccessTokenCacheSize = properties.getProperty(ConfigConstants.AGENT_CACHE_SIZE.toString());
         String maxAgentSize = properties.getProperty(ConfigConstants.MAX_AGENT_AMOUNT.toString());
         String keyStorePassword = properties.getProperty(ConfigConstants.KEYSTORE_PASSWORD.toString());
+        String jwtIssuer = properties.getProperty(ConfigConstants.JWT_ISSUER.toString());
+        String jwtSecretAlias = properties.getProperty(ConfigConstants.JWT_SECRET_ALIAS.toString());
+        String jwtExpirationTime = properties.getProperty(ConfigConstants.JWT_EXPIRATION_TIME.toString());
+
         if (isNotInt(maxAgentSize) || isNotInt(maxAgentCacheSize) || isNotInt(maxAuditCacheSize)
-                || isNotInt(maxAdminCacheSize) || isNotInt(maxAccessTokenCacheSize)) {
+                || isNotInt(maxAdminCacheSize) || isNotInt(maxAccessTokenCacheSize) || isNotInt(jwtExpirationTime)) {
             throw new InvalidPropertyException("Invalid property type provided!");
         }
         return ConfigBuilder.newBuilder()
@@ -54,6 +61,9 @@ public class PropertiesManager {
                 .maxAccessTokenCacheSize(Long.parseLong(maxAccessTokenCacheSize))
                 .maxAgentSize(Integer.parseInt(maxAgentSize))
                 .keyStorePassword(keyStorePassword)
+                .jwtIssuer(jwtIssuer)
+                .jwtSecretAlias(jwtSecretAlias)
+                .jwtExpirationTime(Integer.parseInt(jwtExpirationTime))
                 .build();
     }
 

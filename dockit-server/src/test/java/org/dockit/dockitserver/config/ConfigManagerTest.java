@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ConfigManagerTest {
 
     static final String CONFIG_FILE_NAME = "test.properties";
-    static final String KEY_STORE_NAME = "keystore.jks";
+    static final String KEY_STORE_NAME = "keystore.jceks";
     static final String KEY_STORE_PASSWORD = "changeit";
     static final String ROOT_FOLDER_NAME = ".dockit";
     final static String AGENT_CACHE_SIZE_KEY = ConfigConstants.AGENT_CACHE_SIZE.toString();
@@ -26,9 +26,15 @@ public class ConfigManagerTest {
     final static String TOKEN_CACHE_SIZE_KEY = ConfigConstants.API_KEY_CACHE_SIZE.toString();
     final static String KEY_STORE_PASSWORD_KEY = ConfigConstants.KEYSTORE_PASSWORD.toString();
     final static String MAX_AGENT_KEY = ConfigConstants.MAX_AGENT_AMOUNT.toString();
+    final static String JWT_ISSUER_KEY = ConfigConstants.JWT_ISSUER.toString();
+    final static String JWT_SECRET_ALIAS_KEY = ConfigConstants.JWT_SECRET_ALIAS.toString();
+    final static String JWT_EXPIRATION_TIME_KEY = ConfigConstants.JWT_EXPIRATION_TIME.toString();
+
     final static String CACHE_SIZE_VALUE = "15";
-    final static String PASSWORD_VALUE = "changeit";
     final static String MAX_AGENT_SIZE_VALUE = "12";
+    final static String JWT_ISSUER_VALUE = "http://dockit.server.io";
+    final static String JWT_SECRET_ALIAS_VALUE = "jwtsecret";
+    final static String JWT_EXPIRATION_TIME_VALUE = "60";
     static final String SEPARATOR = File.separator;
 
     static ConfigManager configManager;
@@ -44,11 +50,14 @@ public class ConfigManagerTest {
         configWriter = new ConfigWriter();
         properties = new Properties();
         properties.put(AGENT_CACHE_SIZE_KEY, CACHE_SIZE_VALUE);
-        properties.put(AUDIT_CACHE_SIZE_KEY, CACHE_SIZE_VALUE);
         properties.put(ADMIN_CACHE_SIZE_KEY, CACHE_SIZE_VALUE);
+        properties.put(AUDIT_CACHE_SIZE_KEY, CACHE_SIZE_VALUE);
         properties.put(TOKEN_CACHE_SIZE_KEY, CACHE_SIZE_VALUE);
-        properties.put(KEY_STORE_PASSWORD_KEY, PASSWORD_VALUE);
+        properties.put(KEY_STORE_PASSWORD_KEY, KEY_STORE_PASSWORD);
         properties.put(MAX_AGENT_KEY, MAX_AGENT_SIZE_VALUE);
+        properties.put(JWT_ISSUER_KEY, JWT_ISSUER_VALUE);
+        properties.put(JWT_SECRET_ALIAS_KEY, JWT_SECRET_ALIAS_VALUE);
+        properties.put(JWT_EXPIRATION_TIME_KEY, JWT_EXPIRATION_TIME_VALUE);
     }
 
     @Test
@@ -148,7 +157,7 @@ public class ConfigManagerTest {
         Properties returnedProperties = configWriter
                 .createProperties(rootCreationResult + File.separator, CONFIG_FILE_NAME, properties);
         assertThat(returnedProperties).isNotNull();
-        assertThat(returnedProperties).hasSize(6);
+        assertThat(returnedProperties).hasSize(9);
 
         configManager.loadConfig(rootCreationResult + File.separator, CONFIG_FILE_NAME, KEY_STORE_NAME);
 
