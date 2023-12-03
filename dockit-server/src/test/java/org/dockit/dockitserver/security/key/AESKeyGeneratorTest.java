@@ -15,12 +15,12 @@ public class AESKeyGeneratorTest {
 
     @Test
     public void generateKeyFailsGivenInvalidAlgorithm() {
-        assertTrue(AESKeyGenerator.generateKey("ASE").isEmpty());
+        assertTrue(AESKeyGenerator.generateKey("ASE", KeyConstants.ENCRYPTION_KEY_SIZE).isEmpty());
     }
 
     @Test
     public void generateKeyReturnsValidKey() {
-        Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER);
+        Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.ENCRYPTION_KEY_SIZE);
 
         assertTrue(key.isPresent());
 
@@ -28,22 +28,22 @@ public class AESKeyGeneratorTest {
 
         assertThat(secretKey.getAlgorithm()).isEqualTo(KeyConstants.AES_CIPHER);
         // length will be in bytes, not bits
-        assertThat(secretKey.getEncoded().length).isEqualTo(KeyConstants.KEY_SIZE/8);
+        assertThat(secretKey.getEncoded().length).isEqualTo(KeyConstants.ENCRYPTION_KEY_SIZE /8);
     }
 
     @Test
     public void generateKeyWithPasswordFailsGivenInvalidAlgorithm() {
-        assertTrue(AESKeyGenerator.generateKey("ASE", PASSWORD).isEmpty());
+        assertTrue(AESKeyGenerator.generateKey("ASE", KeyConstants.ENCRYPTION_KEY_SIZE, PASSWORD).isEmpty());
     }
 
     @Test
     public void generateKeyWithPasswordFailsGivenNullPassword() {
-        assertTrue(AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, null).isEmpty());
+        assertTrue(AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.ENCRYPTION_KEY_SIZE, null).isEmpty());
     }
 
     @Test
     public void generateKeyWithPasswordReturnsValidKey() {
-        Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, PASSWORD);
+        Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.ENCRYPTION_KEY_SIZE, PASSWORD);
 
         assertTrue(key.isPresent());
 
@@ -51,6 +51,6 @@ public class AESKeyGeneratorTest {
 
         assertThat(secretKey.getAlgorithm()).isEqualTo(KeyConstants.AES_CIPHER);
         // length will be in bytes, not bits
-        assertThat(secretKey.getEncoded().length).isEqualTo(KeyConstants.KEY_SIZE/8);
+        assertThat(secretKey.getEncoded().length).isEqualTo(KeyConstants.ENCRYPTION_KEY_SIZE /8);
     }
 }

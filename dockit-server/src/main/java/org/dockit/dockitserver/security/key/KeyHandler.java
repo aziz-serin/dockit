@@ -19,7 +19,7 @@ public class KeyHandler {
     }
 
     public void generateKeyForAgentAndSave(String alias, String password) {
-        Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, password);
+        Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.ENCRYPTION_KEY_SIZE, password);
         if (key.isEmpty()) {
             throw new AgentKeyCreationException("Something went wrong creating the key!");
         }
@@ -30,7 +30,7 @@ public class KeyHandler {
     }
 
     public void generateKeyForDBEncryption(String alias, String password) {
-        Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER);
+        Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.ENCRYPTION_KEY_SIZE);
         if (key.isEmpty()) {
             throw new AgentKeyCreationException("Something went wrong creating the key!");
         }

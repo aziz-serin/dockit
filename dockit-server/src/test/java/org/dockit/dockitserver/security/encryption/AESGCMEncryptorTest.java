@@ -25,7 +25,7 @@ public class AESGCMEncryptorTest {
 
     @BeforeAll
     public static void setup() throws Exception {
-        validKey = (SecretKey) AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER).get();
+        validKey = (SecretKey) AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.ENCRYPTION_KEY_SIZE).get();
 
         KeyGenerator keyGenerator = KeyGenerator.getInstance(UNSUPPORTED_ALGORITHM);
         keyGenerator.init(DES_SIZE);

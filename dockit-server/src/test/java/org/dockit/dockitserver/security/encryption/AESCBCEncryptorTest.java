@@ -26,7 +26,7 @@ public class AESCBCEncryptorTest {
         invalidKey = keyGenerator.generateKey();
 
         keyGenerator = KeyGenerator.getInstance(KeyConstants.AES_CIPHER);
-        keyGenerator.init(KeyConstants.KEY_SIZE);
+        keyGenerator.init(KeyConstants.ENCRYPTION_KEY_SIZE);
         validKey = keyGenerator.generateKey();
     }
 

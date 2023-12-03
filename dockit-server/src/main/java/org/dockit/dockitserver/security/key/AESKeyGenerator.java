@@ -12,27 +12,36 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.List;
 import java.util.Optional;
 
 public class AESKeyGenerator {
     private static final Logger logger = LoggerFactory.getLogger(AESKeyGenerator.class);
 
-    public static Optional<Key> generateKey(String algorithm) {
+    private static final List<Integer> keySizes = List.of(128, 192, 256);
+
+    public static Optional<Key> generateKey(String algorithm, int keySize) {
+        if (!keySizes.contains(keySize)) {
+            logger.debug("Given key length {} is invalid for AES!", keySize);
+        }
         try {
-            return Optional.of(generateAESKey(algorithm, KeyConstants.KEY_SIZE));
+            return Optional.of(generateAESKey(algorithm, keySize));
         } catch (NoSuchAlgorithmException e) {
             logger.debug("Given algorithm {} is not found!", algorithm);
             return Optional.empty();
         }
     }
 
-    public static Optional<Key> generateKey(String algorithm, String password) {
+    public static Optional<Key> generateKey(String algorithm, int keySize, String password) {
         if (password == null) {
             logger.debug("Password cannot be null when creating key!");
             return Optional.empty();
         }
+        if (!keySizes.contains(keySize)) {
+            logger.debug("Given key length {} is invalid for AES!", keySize);
+        }
         try {
-            return Optional.of(generatePasswordBasedAESKey(algorithm, KeyConstants.KEY_SIZE, password.toCharArray()));
+            return Optional.of(generatePasswordBasedAESKey(algorithm, keySize, password.toCharArray()));
         } catch (NoSuchAlgorithmException e) {
             logger.debug("Given algorithm {} is not found!", algorithm);
             return Optional.empty();
