@@ -46,24 +46,31 @@ public class APIKeyServiceTest {
     private APIKey APIKey1;
     private APIKey APIKey2;
     private APIKey APIKey3;
-    private Agent agent;
+    private Agent agent1;
+    private Agent agent2;
+    private Agent agent3;
 
     @BeforeAll
     public void setup() {
-        agent = EntityCreator.createAgent("agent1", "password1",
+        agent1 = EntityCreator.createAgent("agent1", "password1",
                 LocalDateTime.now(), LocalDateTime.now(), true).get();
-        agentService.save(agent);
+        agentService.save(agent1);
 
-        APIKey1 = EntityCreator.createAPIKey("token1", LocalDateTime.now().plusHours(1), agent).get();
+        agent2 = EntityCreator.createAgent("agent2", "password2",
+                LocalDateTime.now(), LocalDateTime.now(), true).get();
+        agentService.save(agent2);
+
+        agent3 = EntityCreator.createAgent("agent3", "password3",
+                LocalDateTime.now(), LocalDateTime.now(), true).get();
+        agentService.save(agent3);
+
+        APIKey1 = EntityCreator.createAPIKey("token1", agent1).get();
         APIKeyService.save(APIKey1);
 
-        APIKey2 = new APIKey();
-        APIKey2.setToken("token2");
-        APIKey2.setExpiryDate(LocalDateTime.now().minusMinutes(5));
-        APIKey2.setAgent(agent);
+        APIKey2 = APIKey1 = EntityCreator.createAPIKey("token2", agent2).get();
         APIKeyService.save(APIKey2);
 
-        APIKey3 = EntityCreator.createAPIKey("token3", LocalDateTime.now().plusDays(1), agent).get();
+        APIKey3 = EntityCreator.createAPIKey("token3", agent3).get();
         APIKeyService.save(APIKey3);
     }
 
@@ -78,50 +85,21 @@ public class APIKeyServiceTest {
     }
 
     @Test
-    public void findAllAscendingByExpiryDateReturnsAscendingList() {
-        List<APIKey> tokens = APIKeyService.findAllAscendingByExpiryDate();
-
-        assertThat(tokens).hasSize(3);
-        assertThat(tokens.get(0).getId()).isEqualTo(APIKey2.getId());
-        assertThat(tokens.get(1).getId()).isEqualTo(APIKey1.getId());
-        assertThat(tokens.get(2).getId()).isEqualTo(APIKey3.getId());
-    }
-
-    @Test
     public void findAllByAgentReturnsTrueList() {
-        List<APIKey> tokens = APIKeyService.findAllWithSameAgent(agent);
+        List<APIKey> tokens = APIKeyService.findAllWithSameAgent(agent1);
         tokens.forEach(
-                t -> assertThat(t.getAgent().getId()).isEqualTo(agent.getId())
+                t -> assertThat(t.getAgent().getId()).isEqualTo(agent1.getId())
         );
-    }
-
-    @Test
-    public void findAllDescendingByExpiryDateReturnsDescendingList() {
-        List<APIKey> tokens = APIKeyService.findAllDescendingByExpiryDate();
-
-        assertThat(tokens).hasSize(3);
-        assertThat(tokens.get(0).getId()).isEqualTo(APIKey3.getId());
-        assertThat(tokens.get(1).getId()).isEqualTo(APIKey1.getId());
-        assertThat(tokens.get(2).getId()).isEqualTo(APIKey2.getId());
-    }
-
-    @Test
-    public void deleteExpiredDeletesAllExpiredTokens() {
-        APIKeyService.deleteExpired();
-
-        List<APIKey> tokens = APIKeyService.findAll();
-        assertThat(tokens).hasSize(2);
-        tokens.forEach(token ->
-                assertThat(token.getExpiryDate()).isAfter(LocalDateTime.now()));
-
-        // Undo the effects of this test
-        APIKeyService.save(APIKey2);
     }
 
     @Test
     public void saveCachesTheResultOfTheOperation() {
         Cache cache = cacheManager.getCache(CACHE_NAME);
-        APIKey tempToken = EntityCreator.createAPIKey("token", LocalDateTime.now().plusDays(1), agent).get();
+        Agent tempAgent = EntityCreator.createAgent("tempAgent", "tempAgent",
+                LocalDateTime.now(), LocalDateTime.now(), true).get();
+        agentService.save(tempAgent);
+
+        APIKey tempToken = EntityCreator.createAPIKey("token", tempAgent).get();
         APIKeyService.save(tempToken);
 
         assertThat(cache).isNotNull();
@@ -132,14 +110,22 @@ public class APIKeyServiceTest {
 
         //Undo the effects of this test
         APIKeyService.deleteById(tempToken.getId());
+        agentService.deleteById(tempAgent.getId());
     }
 
     @Test
     public void deleteByIdEvictsOnlyDeletedItemFromCache() {
         Cache cache = cacheManager.getCache(CACHE_NAME);
 
-        APIKey tempToken1 = EntityCreator.createAPIKey("token", LocalDateTime.now().plusDays(1), agent).get();
-        APIKey tempToken2 = EntityCreator.createAPIKey("token", LocalDateTime.now().plusDays(1), agent).get();
+        Agent tempAgent1 = EntityCreator.createAgent("tempAgent1", "tempAgent1",
+                LocalDateTime.now(), LocalDateTime.now(), true).get();
+        agentService.save(tempAgent1);
+        Agent tempAgent2 = EntityCreator.createAgent("tempAgent2", "tempAgent2",
+                LocalDateTime.now(), LocalDateTime.now(), true).get();
+        agentService.save(tempAgent2);
+
+        APIKey tempToken1 = EntityCreator.createAPIKey("token", tempAgent1).get();
+        APIKey tempToken2 = EntityCreator.createAPIKey("token", tempAgent2).get();
         APIKeyService.save(tempToken1);
         APIKeyService.save(tempToken2);
 
@@ -157,25 +143,7 @@ public class APIKeyServiceTest {
 
         //Undo the effects of this test
         APIKeyService.deleteById(tempToken2.getId());
-    }
-
-    @Test
-    public void deleteExpiredEvictsAllCache() {
-        Cache cache = cacheManager.getCache(CACHE_NAME);
-
-        APIKey tempToken = EntityCreator.createAPIKey("token", LocalDateTime.now().plusDays(1), agent).get();
-        APIKeyService.save(tempToken);
-
-        assertThat(cache).isNotNull();
-
-        APIKeyService.deleteExpired();
-
-        Object cachedToken = cache.get(tempToken.getId());
-        assertThat(cachedToken).isNull();
-
-
-        //Undo the effects of this test
-        APIKeyService.deleteById(tempToken.getId());
-        APIKeyService.save(APIKey2);
+        agentService.deleteById(tempAgent1.getId());
+        agentService.deleteById(tempAgent2.getId());
     }
 }

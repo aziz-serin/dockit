@@ -19,7 +19,7 @@ public class EntityValidator {
         return vmId != null && category != null && timeStamp.isBefore(LocalDateTime.now()) && data != null;
     }
 
-    protected static boolean validAPIKey(String token, LocalDateTime expiryTime, Agent agent) {
-        return token != null && expiryTime.isAfter(LocalDateTime.now()) && agent != null;
+    protected static boolean validAPIKey(String token, Agent agent) {
+        return token != null && agent != null;
     }
 }

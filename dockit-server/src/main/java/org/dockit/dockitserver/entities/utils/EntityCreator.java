@@ -46,13 +46,12 @@ public class EntityCreator {
         return Optional.of(audit);
     }
 
-    public static Optional<APIKey> createAPIKey(String token, LocalDateTime expiryTime, Agent agent) {
-        if (!EntityValidator.validAPIKey(token, expiryTime, agent)) {
+    public static Optional<APIKey> createAPIKey(String token, Agent agent) {
+        if (!EntityValidator.validAPIKey(token, agent)) {
             return Optional.empty();
         }
         APIKey APIKey = new APIKey();
         APIKey.setToken(token);
-        APIKey.setExpiryDate(expiryTime);
         APIKey.setAgent(agent);
         return Optional.of(APIKey);
     }

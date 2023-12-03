@@ -41,17 +41,6 @@ public class APIKeyServiceImpl implements APIKeyService {
         APIKeyRepository.deleteById(id);
     }
 
-    @Override
-    @CacheEvict(allEntries = true)
-    public void deleteExpired() {
-        List<APIKey> tokens = APIKeyRepository.findAll();
-        List<Long> expiredTokenIds = tokens.stream()
-                .filter(t -> t.getExpiryDate().isBefore(LocalDateTime.now()))
-                .map(APIKey::getId)
-                .toList();
-        deleteAllById(expiredTokenIds);
-    }
-
     private void deleteAllById(List<Long> ids) {
         APIKeyRepository.deleteAllById(ids);
     }
@@ -67,24 +56,6 @@ public class APIKeyServiceImpl implements APIKeyService {
         return tokens.stream()
                 .filter(t -> t.getAgent().getId().equals(agent.getId()))
                 .toList();
-    }
-
-    @Override
-    public List<APIKey> findAllAscendingByExpiryDate() {
-        List<APIKey> tokens = APIKeyRepository.findAll();
-        return tokens.stream()
-                .sorted(Comparator.comparing(APIKey::getExpiryDate))
-                .toList();
-    }
-
-    @Override
-    public List<APIKey> findAllDescendingByExpiryDate() {
-        List<APIKey> tokens = APIKeyRepository.findAll();
-        List<APIKey> sortedTokens = new ArrayList<>(tokens.stream()
-                .sorted(Comparator.comparing(APIKey::getExpiryDate))
-                .toList());
-        Collections.reverse(sortedTokens);
-        return sortedTokens;
     }
 
     @Override

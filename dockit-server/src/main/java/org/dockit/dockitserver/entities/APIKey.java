@@ -28,10 +28,6 @@ public class APIKey implements DTO {
     @JoinColumn(name = "agent_id")
     private Agent agent;
 
-    @NotNull
-    @Column(name = "expiry_date")
-    private LocalDateTime expiryDate;
-
     @NotEmpty
     @Column(name = "token")
     private String token;
@@ -51,14 +47,6 @@ public class APIKey implements DTO {
 
     public void setAgent(Agent agent) {
         this.agent = agent;
-    }
-
-    public LocalDateTime getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(LocalDateTime expiryDate) {
-        this.expiryDate = expiryDate;
     }
 
     public String getToken() {
