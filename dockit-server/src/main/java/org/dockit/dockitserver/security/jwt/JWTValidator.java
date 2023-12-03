@@ -74,9 +74,7 @@ public class JWTValidator {
             }
             JWSVerifier verifier = new MACVerifier((SecretKey) secretKey.get());
             return jwt.verify(verifier);
-        } catch (JOSEException e) {
-            return false;
-        } catch (JWTSecretKeyException e) {
+        } catch (JOSEException | JWTSecretKeyException e) {
             logger.debug(e.getMessage());
             return false;
         }
