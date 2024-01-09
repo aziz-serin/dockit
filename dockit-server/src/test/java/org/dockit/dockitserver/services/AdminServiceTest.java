@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -162,10 +164,11 @@ public class AdminServiceTest {
     @Test
     public void updatePasswordUpdatesPassword() {
         Optional<Admin> updatedAdmin = adminService.updatePassword(admin1.getId(), "updatedAdmin1");
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
 
         assertTrue(updatedAdmin.isPresent());
         assertThat(updatedAdmin.get().getId()).isEqualTo(admin1.getId());
-        assertThat(updatedAdmin.get().getPassword()).isEqualTo("updatedAdmin1");
+        assertTrue(encoder.matches("updatedAdmin1", updatedAdmin.get().getPassword()));
     }
 
     @Test
@@ -221,10 +224,11 @@ public class AdminServiceTest {
         String newPassword = "newPassword";
 
         adminService.updatePassword(tempAdmin.getId(), newPassword);
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
 
         Admin cachedAdmin = (Admin) cache.get(tempAdmin.getId()).get();
         assertThat(Objects.requireNonNull(cachedAdmin).getId()).isEqualTo(tempAdmin.getId());
-        assertThat(Objects.requireNonNull(cachedAdmin).getPassword()).isEqualTo(newPassword);
+        assertTrue(encoder.matches(newPassword, (Objects.requireNonNull(cachedAdmin).getPassword())));
 
         //Undo the effects of this test
         adminService.deleteById(tempAdmin.getId());

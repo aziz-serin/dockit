@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -177,9 +179,10 @@ public class AgentServiceTest {
     @Test
     public void updateAgentPasswordUpdatesAgent() {
         Optional<Agent> agent = agentService.updatePassword(agent2.getId(), "updatedAgentPassword2");
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         assertTrue(agent.isPresent());
-        assertThat(agent.get().getPassword()).isEqualTo("updatedAgentPassword2");
+        assertTrue(passwordEncoder.matches("updatedAgentPassword2", agent.get().getPassword()));
     }
 
     @Test
@@ -258,9 +261,10 @@ public class AgentServiceTest {
         agentService.updatePassword(tempAgent.getId(), newValue);
 
         Agent cachedAgent = (Agent) cache.get(tempAgent.getId()).get();
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
 
         assertThat(Objects.requireNonNull(cachedAgent).getId()).isEqualTo(tempAgent.getId());
-        assertThat(Objects.requireNonNull(cachedAgent).getPassword()).isEqualTo(newValue);
+        assertTrue(encoder.matches(newValue, Objects.requireNonNull(cachedAgent).getPassword()));
 
         //Undo the effects
         agentService.deleteById(tempAgent.getId());
