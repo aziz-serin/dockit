@@ -31,7 +31,6 @@ public class APIKeyServiceImpl implements APIKeyService {
     @Override
     @CachePut(key = "#token.id")
     public APIKey save(APIKey token) {
-        // TODO: Hash Token
         return APIKeyRepository.save(token);
     }
 
