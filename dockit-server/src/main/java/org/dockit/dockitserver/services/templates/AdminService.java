@@ -12,6 +12,7 @@ public interface AdminService {
     Optional<Admin> updateRole(Long id, Admin.Role role);
     void deleteById(Long id);
     Optional<Admin> findById(Long id);
+    Optional<Admin> findByUsername(String username);
     List<Admin> findAll();
     List<Admin> findAllById(List<Long> ids);
     List<Admin> findByRole(Admin.Role role);

@@ -121,6 +121,19 @@ public class AdminServiceTest {
     }
 
     @Test
+    public void findByUsernameReturnsEmptyIfIdDoesNotExist() {
+        assertFalse(adminService.findByUsername("non-existing").isPresent());
+    }
+
+    @Test
+    public void findByUsernameReturnsAdminIfItExists() {
+        Optional<Admin> admin = adminService.findByUsername(admin1.getUsername());
+
+        assertTrue(admin.isPresent());
+        assertThat(admin.get().getId()).isEqualTo(admin1.getId());
+    }
+
+    @Test
     public void findAllByIdReturnsEmptyListIfNoIdExists() {
         List<Long> ids = new ArrayList<>(Arrays.asList(999L, 9999L, 99999L));
 

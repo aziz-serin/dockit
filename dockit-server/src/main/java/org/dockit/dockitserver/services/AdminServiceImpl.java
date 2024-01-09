@@ -81,6 +81,19 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public Optional<Admin> findByUsername(String username) {
+        List<Admin> admins = adminRepository.findAll();
+        List<Admin> filteredAdmins = admins.stream()
+                .filter(admin -> admin.getUsername().equals(username))
+                .toList();
+        if (filteredAdmins.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(filteredAdmins.get(0));
+        }
+    }
+
+    @Override
     public List<Admin> findAll() {
         return adminRepository.findAll();
     }
