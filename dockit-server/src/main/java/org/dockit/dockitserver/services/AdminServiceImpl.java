@@ -36,7 +36,8 @@ public class AdminServiceImpl implements AdminService {
     @CachePut(key = "#id")
     public Optional<Admin> updateUsername(Long id, String newUsername) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
-        if (optionalAdmin.isPresent()) {
+        Optional<Admin> requestedUserName = findByUsername(newUsername);
+        if (optionalAdmin.isPresent() && requestedUserName.isEmpty()) {
             Admin admin = optionalAdmin.get();
             admin.setUsername(newUsername);
             return Optional.of(adminRepository.save(admin));

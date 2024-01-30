@@ -161,6 +161,11 @@ public class AdminServiceTest {
     }
 
     @Test
+    public void updateUsernameReturnsEmptyIfNewUsernameExists() {
+        assertFalse(adminService.updateUsername(admin1.getId(), admin2.getUsername()).isPresent());
+    }
+
+    @Test
     public void updateUsernameUpdatesUsername() {
         Optional<Admin> updatedAdmin = adminService.updateUsername(admin1.getId(), "updatedAdmin1");
 
