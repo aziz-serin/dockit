@@ -39,12 +39,12 @@ public class AuthenticationController {
     public ResponseEntity<?> issueApiKey(@RequestBody @NonNull Map<String, ?> body) {
         String username = (String) body.get("username");
         String password = (String) body.get("password");
-        Long agentId = (Long) body.get("agentId");
+        Integer agentId = (Integer) body.get("agentId");
         if (!ParameterValidator.valid(username, password, agentId)) {
             logger.debug("Invalid request parameters in body: {}", body);
             return ResponseEntity.badRequest().body("Invalid request!");
         }
-        Optional<APIKey> apiKey = apiKeyIssuer.issueKey(username, password, agentId);
+        Optional<APIKey> apiKey = apiKeyIssuer.issueKey(username, password, Long.valueOf(agentId));
         if (apiKey.isEmpty()) {
             logger.debug("Could not generate api key.");
             return ResponseEntity.badRequest().body("Invalid request!");
