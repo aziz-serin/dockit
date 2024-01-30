@@ -19,7 +19,7 @@ import java.util.Set;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
-    private final Set<String> excludedUrls = Set.of("/api/agent/**", "/api/authenticate/**", "/api/liveness/**");
+    private final Set<String> excludedUrls = Set.of("/api/write/**", "/api/authenticate/**", "/api/liveness/**");
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {

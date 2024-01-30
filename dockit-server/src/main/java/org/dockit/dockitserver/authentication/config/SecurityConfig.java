@@ -45,7 +45,7 @@ public class SecurityConfig {
     public FilterRegistrationBean<APIKeyAuthenticationFilter> apiKeyAuthenticationFilter() {
         FilterRegistrationBean<APIKeyAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new APIKeyAuthenticationFilter());
-        registrationBean.addUrlPatterns("/api/agent/**");
+        registrationBean.addUrlPatterns("/api/write/**");
         return registrationBean;
     }
 
@@ -53,7 +53,7 @@ public class SecurityConfig {
     public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilter() {
         FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new JwtAuthenticationFilter());
-        registrationBean.addUrlPatterns("/api/admin/**");
+        registrationBean.addUrlPatterns("/api/admin/**", "/api/audit/**", "/api/agent/**");
         return registrationBean;
     }
 }
