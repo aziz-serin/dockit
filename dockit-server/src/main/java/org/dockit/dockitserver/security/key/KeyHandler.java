@@ -18,7 +18,7 @@ public class KeyHandler {
         this.keyStoreHandler = keyStoreHandler;
     }
 
-    public void generateKeyForAgentAndSave(String alias, String password) {
+    public Key generateKeyForAgentAndSave(String alias, String password) {
         Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.ENCRYPTION_KEY_SIZE, password);
         if (key.isEmpty()) {
             throw new AgentKeyCreationException("Something went wrong creating the key!");
@@ -27,6 +27,7 @@ public class KeyHandler {
         if (!saved) {
             throw new AgentKeyCreationException("Something went wrong saving the key!");
         }
+        return key.get();
     }
 
     public void generateKeyForDBEncryption(String alias, String password) {
