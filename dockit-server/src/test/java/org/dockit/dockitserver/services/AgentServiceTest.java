@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -34,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AgentServiceTest {
-
     private static final String CACHE_NAME = CacheNames.AGENT;
 
     @Autowired
@@ -47,7 +44,6 @@ public class AgentServiceTest {
     private Agent agent1;
     private Agent agent2;
     private Agent agent3;
-
 
     @BeforeAll
     public void setup() {
@@ -172,22 +168,6 @@ public class AgentServiceTest {
     }
 
     @Test
-    public void updateAgentPasswordReturnsEmptyIfIdDoesNotExist() {
-        assertFalse(agentService.updatePassword(9999L, "TEST").isPresent());
-    }
-
-    @Test
-    public void updateAgentPasswordUpdatesAgent() {
-        Optional<Agent> agent = agentService.updatePassword(agent2.getId(), "updatedAgentPassword2");
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        assertTrue(agent.isPresent());
-        assertTrue(passwordEncoder.matches("updatedAgentPassword2", agent.get().getPassword()));
-    }
-
-
-
-    @Test
     public void updateLastActiveTimeReturnsEmptyIfIdDoesNotExist() {
         assertFalse(agentService.updateLastActiveTime(9999L, LocalDateTime.now()).isPresent());
     }
@@ -236,27 +216,6 @@ public class AgentServiceTest {
         //Undo the effects
         agentService.deleteById(tempAgent.getId());
     }
-
-    @Test
-    public void updatePasswordUpdatesCachedValue() {
-        Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
-                LocalDateTime.now(), LocalDateTime.now()).get();
-        agentService.save(tempAgent);
-
-        String newValue = "newPassword";
-        agentService.updatePassword(tempAgent.getId(), newValue);
-
-        Agent cachedAgent = (Agent) cache.get(tempAgent.getId()).get();
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        assertThat(Objects.requireNonNull(cachedAgent).getId()).isEqualTo(tempAgent.getId());
-        assertTrue(encoder.matches(newValue, Objects.requireNonNull(cachedAgent).getPassword()));
-
-        //Undo the effects
-        agentService.deleteById(tempAgent.getId());
-    }
-
-
 
     @Test
     public void updateLastActiveTimeUpdatesCachedValue() {

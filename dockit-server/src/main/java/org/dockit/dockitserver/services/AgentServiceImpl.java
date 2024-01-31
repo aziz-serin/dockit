@@ -50,18 +50,6 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     @CachePut(key = "#id")
-    public Optional<Agent> updatePassword(Long id, String newPassword) {
-        Optional<Agent> optionalAgent = agentRepository.findById(id);
-        if (optionalAgent.isPresent()) {
-            Agent agent = optionalAgent.get();
-            agent.setPassword(newPassword);
-            return Optional.of(agentRepository.save(agent));
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    @CachePut(key = "#id")
     public Optional<Agent> updateLastActiveTime(Long id, LocalDateTime lastActiveTime) {
         Optional<Agent> optionalAgent = agentRepository.findById(id);
         if (optionalAgent.isPresent()) {
