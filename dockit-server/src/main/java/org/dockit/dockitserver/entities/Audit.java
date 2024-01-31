@@ -17,7 +17,7 @@ public class Audit implements DTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "audit_id")
+    @Column(name = "id")
     private Long id;
 
     @NotEmpty

@@ -20,12 +20,12 @@ public class APIKey implements DTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "api_key_id")
+    @Column(name = "id")
     private Long id;
 
     @NotNull
     @OneToOne
-    @JoinColumn(name = "agent_id")
+    @JoinColumn(name = "agent")
     private Agent agent;
 
     @NotEmpty

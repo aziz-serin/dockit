@@ -18,7 +18,7 @@ public class Agent implements DTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "agent_id")
+    @Column(name = "id")
     private Long id;
 
     @NotEmpty
