@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class EntityCreator {
     public static Optional<Agent> createAgent(String agentName, String password, LocalDateTime creationTime,
-                                    LocalDateTime lastActiveTime, boolean isActive) {
+                                    LocalDateTime lastActiveTime) {
         if (!EntityValidator.validAgent(agentName, password, creationTime, lastActiveTime)) {
             return Optional.empty();
         }
@@ -19,7 +19,6 @@ public class EntityCreator {
         agent.setPassword(password);
         agent.setCreationTime(creationTime);
         agent.setLastActiveTime(lastActiveTime);
-        agent.setActive(isActive);
         return Optional.of(agent);
     }
 

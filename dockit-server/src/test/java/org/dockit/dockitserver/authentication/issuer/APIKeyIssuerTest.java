@@ -50,7 +50,7 @@ public class APIKeyIssuerTest {
     @BeforeAll
     public void setup() {
         agent = EntityCreator.createAgent("agent1", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), true).get();
+                LocalDateTime.now(), LocalDateTime.now()).get();
         agentService.save(agent);
 
         admin = EntityCreator.createAdmin(USERNAME, PASSWORD, Admin.Role.SUPER).get();

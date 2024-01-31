@@ -62,18 +62,6 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     @CachePut(key = "#id")
-    public Optional<Agent> updateIsActive(Long id, Boolean isActive) {
-        Optional<Agent> optionalAgent = agentRepository.findById(id);
-        if (optionalAgent.isPresent()) {
-            Agent agent = optionalAgent.get();
-            agent.setActive(isActive);
-            return Optional.of(agentRepository.save(agent));
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    @CachePut(key = "#id")
     public Optional<Agent> updateLastActiveTime(Long id, LocalDateTime lastActiveTime) {
         Optional<Agent> optionalAgent = agentRepository.findById(id);
         if (optionalAgent.isPresent()) {

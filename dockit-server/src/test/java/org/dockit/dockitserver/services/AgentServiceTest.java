@@ -52,15 +52,15 @@ public class AgentServiceTest {
     @BeforeAll
     public void setup() {
         agent1 = EntityCreator.createAgent("agent1", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), true).get();
+                LocalDateTime.now(), LocalDateTime.now()).get();
         agentService.save(agent1);
 
         agent2 = EntityCreator.createAgent("agent2", "password2",
-                LocalDateTime.now().minusWeeks(1), LocalDateTime.now().minusDays(3), false).get();
+                LocalDateTime.now().minusWeeks(1), LocalDateTime.now().minusDays(3)).get();
         agentService.save(agent2);
 
         agent3 = EntityCreator.createAgent("agent3", "password3",
-                LocalDateTime.now().minusDays(1), LocalDateTime.now().minusMinutes(5), true).get();
+                LocalDateTime.now().minusDays(1), LocalDateTime.now().minusMinutes(5)).get();
         agentService.save(agent3);
 
         cache = Objects.requireNonNull(cacheManager.getCache(CACHE_NAME));
@@ -185,21 +185,7 @@ public class AgentServiceTest {
         assertTrue(passwordEncoder.matches("updatedAgentPassword2", agent.get().getPassword()));
     }
 
-    @Test
-    public void updateIsActiveReturnsEmptyIfIdDoesNotExist() {
-        assertFalse(agentService.updateIsActive(9999L, true).isPresent());
-    }
 
-    @Test
-    public void updateIsActiveUpdatesAgent() {
-        Optional<Agent> agent = agentService.updateIsActive(agent2.getId(), true);
-
-        assertTrue(agent.isPresent());
-        assertTrue(agent.get().getActive());
-
-        // Undo the update
-        agentService.updateIsActive(agent2.getId(), false);
-    }
 
     @Test
     public void updateLastActiveTimeReturnsEmptyIfIdDoesNotExist() {
@@ -222,7 +208,7 @@ public class AgentServiceTest {
     @Test
     public void saveCachesResult() {
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), true).get();
+                LocalDateTime.now(), LocalDateTime.now()).get();
         agentService.save(tempAgent);
 
         Agent cachedAgent = (Agent) cache.get(tempAgent.getId()).get();
@@ -236,7 +222,7 @@ public class AgentServiceTest {
     @Test
     public void updateAgentNameUpdatesCachedValue() {
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), true).get();
+                LocalDateTime.now(), LocalDateTime.now()).get();
         agentService.save(tempAgent);
 
         String newValue = "newUserName";
@@ -254,7 +240,7 @@ public class AgentServiceTest {
     @Test
     public void updatePasswordUpdatesCachedValue() {
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), true).get();
+                LocalDateTime.now(), LocalDateTime.now()).get();
         agentService.save(tempAgent);
 
         String newValue = "newPassword";
@@ -270,27 +256,12 @@ public class AgentServiceTest {
         agentService.deleteById(tempAgent.getId());
     }
 
-    @Test
-    public void updateIsActiveUpdatesCachedValue() {
-        Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), true).get();
-        agentService.save(tempAgent);
 
-        agentService.updateIsActive(tempAgent.getId(), false);
-
-        Agent cachedAgent = (Agent) cache.get(tempAgent.getId()).get();
-
-        assertThat(Objects.requireNonNull(cachedAgent).getId()).isEqualTo(tempAgent.getId());
-        assertFalse(Objects.requireNonNull(cachedAgent).getActive());
-
-        //Undo the effects
-        agentService.deleteById(tempAgent.getId());
-    }
 
     @Test
     public void updateLastActiveTimeUpdatesCachedValue() {
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
-                LocalDateTime.now(), LocalDateTime.now().minusMinutes(15), true).get();
+                LocalDateTime.now(), LocalDateTime.now().minusMinutes(15)).get();
         agentService.save(tempAgent);
 
         LocalDateTime newTime = LocalDateTime.now();
@@ -308,7 +279,7 @@ public class AgentServiceTest {
     @Test
     public void deleteEvictsDeletedValue() {
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
-                LocalDateTime.now(), LocalDateTime.now().minusMinutes(15), true).get();
+                LocalDateTime.now(), LocalDateTime.now().minusMinutes(15)).get();
         agentService.save(tempAgent);
 
         agentService.deleteById(tempAgent.getId());

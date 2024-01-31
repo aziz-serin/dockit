@@ -38,10 +38,6 @@ public class Agent implements DTO {
     @Column(name = "last_active_time")
     private LocalDateTime lastActiveTime;
 
-    @NotEmpty
-    @Column(name = "is_active")
-    private Boolean isActive;
-
     public Long getId() {
         return id;
     }
@@ -73,14 +69,6 @@ public class Agent implements DTO {
 
     public void setCreationTime(LocalDateTime creationTime) {
         this.creationTime = creationTime;
-    }
-
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
     }
 
     public LocalDateTime getLastActiveTime() {

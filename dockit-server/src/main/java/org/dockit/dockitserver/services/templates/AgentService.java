@@ -10,7 +10,6 @@ public interface AgentService {
     Agent save(Agent agent);
     Optional<Agent> updateAgentName(Long id, String newAgentName);
     Optional<Agent> updatePassword(Long id, String newPassword);
-    Optional<Agent> updateIsActive(Long id, Boolean isActive);
     Optional<Agent> updateLastActiveTime(Long id, LocalDateTime lastActiveTime);
     void deleteById(Long id);
     Optional<Agent> findById(Long id);
