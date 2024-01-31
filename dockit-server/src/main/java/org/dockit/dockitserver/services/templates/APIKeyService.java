@@ -8,6 +8,7 @@ import java.util.List;
 public interface APIKeyService {
     APIKey save(APIKey token);
     void deleteById(Long id);
+    void deleteAllById(List<Long> ids);
     List<APIKey> findAll();
     List<APIKey> findAllWithSameAgent(Agent agent);
     long count();

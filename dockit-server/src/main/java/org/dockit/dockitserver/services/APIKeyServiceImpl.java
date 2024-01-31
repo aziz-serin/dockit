@@ -40,7 +40,9 @@ public class APIKeyServiceImpl implements APIKeyService {
         APIKeyRepository.deleteById(id);
     }
 
-    private void deleteAllById(List<Long> ids) {
+    @Override
+    @CacheEvict(allEntries = true)
+    public void deleteAllById(List<Long> ids) {
         APIKeyRepository.deleteAllById(ids);
     }
 
