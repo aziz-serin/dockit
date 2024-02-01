@@ -80,7 +80,7 @@ public class AdminController {
         }
     }
 
-    @PutMapping("updateRole")
+    @PutMapping("/updateRole")
     @PreAuthorize("hasAuthority('SUPER')")
     public ResponseEntity<?> updateAdminRole(@RequestBody @NonNull Map<String, ?> body) {
         String userName = (String) body.get("username");
