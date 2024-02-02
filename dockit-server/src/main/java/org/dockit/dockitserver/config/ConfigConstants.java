@@ -39,10 +39,10 @@ public enum ConfigConstants {
             case DEFAULT_INSTALL_LOCATION -> ".dockit";
             case DEFAULT_KEYSTORE_NAME -> "keystore.jceks";
             case DEFAULT_KEYSTORE_PASSWORD -> "changeit";
-            case DEFAULT_PROPERTIES_NAME -> "sample_config.properties";
+            case DEFAULT_PROPERTIES_NAME -> "config.properties";
             case JWT_EXPIRATION_TIME -> "jwt_expiration_time";
             case JWT_SECRET_ALIAS -> "jwt_secret_alias";
-            case JWT_ISSUER -> "jwt_alias";
+            case JWT_ISSUER -> "jwt_issuer";
             case DEFAULT_JWT_EXPIRATION_TIME -> "60";
             case DEFAULT_JWT_SECRET_ALIAS -> "jwtsecret";
             case DEFAULT_JWT_ISSUER -> "http://dockit.server.io";
