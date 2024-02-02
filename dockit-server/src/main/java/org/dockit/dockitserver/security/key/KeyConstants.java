@@ -22,4 +22,7 @@ public class KeyConstants {
     public static final String AES_GCM_CIPHER = "AES/GCM/NoPadding";
 
     public static final String AES_CBC_CIPHER = "AES/CBC/PKCS5Padding";
+
+    // Used as an alias for the encryption key for the database
+    public static final String DB_KEY_ALIAS = "database_encryption";
 }
