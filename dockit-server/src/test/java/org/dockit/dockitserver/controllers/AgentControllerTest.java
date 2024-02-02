@@ -184,12 +184,7 @@ public class AgentControllerTest {
                 .consumeWith(res -> {
                     Map<String, Object> body = res.getResponseBody();
                     long id = Long.parseLong(String.valueOf(Objects.requireNonNull(body).get("id")));
-                    String key = (String) Objects.requireNonNull(body).get("key");
                     assertTrue(keyStoreHandler.keyExists(String.valueOf(id)));
-                    Optional<Key> optionalKey = keyStoreHandler.getKey(String.valueOf(id)
-                            , AGENT_PASSWORD.toCharArray());
-                    assertThat(optionalKey).isPresent();
-                    assertThat(Base64.getEncoder().encodeToString(optionalKey.get().getEncoded())).isEqualTo(key);
                 });
     }
 

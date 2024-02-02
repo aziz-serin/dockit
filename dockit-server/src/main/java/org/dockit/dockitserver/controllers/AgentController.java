@@ -95,7 +95,7 @@ public class AgentController {
         }
         agentService.save(agent.get());
         // Generate secret key for the agent and store it
-        Key key = keyHandler.generateKeyForAgentAndSave(agent.get().getId().toString(), password);
+        Key key = keyHandler.generateKeyForAgentAndSave(agent.get().getId().toString(), agent.get().getPassword());
 
         return ResponseEntity.ok().body(Map.of(
                         "id", agent.get().getId(),
