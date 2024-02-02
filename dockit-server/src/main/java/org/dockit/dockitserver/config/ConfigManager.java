@@ -66,7 +66,7 @@ public final class ConfigManager {
     }
 
     private KeyStore loadKeystoreConfig(String keyStoreName, String path, String keyStorePassword) {
-        return KeyStoreManager.loadKeyStore(keyStoreName, path, keyStorePassword);
+        return KeyStoreManager.loadKeyStore(keyStoreName, path + PATH_SEPARATOR, keyStorePassword);
     }
 
     public void loadConfig(String path, String configFileName, String keyStoreName) {
