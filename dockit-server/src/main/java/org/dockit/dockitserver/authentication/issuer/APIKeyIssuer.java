@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class APIKeyIssuer {
@@ -25,7 +26,7 @@ public class APIKeyIssuer {
         this.agentService = agentService;
         this.adminService = adminService;
     }
-    public Optional<APIKey> issueKey(String username, String password, Long agentId) {
+    public Optional<APIKey> issueKey(String username, String password, UUID agentId) {
         Optional<Admin> admin = adminService.findByUsername(username);
         if (admin.isEmpty()) {
             return Optional.empty();

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @CacheConfig(cacheNames = {CacheNames.API_KEY})
@@ -36,13 +37,13 @@ public class APIKeyServiceImpl implements APIKeyService {
 
     @Override
     @CacheEvict(key = "#id")
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         APIKeyRepository.deleteById(id);
     }
 
     @Override
     @CacheEvict(allEntries = true)
-    public void deleteAllById(List<Long> ids) {
+    public void deleteAllById(List<UUID> ids) {
         APIKeyRepository.deleteAllById(ids);
     }
 

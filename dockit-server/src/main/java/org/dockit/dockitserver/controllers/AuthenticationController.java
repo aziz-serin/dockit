@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.text.ParseException;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/authenticate", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -39,12 +40,12 @@ public class AuthenticationController {
     public ResponseEntity<?> issueApiKey(@RequestBody @NonNull Map<String, ?> body) {
         String username = (String) body.get("username");
         String password = (String) body.get("password");
-        Integer agentId = (Integer) body.get("agentId");
-        if (!ParameterValidator.valid(username, password, agentId)) {
+        UUID agentId = UUID.fromString((String) body.get("agentId"));
+        if (ParameterValidator.invalid(username, password, agentId)) {
             logger.debug("Invalid request parameters in body: {}", body);
             return ResponseEntity.badRequest().body("Invalid request!");
         }
-        Optional<APIKey> apiKey = apiKeyIssuer.issueKey(username, password, Long.valueOf(agentId));
+        Optional<APIKey> apiKey = apiKeyIssuer.issueKey(username, password, agentId);
         if (apiKey.isEmpty()) {
             logger.debug("Could not generate api key.");
             return ResponseEntity.badRequest().body("Invalid request!");
@@ -61,7 +62,7 @@ public class AuthenticationController {
     public ResponseEntity<?> issueJwt(@RequestBody @NonNull Map<String, ?> body) {
         String username = (String) body.get("username");
         String password = (String) body.get("password");
-        if (!ParameterValidator.valid(username, password)) {
+        if (ParameterValidator.invalid(username, password)) {
             logger.debug("Invalid request parameters in body: {}", body);
             return ResponseEntity.badRequest().body("Invalid request!");
         }
@@ -81,7 +82,7 @@ public class AuthenticationController {
     @PostMapping("/jwt/introspect")
     public ResponseEntity<?> introspectJwt(@RequestBody @NonNull Map<String, ?> body) {
         String jwt = (String) body.get("jwt");
-        if (!ParameterValidator.valid(jwt)) {
+        if (ParameterValidator.invalid(jwt)) {
             logger.debug("Invalid request parameters in body: {}", body);
             return ResponseEntity.badRequest().body("Invalid request!");
         }

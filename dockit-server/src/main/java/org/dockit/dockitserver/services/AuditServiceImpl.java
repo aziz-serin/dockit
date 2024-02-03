@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @CacheConfig(cacheNames = {CacheNames.AUDIT})
@@ -37,13 +38,13 @@ public class AuditServiceImpl implements AuditService {
 
     @Override
     @CacheEvict(key = "#id")
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         auditRepository.deleteById(id);
     }
 
     @Override
     @Cacheable(key = "#id")
-    public Optional<Audit> findById(Long id) {
+    public Optional<Audit> findById(UUID id) {
         return auditRepository.findById(id);
     }
 

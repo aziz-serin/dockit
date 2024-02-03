@@ -20,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,7 +79,7 @@ public class APIKeyIssuerTest {
     @Test
     public void issueKeyReturnsEmptyGivenAgentDoesNotExist() {
         long countBefore = apiKeyService.count();
-        Optional<APIKey> apiKey = apiKeyIssuer.issueKey(USERNAME, PASSWORD, 999L);
+        Optional<APIKey> apiKey = apiKeyIssuer.issueKey(USERNAME, PASSWORD, UUID.randomUUID());
 
         assertTrue(apiKey.isEmpty());
         assertEquals(countBefore, apiKeyService.count());

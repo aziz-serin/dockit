@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +35,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @CachePut(key = "#id")
-    public Optional<Admin> updateUsername(Long id, String newUsername) {
+    public Optional<Admin> updateUsername(UUID id, String newUsername) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         Optional<Admin> requestedUserName = findByUsername(newUsername);
         if (optionalAdmin.isPresent() && requestedUserName.isEmpty()) {
@@ -47,7 +48,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @CachePut(key = "#id")
-    public Optional<Admin> updatePassword(Long id, String newPassword) {
+    public Optional<Admin> updatePassword(UUID id, String newPassword) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if (optionalAdmin.isPresent()) {
             Admin admin = optionalAdmin.get();
@@ -59,7 +60,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @CachePut(key = "#id")
-    public Optional<Admin> updateRole(Long id, Admin.Role role) {
+    public Optional<Admin> updateRole(UUID id, Admin.Role role) {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if (optionalAdmin.isPresent()) {
             Admin admin = optionalAdmin.get();
@@ -71,13 +72,13 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @CacheEvict(key = "#id")
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         adminRepository.deleteById(id);
     }
 
     @Override
     @Cacheable(key = "#id")
-    public Optional<Admin> findById(Long id) {
+    public Optional<Admin> findById(UUID id) {
         return adminRepository.findById(id);
     }
 
@@ -100,7 +101,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Admin> findAllById(List<Long> ids) {
+    public List<Admin> findAllById(List<UUID> ids) {
         return adminRepository.findAllById(ids);
     }
 
@@ -118,7 +119,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public boolean existsById(Long id) {
+    public boolean existsById(UUID id) {
         return adminRepository.existsById(id);
     }
 }

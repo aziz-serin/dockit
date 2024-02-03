@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -65,7 +66,7 @@ public class AuditServiceTest {
 
     @Test
     public void findByIdReturnsEmptyIfItDoesNotExists() {
-        assertFalse(auditService.findById(999L).isPresent());
+        assertFalse(auditService.findById(UUID.randomUUID()).isPresent());
     }
 
     @Test
@@ -243,10 +244,11 @@ public class AuditServiceTest {
 
     @Test
     public void findByIdDoesNotCacheResultOnFailedFind() {
+        UUID id = UUID.randomUUID();
         // Place audit1 in the cache
-        auditService.findById(999L);
+        auditService.findById(id);
 
-        Object cachedAudit = cache.get(999L).get();
+        Object cachedAudit = cache.get(id).get();
 
         assertThat(cachedAudit).isNull();
     }

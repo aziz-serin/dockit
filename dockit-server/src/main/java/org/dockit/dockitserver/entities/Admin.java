@@ -11,6 +11,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.UUID;
+
 @Entity
 @Table(name= "admins")
 public class Admin implements DTO {
@@ -22,9 +24,9 @@ public class Admin implements DTO {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
     @Size(max = 512)
     @NotEmpty
@@ -39,11 +41,11 @@ public class Admin implements DTO {
     @Column(name = "privilege")
     private Role privilege;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

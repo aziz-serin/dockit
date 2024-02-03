@@ -1,6 +1,8 @@
 package org.dockit.dockitserver.entities;
 
+import java.util.UUID;
+
 public interface DTO {
-    Long getId();
-    void setId(Long id);
+    UUID getId();
+    void setId(UUID id);
 }

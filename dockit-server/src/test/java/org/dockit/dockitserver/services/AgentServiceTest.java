@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -64,7 +65,7 @@ public class AgentServiceTest {
 
     @Test
     public void findByIdReturnsEmptyIfIdDoesNotExist() {
-        assertFalse(agentService.findById(999L).isPresent());
+        assertFalse(agentService.findById(UUID.randomUUID()).isPresent());
     }
 
     @Test
@@ -155,7 +156,7 @@ public class AgentServiceTest {
 
     @Test
     public void updateAgentNameReturnsEmptyIfIdDoesNotExist() {
-        assertFalse(agentService.updateAgentName(9999L, "TEST").isPresent());
+        assertFalse(agentService.updateAgentName(UUID.randomUUID(), "TEST").isPresent());
     }
 
     @Test
@@ -169,7 +170,7 @@ public class AgentServiceTest {
 
     @Test
     public void updateLastActiveTimeReturnsEmptyIfIdDoesNotExist() {
-        assertFalse(agentService.updateLastActiveTime(9999L, LocalDateTime.now()).isPresent());
+        assertFalse(agentService.updateLastActiveTime(UUID.randomUUID(), LocalDateTime.now()).isPresent());
     }
 
     @Test
@@ -259,7 +260,7 @@ public class AgentServiceTest {
 
     @Test
     public void findByDoesNotCacheFailedFind() {
-        Long id = 9999L;
+        UUID id = UUID.randomUUID();
         // Place agent1 into cache
         agentService.findById(id);
 

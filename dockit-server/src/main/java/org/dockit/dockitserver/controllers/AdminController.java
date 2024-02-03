@@ -8,8 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,10 +40,9 @@ public class AdminController {
     @PutMapping("/updateUsername")
     @PreAuthorize("hasAuthority('SUPER')")
     public ResponseEntity<?> updateAdminUsername(@RequestBody @NonNull Map<String, ?> body) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = (String) body.get("username");
         String newUserName = (String) body.get("new_user_name");
-        if (!ParameterValidator.valid(userName, newUserName)) {
+        if (ParameterValidator.invalid(userName, newUserName)) {
             return ResponseEntity.badRequest().body("Invalid request!");
         }
         Optional<Admin> requestedAdmin = adminService.findByUsername(userName);
@@ -65,7 +62,7 @@ public class AdminController {
     public ResponseEntity<?> updateAdminPassword(@RequestBody @NonNull Map<String, ?> body) {
         String userName = (String) body.get("username");
         String newPassword = (String) body.get("new_password");
-        if (!ParameterValidator.valid(userName, newPassword)) {
+        if (ParameterValidator.invalid(userName, newPassword)) {
             return ResponseEntity.badRequest().body("Invalid request!");
         }
         Optional<Admin> requestedAdmin = adminService.findByUsername(userName);
@@ -86,7 +83,7 @@ public class AdminController {
         String userName = (String) body.get("username");
         String newRole = (String) body.get("new_role");
 
-        if (!ParameterValidator.valid(userName, newRole)) {
+        if (ParameterValidator.invalid(userName, newRole)) {
             return ResponseEntity.badRequest().body("Invalid request!");
         }
 
@@ -116,7 +113,7 @@ public class AdminController {
         String password = (String) body.get("password");
         String bodyRole = (String) body.get("role");
 
-        if (!ParameterValidator.valid(userName, password, bodyRole)) {
+        if (ParameterValidator.invalid(userName, password, bodyRole)) {
             return ResponseEntity.badRequest().body("Invalid request!");
         }
 
@@ -142,7 +139,6 @@ public class AdminController {
         adminService.deleteById(requestedAdmin.get().getId());
         return ResponseEntity.ok().build();
     }
-
 
     private Optional<Admin.Role> getRole(String role) {
         if (role == null)

@@ -30,7 +30,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -180,8 +181,8 @@ public class AgentControllerTest {
                 .expectBody(Map.class)
                 .consumeWith(res -> {
                     Map<String, Object> body = res.getResponseBody();
-                    long id = Long.parseLong(String.valueOf(Objects.requireNonNull(body).get("id")));
-                    assertTrue(keyStoreHandler.keyExists(String.valueOf(id)));
+                    UUID id = UUID.fromString((String) Objects.requireNonNull(body).get("id"));
+                    assertTrue(keyStoreHandler.keyExists(id.toString()));
                 });
     }
 
@@ -205,7 +206,7 @@ public class AgentControllerTest {
                 "agentName", AGENT_NAME,
                 "password", AGENT_PASSWORD
         );
-        AtomicLong id = new AtomicLong(0L);
+        AtomicReference<UUID> id = new AtomicReference<>(); 
 
         client.post().uri("/api/agent")
                 .header("Authorization", jwt)
@@ -216,7 +217,7 @@ public class AgentControllerTest {
                 .expectBody(Map.class)
                 .consumeWith(res -> {
                             Map<String, Object> body = res.getResponseBody();
-                            id.set(Long.parseLong(String.valueOf(Objects.requireNonNull(body).get("id"))));
+                            id.set(UUID.fromString((String) Objects.requireNonNull(body).get("id")));
                         });
 
         // Create api key to observe it getting deleted

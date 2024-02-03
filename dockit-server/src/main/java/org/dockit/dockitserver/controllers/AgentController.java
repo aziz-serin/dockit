@@ -27,6 +27,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/agent", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -46,7 +47,7 @@ public class AgentController {
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR', 'VIEWER')")
-    public ResponseEntity<?> getAgent(@RequestParam(name = "id") long id) {
+    public ResponseEntity<?> getAgent(@RequestParam(name = "id") UUID id) {
         Optional<Agent> agent = agentService.findById(id);
         if (agent.isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid request!");
@@ -83,7 +84,7 @@ public class AgentController {
     public ResponseEntity<?> creteAgent(@RequestBody @NonNull Map<String, ?> body) {
         String agentName = (String) body.get("agentName");
         String password = (String) body.get("password");
-        if (!ParameterValidator.valid(agentName, password)) {
+        if (ParameterValidator.invalid(agentName, password)) {
             return ResponseEntity.badRequest().body("Invalid request!");
         }
         LocalDateTime creationTime = LocalDateTime.now();
@@ -105,13 +106,13 @@ public class AgentController {
 
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR')")
-    public ResponseEntity<?> delete(@RequestParam(name = "id") long id) {
+    public ResponseEntity<?> delete(@RequestParam(name = "id") UUID id) {
         // Delete agent and any associated apikey with it, as well as its secret key
         Optional<Agent> agent = agentService.findById(id);
         if (agent.isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid request!");
         }
-        List<Long> keyIds = apiKeyService.findAllWithSameAgent(agent.get())
+        List<UUID> keyIds = apiKeyService.findAllWithSameAgent(agent.get())
                 .stream()
                 .map(APIKey::getId)
                 .toList();
@@ -123,10 +124,10 @@ public class AgentController {
 
     @PutMapping
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR')")
-    public ResponseEntity<?> updateAgentName(@RequestParam(name = "id") long id,
+    public ResponseEntity<?> updateAgentName(@RequestParam(name = "id") UUID id,
                                                     @RequestBody @NonNull Map<String, ?> body) {
         String name = (String) body.get("agentName");
-        if (!ParameterValidator.valid(name)) {
+        if (ParameterValidator.invalid(name)) {
             return ResponseEntity.badRequest().body("Invalid request!");
         }
         Optional<Agent> agent = agentService.updateAgentName(id, name);

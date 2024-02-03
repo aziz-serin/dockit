@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +39,7 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     @CachePut(key = "#id")
-    public Optional<Agent> updateAgentName(Long id, String newAgentName) {
+    public Optional<Agent> updateAgentName(UUID id, String newAgentName) {
         Optional<Agent> optionalAgent = agentRepository.findById(id);
         if (optionalAgent.isPresent()) {
             Agent agent = optionalAgent.get();
@@ -50,7 +51,7 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     @CachePut(key = "#id")
-    public Optional<Agent> updateLastActiveTime(Long id, LocalDateTime lastActiveTime) {
+    public Optional<Agent> updateLastActiveTime(UUID id, LocalDateTime lastActiveTime) {
         Optional<Agent> optionalAgent = agentRepository.findById(id);
         if (optionalAgent.isPresent()) {
             Agent agent = optionalAgent.get();
@@ -62,13 +63,13 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     @CacheEvict(key = "#id")
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         agentRepository.deleteById(id);
     }
 
     @Override
     @Cacheable(key = "#id")
-    public Optional<Agent> findById(Long id) {
+    public Optional<Agent> findById(UUID id) {
         return agentRepository.findById(id);
     }
 

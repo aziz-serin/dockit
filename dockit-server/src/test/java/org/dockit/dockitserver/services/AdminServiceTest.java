@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -82,7 +83,7 @@ public class AdminServiceTest {
 
     @Test
     public void deleteDoesNothingIfAdminDoesNotExist() {
-        adminService.deleteById(999L);
+        adminService.deleteById(UUID.randomUUID());
 
         assertThat(adminService.count()).isEqualTo(3);
     }
@@ -104,12 +105,12 @@ public class AdminServiceTest {
 
     @Test
     public void existsByIdReturnsFalseIfItDoesNotExists() {
-        assertFalse(adminService.existsById(999L));
+        assertFalse(adminService.existsById(UUID.randomUUID()));
     }
 
     @Test
     public void findByIdReturnsEmptyIfIdDoesNotExist() {
-        assertFalse(adminService.findById(999L).isPresent());
+        assertFalse(adminService.findById(UUID.randomUUID()).isPresent());
     }
 
     @Test
@@ -135,14 +136,14 @@ public class AdminServiceTest {
 
     @Test
     public void findAllByIdReturnsEmptyListIfNoIdExists() {
-        List<Long> ids = new ArrayList<>(Arrays.asList(999L, 9999L, 99999L));
+        List<UUID> ids = new ArrayList<>(Arrays.asList(UUID.randomUUID(), UUID.randomUUID()));
 
         assertThat(adminService.findAllById(ids)).hasSize(0);
     }
 
     @Test
     public void findAllByIdReturnsListIfIdExists() {
-        List<Long> ids = new ArrayList<>(Arrays.asList(999L, admin1.getId(), admin2.getId()));
+        List<UUID> ids = new ArrayList<>(Arrays.asList(UUID.randomUUID(), admin1.getId(), admin2.getId()));
 
         assertThat(adminService.findAllById(ids)).hasSize(2);
     }
@@ -157,7 +158,7 @@ public class AdminServiceTest {
 
     @Test
     public void updateUsernameReturnsEmptyIfIdDoesNotExist() {
-        assertFalse(adminService.updateUsername(999L, "test").isPresent());
+        assertFalse(adminService.updateUsername(UUID.randomUUID(), "test").isPresent());
     }
 
     @Test
@@ -176,7 +177,7 @@ public class AdminServiceTest {
 
     @Test
     public void updatePasswordReturnsEmptyIfIdDoesNotExist() {
-        assertFalse(adminService.updatePassword(999L, "test").isPresent());
+        assertFalse(adminService.updatePassword(UUID.randomUUID(), "test").isPresent());
     }
 
     @Test
@@ -191,7 +192,7 @@ public class AdminServiceTest {
 
     @Test
     public void updateRoleReturnsEmptyIfIdDoesNotExist() {
-        assertFalse(adminService.updateRole(999L, Admin.Role.SUPER).isPresent());
+        assertFalse(adminService.updateRole(UUID.randomUUID(), Admin.Role.SUPER).isPresent());
     }
 
     @Test
@@ -291,7 +292,7 @@ public class AdminServiceTest {
     @Test
     public void findByIdDoesNotCacheResultForFailedFind() {
         //Cache the admin using findById
-        adminService.findById(9999L);
+        adminService.findById(UUID.randomUUID());
 
         Object admin =  cache.get(admin3.getId());
         assertThat(admin).isNull();
