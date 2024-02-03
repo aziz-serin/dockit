@@ -40,7 +40,7 @@ public class ConfigWriter {
         try {
             FileOutputStream outputStream = new FileOutputStream(writePath);
             String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
-            properties.store(outputStream, "System Config \n Generated at " + timeStamp);
+            properties.store(outputStream, "System Config \nGenerated at " + timeStamp);
             return properties;
         } catch (IOException e) {
             logger.debug("Could not create the properties!");
