@@ -29,7 +29,7 @@ public class AESGCMEncryptor {
         byte[] IV = getRandomBytes(KeyConstants.IV_SIZE_GCM);
 
         Cipher cipher = initCipher(Cipher.ENCRYPT_MODE, key, IV);
-        cipher.updateAAD(Base64.getDecoder().decode(aad));
+        cipher.updateAAD(aad.getBytes());
 
         byte[] encryptedBytes = cipher.doFinal(data.getBytes());
         byte[] cipherByte = ArrayUtils.addAll(IV, encryptedBytes);
@@ -49,7 +49,7 @@ public class AESGCMEncryptor {
         byte[] encryptedBytes = ArrayUtils.subarray(dataBytes, KeyConstants.IV_SIZE_GCM, dataBytes.length);
 
         Cipher cipher = initCipher(Cipher.DECRYPT_MODE, key, IV);
-        cipher.updateAAD(Base64.getDecoder().decode(aad));
+        cipher.updateAAD(aad.getBytes());
 
         byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
 
