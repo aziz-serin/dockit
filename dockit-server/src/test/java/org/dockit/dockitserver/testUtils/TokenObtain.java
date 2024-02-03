@@ -5,6 +5,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class TokenObtain {
 
@@ -28,7 +29,7 @@ public class TokenObtain {
         return jwtToken;
     }
 
-    public static String getAPIToken(String userName, String password, Long agentId, WebTestClient client) {
+    public static String getAPIToken(String userName, String password, UUID agentId, WebTestClient client) {
         Map<String, ?> json = Map.of(
                 "username", userName,
                 "password", password,
