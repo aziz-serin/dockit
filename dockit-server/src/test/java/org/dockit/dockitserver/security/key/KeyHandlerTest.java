@@ -1,6 +1,6 @@
 package org.dockit.dockitserver.security.key;
 
-import org.dockit.dockitserver.exceptions.security.key.AgentKeyCreationException;
+import org.dockit.dockitserver.exceptions.security.key.KeyStoreException;
 import org.dockit.dockitserver.security.keystore.KeyStoreHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +33,7 @@ public class KeyHandlerTest {
 
     @Test
     public void generateKeyForAgentAndSaveFailsGivenNullPassword() {
-        Exception exception = assertThrows(AgentKeyCreationException.class, () -> {
+        Exception exception = assertThrows(KeyStoreException.class, () -> {
             keyHandler.generateKeyForAgentAndSave(ALIAS, null);
         });
 
@@ -44,7 +44,7 @@ public class KeyHandlerTest {
     public void generateKeyForAgentAndSaveFailsGivenFailureInSaving() {
         when(keyStoreHandler.saveKey(any(String.class), any(SecretKey.class), any(char[].class))).thenReturn(false);
 
-        Exception exception = assertThrows(AgentKeyCreationException.class, () -> {
+        Exception exception = assertThrows(KeyStoreException.class, () -> {
             keyHandler.generateKeyForAgentAndSave(ALIAS, PASSWORD);
         });
 
@@ -62,7 +62,7 @@ public class KeyHandlerTest {
     public void generateKeyForDBEncryptionFailsGivenFailureInSaving() {
         when(keyStoreHandler.saveKey(any(String.class), any(SecretKey.class), any(char[].class))).thenReturn(false);
 
-        Exception exception = assertThrows(AgentKeyCreationException.class, () -> {
+        Exception exception = assertThrows(KeyStoreException.class, () -> {
             keyHandler.generateKeyForDBEncryption(ALIAS, PASSWORD);
         });
 

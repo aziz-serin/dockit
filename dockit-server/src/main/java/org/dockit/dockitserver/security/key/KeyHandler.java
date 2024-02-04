@@ -1,6 +1,6 @@
 package org.dockit.dockitserver.security.key;
 
-import org.dockit.dockitserver.exceptions.security.key.AgentKeyCreationException;
+import org.dockit.dockitserver.exceptions.security.key.KeyStoreException;
 import org.dockit.dockitserver.security.keystore.KeyStoreHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,11 +21,11 @@ public class KeyHandler {
     public Key generateKeyForAgentAndSave(String alias, String password) {
         Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.ENCRYPTION_KEY_SIZE, password);
         if (key.isEmpty()) {
-            throw new AgentKeyCreationException("Something went wrong creating the key!");
+            throw new KeyStoreException("Something went wrong creating the key!");
         }
         boolean saved = keyStoreHandler.saveKey(alias, (SecretKey) key.get(), password.toCharArray());
         if (!saved) {
-            throw new AgentKeyCreationException("Something went wrong saving the key!");
+            throw new KeyStoreException("Something went wrong saving the key!");
         }
         return key.get();
     }
@@ -33,11 +33,11 @@ public class KeyHandler {
     public void generateKeyForDBEncryption(String alias, String password) {
         Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.ENCRYPTION_KEY_SIZE);
         if (key.isEmpty()) {
-            throw new AgentKeyCreationException("Something went wrong creating the key!");
+            throw new KeyStoreException("Something went wrong creating the key!");
         }
         boolean saved = keyStoreHandler.saveKey(alias, (SecretKey) key.get(), password.toCharArray());
         if (!saved) {
-            throw new AgentKeyCreationException("Something went wrong saving the key!");
+            throw new KeyStoreException("Something went wrong saving the key!");
         }
     }
 }
