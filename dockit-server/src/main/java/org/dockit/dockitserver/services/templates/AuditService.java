@@ -10,6 +10,7 @@ import java.util.UUID;
 public interface AuditService {
     Audit save(Audit audit);
     void deleteById(UUID id);
+    void deleteAllById(List<UUID> ids);
     Optional<Audit> findById(UUID id);
     List<Audit> findByVmId(String vmId);
     List<Audit> findByCategory(String category);

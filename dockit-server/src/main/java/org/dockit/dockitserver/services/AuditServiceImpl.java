@@ -43,6 +43,11 @@ public class AuditServiceImpl implements AuditService {
     }
 
     @Override
+    public void deleteAllById(List<UUID> ids) {
+        auditRepository.deleteAllById(ids);
+    }
+
+    @Override
     @Cacheable(key = "#id")
     public Optional<Audit> findById(UUID id) {
         return auditRepository.findById(id);
