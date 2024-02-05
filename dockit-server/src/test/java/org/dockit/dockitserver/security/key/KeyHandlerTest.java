@@ -52,7 +52,7 @@ public class KeyHandlerTest {
     }
 
     @Test
-    public void generateKeyForAgentAndSaveSucceeds() {
+    public void generateKeyForAgentAndSaveSucceeds() throws KeyStoreException {
         when(keyStoreHandler.saveKey(any(String.class), any(SecretKey.class), any(char[].class))).thenReturn(true);
 
         keyHandler.generateKeyForAgentAndSave(ALIAS, PASSWORD);
@@ -70,7 +70,7 @@ public class KeyHandlerTest {
     }
 
     @Test
-    public void generateKeyForDBEncryptionAndSaveSucceeds() {
+    public void generateKeyForDBEncryptionAndSaveSucceeds() throws KeyStoreException {
         when(keyStoreHandler.saveKey(any(String.class), any(SecretKey.class), any(char[].class))).thenReturn(true);
 
         keyHandler.generateKeyForDBEncryption(ALIAS, PASSWORD);

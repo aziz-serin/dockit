@@ -4,6 +4,7 @@ import org.dockit.dockitserver.controllers.utils.ParameterValidator;
 import org.dockit.dockitserver.entities.APIKey;
 import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.utils.EntityCreator;
+import org.dockit.dockitserver.exceptions.security.key.KeyStoreException;
 import org.dockit.dockitserver.security.key.KeyHandler;
 import org.dockit.dockitserver.security.keystore.KeyStoreHandler;
 import org.dockit.dockitserver.services.templates.APIKeyService;
@@ -95,13 +96,17 @@ public class AgentController {
             return ResponseEntity.badRequest().body("Invalid request!");
         }
         agentService.save(agent.get());
-        // Generate secret key for the agent and store it
-        Key key = keyHandler.generateKeyForAgentAndSave(agent.get().getId().toString(), agent.get().getPassword());
 
-        return ResponseEntity.ok().body(Map.of(
-                        "id", agent.get().getId(),
-                        "key", Base64.getEncoder().encodeToString(key.getEncoded()))
-        );
+        try {
+            // Generate secret key for the agent and store it
+            Key key = keyHandler.generateKeyForAgentAndSave(agent.get().getId().toString(), agent.get().getPassword());
+            return ResponseEntity.ok().body(Map.of(
+                    "id", agent.get().getId(),
+                    "key", Base64.getEncoder().encodeToString(key.getEncoded()))
+            );
+        } catch (KeyStoreException e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @DeleteMapping

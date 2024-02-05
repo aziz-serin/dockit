@@ -18,7 +18,7 @@ public class KeyHandler {
         this.keyStoreHandler = keyStoreHandler;
     }
 
-    public Key generateKeyForAgentAndSave(String alias, String password) {
+    public Key generateKeyForAgentAndSave(String alias, String password) throws KeyStoreException {
         Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.ENCRYPTION_KEY_SIZE, password);
         if (key.isEmpty()) {
             throw new KeyStoreException("Something went wrong creating the key!");
@@ -30,7 +30,7 @@ public class KeyHandler {
         return key.get();
     }
 
-    public void generateKeyForDBEncryption(String alias, String password) {
+    public void generateKeyForDBEncryption(String alias, String password) throws KeyStoreException {
         Optional<Key> key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.ENCRYPTION_KEY_SIZE);
         if (key.isEmpty()) {
             throw new KeyStoreException("Something went wrong creating the key!");
