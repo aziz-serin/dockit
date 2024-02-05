@@ -55,7 +55,7 @@ public class SecurityConfig {
     public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilter() {
         FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new JwtAuthenticationFilter());
-        registrationBean.addUrlPatterns("/api/admin/**", "/api/audit/**", "/api/agent/**");
+        registrationBean.addUrlPatterns("/api/admin/**", "/api/audit/**", "/api/agent/**", "/api/apiKey/**");
         return registrationBean;
     }
 }

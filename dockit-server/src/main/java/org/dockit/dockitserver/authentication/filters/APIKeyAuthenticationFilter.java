@@ -21,7 +21,7 @@ public class APIKeyAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(APIKeyAuthenticationFilter.class);
 
     private final Set<String> excludedUrls = Set.of("/api/admin/**", "/api/authenticate/**", "/api/actuator/**",
-            "/api/audit/**", "/api/agent/**");
+            "/api/audit/**", "/api/agent/**", "/api/apiKey/**");
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
