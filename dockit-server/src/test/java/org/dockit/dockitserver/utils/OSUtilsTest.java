@@ -1,6 +1,6 @@
 package org.dockit.dockitserver.utils;
 
-import org.dockit.dockitserver.utils.OSUtils;
+import org.dockit.dockitserver.config.utils.OSUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

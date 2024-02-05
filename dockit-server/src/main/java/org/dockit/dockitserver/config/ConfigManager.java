@@ -2,7 +2,7 @@ package org.dockit.dockitserver.config;
 
 import org.dockit.dockitserver.exceptions.config.ConfigWriterException;
 import org.dockit.dockitserver.security.keystore.KeyStoreManager;
-import org.dockit.dockitserver.utils.OSUtils;
+import org.dockit.dockitserver.config.utils.OSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;

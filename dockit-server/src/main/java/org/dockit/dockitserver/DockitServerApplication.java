@@ -1,6 +1,6 @@
 package org.dockit.dockitserver;
 
-import org.dockit.dockitserver.utils.OSUtils;
+import org.dockit.dockitserver.config.utils.OSUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;

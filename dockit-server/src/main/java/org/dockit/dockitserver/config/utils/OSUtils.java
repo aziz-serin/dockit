@@ -1,4 +1,4 @@
-package org.dockit.dockitserver.utils;
+package org.dockit.dockitserver.config.utils;
 
 public class OSUtils {
 
