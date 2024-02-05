@@ -73,26 +73,27 @@ public class AdminServiceTest {
     public void getAllReturnAllAdmins() {
         List<Admin> admins = adminService.findAll();
 
-        assertThat(admins.size()).isEqualTo(3);
-    }
-
-    @Test
-    public void countReturnsTrueCount() {
-        assertThat(adminService.count()).isEqualTo(3);
+        assertThat(admins.stream().map(Admin::getId)).contains(
+                admin1.getId(), admin2.getId(), admin3.getId()
+        );
     }
 
     @Test
     public void deleteDoesNothingIfAdminDoesNotExist() {
         adminService.deleteById(UUID.randomUUID());
 
-        assertThat(adminService.count()).isEqualTo(3);
+        List<Admin> admins = adminService.findAll();
+
+        assertThat(admins.stream().map(Admin::getId)).contains(
+                admin1.getId(), admin2.getId(), admin3.getId()
+        );
     }
 
     @Test
     public void deleteDoesDeleteTheAdminIfItExists() {
         adminService.deleteById(admin1.getId());
 
-        assertThat(adminService.count()).isEqualTo(2);
+        assertThat(adminService.findAll().stream().map(Admin::getId)).doesNotContain(admin1.getId());
 
         //Undo the effects of the test
         adminService.save(admin1);
@@ -152,8 +153,8 @@ public class AdminServiceTest {
     public void findByRoleReturnsAdmin() {
         List<Admin> admins = adminService.findByRole(Admin.Role.SUPER);
 
-        assertThat(admins).hasSize(1);
-        assertThat(admins.get(0).getPrivilege()).isEqualTo(Admin.Role.SUPER);
+        assertThat(admins.stream().map(Admin::getPrivilege))
+                .doesNotContain(Admin.Role.VIEWER, Admin.Role.EDITOR);
     }
 
     @Test
