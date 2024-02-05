@@ -35,7 +35,7 @@ public class AuditController {
     public ResponseEntity<?> getById(@RequestParam(name = "id") @NonNull String id) {
         Optional<Audit> audit = auditService.findById(UUID.fromString(id));
         if (audit.isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid request!");
+            return ResponseEntity.notFound().build();
         }
         try {
             return ResponseEntity.ok().body(decryptor.decryptAudit(audit.get()));

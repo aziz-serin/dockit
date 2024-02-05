@@ -51,7 +51,7 @@ public class AgentController {
     public ResponseEntity<?> getAgent(@RequestParam(name = "id") UUID id) {
         Optional<Agent> agent = agentService.findById(id);
         if (agent.isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid request!");
+            return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok().body(agent.get());
         }
@@ -115,7 +115,7 @@ public class AgentController {
         // Delete agent and any associated apikey with it, as well as its secret key
         Optional<Agent> agent = agentService.findById(id);
         if (agent.isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid request!");
+            return ResponseEntity.notFound().build();
         }
         Optional<APIKey> apiKey = apiKeyService.findByAgentId(agent.get().getId());
 
