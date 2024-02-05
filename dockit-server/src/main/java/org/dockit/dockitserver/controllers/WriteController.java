@@ -1,4 +1,4 @@
-package org.dockit.dockitserver.authentication.filters;
+package org.dockit.dockitserver.controllers;
 
 import org.dockit.dockitserver.controllers.utils.ParameterValidator;
 import org.dockit.dockitserver.controllers.utils.WriteProcessor;
