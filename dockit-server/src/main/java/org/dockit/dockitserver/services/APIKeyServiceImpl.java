@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -53,11 +54,11 @@ public class APIKeyServiceImpl implements APIKeyService {
     }
 
     @Override
-    public List<APIKey> findAllWithSameAgent(Agent agent) {
+    public Optional<APIKey> findByAgentId(UUID agentId) {
         List<APIKey> tokens = APIKeyRepository.findAll();
         return tokens.stream()
-                .filter(t -> t.getAgent().getId().equals(agent.getId()))
-                .toList();
+                .filter(t -> t.getAgent().getId().toString().equals(agentId.toString()))
+                .findFirst();
     }
 
     @Override

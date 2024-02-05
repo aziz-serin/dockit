@@ -15,6 +15,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -61,7 +63,7 @@ public class APIKeyIssuerTest {
     @Test
     public void issueKeyReturnsEmptyGivenAdminDoesNotExists() {
         long countBefore = apiKeyService.count();
-        Optional<APIKey> apiKey = apiKeyIssuer.issueKey("user", PASSWORD, agent.getId());
+        Optional<String> apiKey = apiKeyIssuer.issueKey("user", PASSWORD, agent.getId());
 
         assertTrue(apiKey.isEmpty());
         assertEquals(countBefore, apiKeyService.count());
@@ -70,7 +72,7 @@ public class APIKeyIssuerTest {
     @Test
     public void issueKeyReturnsEmptyGivenAdminPasswordInvalid() {
         long countBefore = apiKeyService.count();
-        Optional<APIKey> apiKey = apiKeyIssuer.issueKey(USERNAME, "invalid_password", agent.getId());
+        Optional<String> apiKey = apiKeyIssuer.issueKey(USERNAME, "invalid_password", agent.getId());
 
         assertTrue(apiKey.isEmpty());
         assertEquals(countBefore, apiKeyService.count());
@@ -79,7 +81,7 @@ public class APIKeyIssuerTest {
     @Test
     public void issueKeyReturnsEmptyGivenAgentDoesNotExist() {
         long countBefore = apiKeyService.count();
-        Optional<APIKey> apiKey = apiKeyIssuer.issueKey(USERNAME, PASSWORD, UUID.randomUUID());
+        Optional<String> apiKey = apiKeyIssuer.issueKey(USERNAME, PASSWORD, UUID.randomUUID());
 
         assertTrue(apiKey.isEmpty());
         assertEquals(countBefore, apiKeyService.count());
@@ -87,11 +89,15 @@ public class APIKeyIssuerTest {
 
     @Test
     public void issueKeyCreatesAndReturnsKey() {
-        Optional<APIKey> apiKey = apiKeyIssuer.issueKey(USERNAME, PASSWORD, agent.getId());
+        Optional<String> apiKey = apiKeyIssuer.issueKey(USERNAME, PASSWORD, agent.getId());
+
+        Optional<APIKey> savedKey = apiKeyService.findByAgentId(agent.getId());
+
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
 
         assertTrue(apiKey.isPresent());
-        assertThat(apiKey.get().getAgent().getId()).isEqualTo(agent.getId());
-        assertThat(apiKeyService.findAll().stream().map(APIKey::getId).toList()).contains(apiKey.get().getId());
+        assertThat(savedKey).isPresent();
+        assertTrue(encoder.matches(apiKey.get(), savedKey.get().getToken()));
     }
 
 }

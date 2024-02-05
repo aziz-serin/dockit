@@ -23,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -85,11 +86,11 @@ public class APIKeyServiceTest {
     }
 
     @Test
-    public void findAllByAgentReturnsTrueList() {
-        List<APIKey> tokens = APIKeyService.findAllWithSameAgent(agent1);
-        tokens.forEach(
-                t -> assertThat(t.getAgent().getId()).isEqualTo(agent1.getId())
-        );
+    public void findAllByAgentReturnsToken() {
+        Optional<APIKey> token = APIKeyService.findByAgentId(agent1.getId());
+
+        assertThat(token).isPresent();
+        assertThat(token.get().getAgent().getId()).isEqualTo(agent1.getId());
     }
 
     @Test

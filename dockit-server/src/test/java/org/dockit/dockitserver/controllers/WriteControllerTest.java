@@ -66,6 +66,8 @@ public class WriteControllerTest {
     WebTestClient client;
     UUID agentId;
 
+    String apiToken;
+
     @BeforeAll
     public void setup() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
             NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
@@ -80,12 +82,12 @@ public class WriteControllerTest {
 
         Key key = keyStoreHandler.getKey(agentId.toString(), agent.getPassword().toCharArray()).get();
         encryptedData = AESGCMEncryptor.encrypt(DATA, agentId.toString(), (SecretKey) key);
+
+        apiToken = TokenObtain.getAPIToken(ADMIN_USERNAME, ADMIN_PASSWORD, agentId, client);
     }
 
     @Test
     public void writeControllerFailsGivenInvalidBody() {
-        String apiToken = TokenObtain.getAPIToken(ADMIN_USERNAME, ADMIN_PASSWORD, agentId, client);
-
         Map<String, Object> json = Map.of(
                 "vmId", VM_ID,
                 "categor", CATEGORY,
@@ -103,8 +105,6 @@ public class WriteControllerTest {
 
     @Test
     public void writeControllerFailsGivenInvalidTimeStamp() {
-        String apiToken = TokenObtain.getAPIToken(ADMIN_USERNAME, ADMIN_PASSWORD, agentId, client);
-
         Map<String, Object> json = Map.of(
                 "vmId", VM_ID,
                 "category", CATEGORY,
@@ -122,8 +122,6 @@ public class WriteControllerTest {
 
     @Test
     public void writeControllerFailsGivenInvalidAgent() {
-        String apiToken = TokenObtain.getAPIToken(ADMIN_USERNAME, ADMIN_PASSWORD, agentId, client);
-
         Map<String, Object> json = Map.of(
                 "vmId", VM_ID,
                 "category", CATEGORY,
@@ -141,8 +139,6 @@ public class WriteControllerTest {
 
     @Test
     public void writeControllerFailsGivenUnencryptedData() {
-        String apiToken = TokenObtain.getAPIToken(ADMIN_USERNAME, ADMIN_PASSWORD, agentId, client);
-
         Map<String, Object> json = Map.of(
                 "vmId", VM_ID,
                 "category", CATEGORY,
@@ -160,8 +156,6 @@ public class WriteControllerTest {
 
     @Test
     public void writeControllerSucceeds() {
-        String apiToken = TokenObtain.getAPIToken(ADMIN_USERNAME, ADMIN_PASSWORD, agentId, client);
-
         Map<String, Object> json = Map.of(
                 "vmId", VM_ID,
                 "category", CATEGORY,

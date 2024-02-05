@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -34,6 +36,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @DirtiesContext
@@ -138,9 +141,14 @@ public class AuthenticationControllerTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Map.class)
-                .consumeWith(response -> assertThat(Objects.requireNonNull(response.getResponseBody()).get("key"))
-                        .isIn(apiKeyService.findAll().stream().map(APIKey::getToken).toList())
-                );
+                .consumeWith(response -> {
+                            String apiKey = (String) Objects.requireNonNull(response.getResponseBody()).get("key");
+                            PasswordEncoder encoder = new BCryptPasswordEncoder();
+                            assertTrue(
+                                    apiKeyService.findAll().stream()
+                                            .anyMatch(key -> encoder.matches(apiKey, key.getToken()))
+                            );
+                });
     }
 
     @Test
@@ -189,7 +197,7 @@ public class AuthenticationControllerTest {
                 .expectBody(Map.class)
                 .consumeWith(res -> {
                     try {
-                        Assertions.assertTrue(jwtValidator.validateJwtToken((String) Objects.requireNonNull(res.getResponseBody()).get("token")));
+                        assertTrue(jwtValidator.validateJwtToken((String) Objects.requireNonNull(res.getResponseBody()).get("token")));
                     } catch (ParseException e) {
                         //fail
                         throw new RuntimeException(e);

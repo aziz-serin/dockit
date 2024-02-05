@@ -221,8 +221,7 @@ public class AgentControllerTest {
                         });
 
         // Create api key to observe it getting deleted
-        APIKey apiKey = apiKeyIssuer.issueKey(ADMIN_USERNAME, ADMIN_PASSWORD, id.get()).get();
-        apiKeyService.save(apiKey);
+        String apiKey = apiKeyIssuer.issueKey(ADMIN_USERNAME, ADMIN_PASSWORD, id.get()).get();
 
         client.delete().uri("/api/agent?id=" + id.get())
                 .header("Authorization", jwt)

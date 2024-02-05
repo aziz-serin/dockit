@@ -45,14 +45,14 @@ public class AuthenticationController {
             logger.debug("Invalid request parameters in body: {}", body);
             return ResponseEntity.badRequest().body("Invalid request!");
         }
-        Optional<APIKey> apiKey = apiKeyIssuer.issueKey(username, password, agentId);
+        Optional<String> apiKey = apiKeyIssuer.issueKey(username, password, agentId);
         if (apiKey.isEmpty()) {
             logger.debug("Could not generate api key.");
             return ResponseEntity.badRequest().body("Invalid request!");
         } else {
             return ResponseEntity.ok().body(
                     Map.of(
-                            "key", apiKey.get().getToken()
+                            "key", apiKey.get()
                     )
             );
         }

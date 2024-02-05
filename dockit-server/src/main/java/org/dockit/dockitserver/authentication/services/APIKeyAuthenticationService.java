@@ -7,9 +7,12 @@ import org.dockit.dockitserver.services.templates.APIKeyService;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class APIKeyAuthenticationService {
@@ -30,8 +33,12 @@ public class APIKeyAuthenticationService {
 
     private static boolean validAPIKey(String apiKey) {
         List<APIKey> keys = apiKeyService.findAll();
+
         return keys.stream()
                 .map(APIKey::getToken)
-                .anyMatch(apiKey::equals);
+                .anyMatch(key -> {
+                    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                    return passwordEncoder.matches(apiKey, key);
+                });
     }
 }

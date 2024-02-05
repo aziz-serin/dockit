@@ -26,7 +26,7 @@ public class APIKeyIssuer {
         this.agentService = agentService;
         this.adminService = adminService;
     }
-    public Optional<APIKey> issueKey(String username, String password, UUID agentId) {
+    public Optional<String> issueKey(String username, String password, UUID agentId) {
         Optional<Admin> admin = adminService.findByUsername(username);
         if (admin.isEmpty()) {
             return Optional.empty();
@@ -39,10 +39,11 @@ public class APIKeyIssuer {
         if (agent.isEmpty()) {
             return Optional.empty();
         }
-        Optional<APIKey> apiKey = EntityCreator.createAPIKey(APIKeyGenerator.generateApiKey(), agent.get());
+        String generatedKey = APIKeyGenerator.generateApiKey();
+        Optional<APIKey> apiKey = EntityCreator.createAPIKey(generatedKey, agent.get());
         if (apiKey.isPresent()) {
             apiKeyService.save(apiKey.get());
-            return apiKey;
+            return Optional.of(generatedKey);
         } else {
             return Optional.empty();
         }

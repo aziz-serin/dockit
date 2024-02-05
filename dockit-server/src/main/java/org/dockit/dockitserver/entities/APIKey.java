@@ -11,6 +11,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -55,6 +56,7 @@ public class APIKey implements DTO {
     }
 
     public void setToken(String token) {
-        this.token = token;
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        this.token = encoder.encode(token);
     }
 }

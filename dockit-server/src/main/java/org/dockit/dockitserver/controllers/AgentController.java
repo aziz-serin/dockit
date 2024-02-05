@@ -117,11 +117,9 @@ public class AgentController {
         if (agent.isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid request!");
         }
-        List<UUID> keyIds = apiKeyService.findAllWithSameAgent(agent.get())
-                .stream()
-                .map(APIKey::getId)
-                .toList();
-        apiKeyService.deleteAllById(keyIds);
+        Optional<APIKey> apiKey = apiKeyService.findByAgentId(agent.get().getId());
+
+        apiKey.ifPresent(key -> apiKeyService.deleteById(key.getId()));
         agentService.deleteById(id);
         keyStoreHandler.deleteKey(String.valueOf(id));
         return ResponseEntity.ok().build();
