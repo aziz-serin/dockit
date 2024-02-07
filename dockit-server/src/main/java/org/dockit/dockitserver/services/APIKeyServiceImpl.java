@@ -43,12 +43,6 @@ public class APIKeyServiceImpl implements APIKeyService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
-    public void deleteAllById(List<UUID> ids) {
-        APIKeyRepository.deleteAllById(ids);
-    }
-
-    @Override
     public List<APIKey> findAll() {
         return APIKeyRepository.findAll();
     }
