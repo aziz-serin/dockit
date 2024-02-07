@@ -16,6 +16,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Set;
 
+/**
+ * Authentication Filter used for API key authentication
+ */
 public class APIKeyAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(APIKeyAuthenticationFilter.class);
@@ -23,6 +26,9 @@ public class APIKeyAuthenticationFilter extends OncePerRequestFilter {
     private final Set<String> excludedUrls = Set.of("/api/admin/**", "/api/authenticate/**", "/api/actuator/**",
             "/api/audit/**", "/api/agent/**", "/api/apiKey/**");
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
         return excludedUrls.stream().anyMatch(url -> {
@@ -31,6 +37,9 @@ public class APIKeyAuthenticationFilter extends OncePerRequestFilter {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {

@@ -10,17 +10,29 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+/**
+ * Issuer class responsible for the generation of jwts
+ */
 @Component
 public class JwtIssuer {
 
     private final AdminService adminService;
     private final JWTGenerator jwtGenerator;
 
+    /**
+     * @param adminService {@link AdminService} object to be injected
+     * @param jwtGenerator {@link JWTGenerator} object to be injected
+     */
     public JwtIssuer(AdminService adminService, JWTGenerator jwtGenerator) {
         this.adminService = adminService;
         this.jwtGenerator = jwtGenerator;
     }
 
+    /**
+     * @param username username for {@link Admin}
+     * @param password password for {@link Admin}
+     * @return {@link Optional} string containing the jwt if successful, empty if not
+     */
     public Optional<String> issueJwt(String username, String password) {
         Optional<Admin> admin = adminService.findByUsername(username);
         if (admin.isEmpty()) {

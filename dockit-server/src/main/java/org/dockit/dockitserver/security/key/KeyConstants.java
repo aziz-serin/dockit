@@ -1,5 +1,8 @@
 package org.dockit.dockitserver.security.key;
 
+/**
+ * Constants class containing required constants for key operations
+ */
 public class KeyConstants {
 
     public static final String AES_CIPHER = "AES";

@@ -15,11 +15,21 @@ import java.security.spec.KeySpec;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Utility class to generate AES keys for encryption/decryption
+ */
 public class AESKeyGenerator {
     private static final Logger logger = LoggerFactory.getLogger(AESKeyGenerator.class);
 
     private static final List<Integer> keySizes = List.of(128, 192, 256);
 
+    /**
+     * Generates a normal AES key by validating the given algorithm and key size
+     *
+     * @param algorithm to be used when generating the key
+     * @param keySize keysize to be used
+     * @return {@link Optional} empty if there is an error, or the generated {@link Key}
+     */
     public static Optional<Key> generateKey(String algorithm, int keySize) {
         if (!keySizes.contains(keySize)) {
             logger.debug("Given key length {} is invalid for AES!", keySize);
@@ -32,6 +42,14 @@ public class AESKeyGenerator {
         }
     }
 
+    /**
+     * Generates a password-based AES key by validating the given algorithm and key size
+     *
+     * @param algorithm to be used when generating the key
+     * @param keySize keysize to be used
+     * @param password password to be used when creating the key
+     * @return {@link Optional} empty if there is an error, or the generated {@link Key}
+     */
     public static Optional<Key> generateKey(String algorithm, int keySize, String password) {
         if (password == null) {
             logger.debug("Password cannot be null when creating key!");

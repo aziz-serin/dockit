@@ -19,16 +19,29 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
+/**
+ * Deal with the incoming requests from the {@link org.dockit.dockitserver.controllers.WriteController}
+ */
 @Component
 public class WriteProcessor {
     private final KeyStoreHandler keyStoreHandler;
 
     private static final Logger logger = LoggerFactory.getLogger(WriteProcessor.class);
 
+    /**
+     * @param keyStoreHandler {@link KeyStoreHandler} to be injected
+     */
     public WriteProcessor(KeyStoreHandler keyStoreHandler) {
         this.keyStoreHandler = keyStoreHandler;
     }
 
+    /**
+     * Takes the sender agent of the data and encrypted data, then decrypts it using the agent's key.
+     *
+     * @param agent {@link Agent} which sent the data
+     * @param agentEncryptedData encrypted data sent from an agent
+     * @return {@link Optional} empty if any error occurs, if not the sent data encrypted with the database key
+     */
     public Optional<String> process(Agent agent, String agentEncryptedData) {
 
         Optional<Key> key = keyStoreHandler.getKey(agent.getId().toString(), agent.getPassword().toCharArray());

@@ -2,6 +2,9 @@ package org.dockit.dockitserver.config;
 
 import java.util.Properties;
 
+/**
+ * Class containing configuration for the application.
+ */
 public class Config {
 
     private final Long maxAgentCacheSize;
@@ -14,6 +17,17 @@ public class Config {
     private final String jwtSecretAlias;
     private final Integer jwtExpirationTime;
 
+    /**
+     * @param maxAgentCacheSize Agent cache size from the config file
+     * @param maxAuditCacheSize Audit cache size from the config file
+     * @param maxAdminCacheSize Admin cache size from the config file
+     * @param maxAccessTokenCacheSize Access token cache size from the config file
+     * @param maxAgentSize Max simultaneously operating agent size
+     * @param keyStorePassword Default keystore password
+     * @param jwtIssuer Jwt issuer
+     * @param jwtSecretAlias Jwt secret alias
+     * @param jwtExpirationTime Jwt expiration period in minutes
+     */
     protected Config(Long maxAgentCacheSize, Long maxAuditCacheSize, Long maxAdminCacheSize, Long maxAccessTokenCacheSize,
                      Integer maxAgentSize, String keyStorePassword, String jwtIssuer, String jwtSecretAlias,
                      Integer jwtExpirationTime) {
@@ -64,6 +78,9 @@ public class Config {
         return jwtExpirationTime;
     }
 
+    /**
+     * @return {@link Properties} object generated from individual properties
+     */
     public Properties toProperties() {
         Properties properties = new Properties();
         properties.put(ConfigConstants.AGENT_CACHE_SIZE.toString(), maxAgentCacheSize.toString());

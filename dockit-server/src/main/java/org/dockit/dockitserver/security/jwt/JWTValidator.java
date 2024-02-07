@@ -21,6 +21,9 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
 
+/**
+ * Validates a given JWT
+ */
 @Component
 public class JWTValidator {
     private static final Logger logger = LoggerFactory.getLogger(JWTValidator.class);
@@ -29,15 +32,33 @@ public class JWTValidator {
     private final KeyStoreHandler keyStoreHandler;
 
 
+    /**
+     * @param configContainer {@link ConfigContainer} object to be injected
+     * @param keyStoreHandler {@link KeyStoreHandler} object to be injected
+     */
     public JWTValidator(ConfigContainer configContainer, KeyStoreHandler keyStoreHandler) {
         this.configContainer = configContainer;
         this.keyStoreHandler = keyStoreHandler;
     }
 
+    /**
+     * Return the username (subject claim) from the jwt
+     *
+     * @param token given jwt token
+     * @return username obtained from the jwt
+     * @throws ParseException if the given token cannot be parsed into {@link SignedJWT}
+     */
     public String getUserNameFromJwtToken(String token) throws ParseException {
         return SignedJWT.parse(token).getJWTClaimsSet().getSubject();
     }
 
+    /**
+     * Validates the jwt by ensuring it has all the required claims, and has a valid signature, issuer, and expiry time
+     *
+     * @param token given jwt token
+     * @return true if it is valid, false if not
+     * @throws ParseException if the given token cannot be parsed into {@link SignedJWT}
+     */
     public boolean validateJwtToken(String token) throws ParseException {
         Config config = configContainer.getConfig();
         SignedJWT jwt = SignedJWT.parse(token);

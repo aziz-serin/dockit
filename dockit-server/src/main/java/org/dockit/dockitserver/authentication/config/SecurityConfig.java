@@ -13,6 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Contains the configuration for REST-api security
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -20,10 +23,21 @@ public class SecurityConfig {
 
     private final AuthEntryPoint authEntryPoint;
 
+    /**
+     * @param authEntryPoint Injected dependency for error handling
+     */
     public SecurityConfig(AuthEntryPoint authEntryPoint) {
         this.authEntryPoint = authEntryPoint;
     }
 
+
+    /**
+     * Bean to configure the http security details
+     *
+     * @param http HTTPSecurity object, {@link org.springframework.security.config.annotation.web.builders.HttpSecurity}
+     * @return Built http configuration
+     * @throws Exception Can throw an Exception
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
@@ -43,6 +57,11 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Bean to set up the {@link org.dockit.dockitserver.authentication.filters.APIKeyAuthenticationFilter}
+     *
+     * @return filter registration bean
+     */
     @Bean
     public FilterRegistrationBean<APIKeyAuthenticationFilter> apiKeyAuthenticationFilter() {
         FilterRegistrationBean<APIKeyAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
@@ -51,6 +70,11 @@ public class SecurityConfig {
         return registrationBean;
     }
 
+    /**
+     * Bean to set up the {@link org.dockit.dockitserver.authentication.filters.JwtAuthenticationFilter}
+     *
+     * @return filter registration bean
+     */
     @Bean
     public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilter() {
         FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();

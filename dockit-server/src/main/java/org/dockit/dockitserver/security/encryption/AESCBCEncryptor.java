@@ -15,6 +15,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+/**
+ * Class to handle AES-CBC encryption operations. Check <a href="https://www.ietf.org/rfc/rfc3602.txt">this link</a>
+ * for more information on the encryption algorithm
+ */
 public class AESCBCEncryptor {
     private static IvParameterSpec generateIv() {
         byte[] iv = new byte[KeyConstants.IV_SIZE_CBC];
@@ -22,6 +26,19 @@ public class AESCBCEncryptor {
         return new IvParameterSpec(iv);
     }
 
+    /**
+     * Encrypt using AES-CBC algorithm
+     *
+     * @param input string data to be encrypted
+     * @param key {@link SecretKey} used to encrypt the data
+     * @return encrypted string if successful
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidAlgorithmParameterException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     */
     public static String encrypt(String input, SecretKey key) throws NoSuchPaddingException, NoSuchAlgorithmException,
             InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
 
@@ -42,6 +59,19 @@ public class AESCBCEncryptor {
         return Base64.getEncoder().encodeToString(outputCipher);
     }
 
+    /**
+     * Decrypt using AES-CBC algorithm
+     *
+     * @param input string data to be decrypted
+     * @param key {@link SecretKey} used to decrypt the data
+     * @return decrypted string if successful
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidAlgorithmParameterException
+     * @throws InvalidKeyException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     */
     public static String decrypt(String input, SecretKey key) throws NoSuchPaddingException, NoSuchAlgorithmException,
             InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 

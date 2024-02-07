@@ -11,9 +11,19 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.security.Key;
 
+/**
+ * Component for the initialization of the keystore
+ */
 @Component
 public class KeyStoreInitializer {
-
+    /**
+     * Generate and save keys for jwt signing and database encryption.
+     *
+     * @param configContainer {@link ConfigContainer} object containing the keystore and the config.
+     * @param keyStoreHandler {@link KeyStoreHandler} for key operations
+     * @param keyHandler {@link KeyHandler} for the generation of keys
+     * @throws KeyStoreException if generation of a key fails
+     */
     @Autowired
     public KeyStoreInitializer(ConfigContainer configContainer, KeyStoreHandler keyStoreHandler, KeyHandler keyHandler)
             throws KeyStoreException {

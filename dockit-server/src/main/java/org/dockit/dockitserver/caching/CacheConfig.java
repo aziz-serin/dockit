@@ -12,10 +12,19 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Configuration class for caching
+ */
 @Configuration
 @EnableCaching
 public class CacheConfig {
 
+    /**
+     * Register custom caches for different services using the application {@link Config}
+     *
+     * @param configContainer {@link ConfigContainer} object to be injected
+     * @return {@link CacheManager} object containing the cache configuration
+     */
     @Bean
     public CacheManager cacheManager(ConfigContainer configContainer) {
         Config config = configContainer.getConfig();

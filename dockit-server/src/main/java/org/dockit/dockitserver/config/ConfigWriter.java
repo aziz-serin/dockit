@@ -14,10 +14,20 @@ import java.security.KeyStore;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 
+/**
+ * Writes the given config file, and generates keystore to be used by the application
+ */
 public class ConfigWriter {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigWriter.class);
 
+    /**
+     * Create the root directory which will contain the keystore and the config file
+     *
+     * @param rootPath Path string for the root file
+     * @return rootPath string
+     * @throws ConfigWriterException thrown if root directory cannot be created
+     */
     protected String createRootDirectory(String rootPath) throws ConfigWriterException {
         try {
             Path path = Paths.get(rootPath);
@@ -31,10 +41,28 @@ public class ConfigWriter {
         }
     }
 
+    /**
+     * Generate and save the created keystore file
+     *
+     * @param path Path string representing root directory
+     * @param keyStoreName Name string to be used when creating keystore
+     * @param keyStorePassword Password string to be used when creating keyStore
+     * @return {@link KeyStore} object after its creation
+     * @throws ConfigWriterException thrown if keystore cannot be created
+     */
     protected KeyStore createKeyStore(String path, String keyStoreName, String keyStorePassword) throws ConfigWriterException {
         return KeyStoreManager.createKeystore(keyStoreName, path, keyStorePassword);
     }
 
+    /**
+     * Generate and save the created properties file
+     *
+     * @param path Path string representing root directory
+     * @param configFileName Name of the config file
+     * @param properties {@link Properties} containing the config of the application
+     * @return {@link Properties} object after its creation
+     * @throws ConfigWriterException if properties cannot be created
+     */
     protected Properties createProperties(String path, String configFileName, Properties properties) throws ConfigWriterException {
         String writePath = path + configFileName;
         try {

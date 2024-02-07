@@ -12,9 +12,20 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
+/**
+ * Class to manage the handling of the application's keystore.
+ */
 public class KeyStoreManager {
     private static final Logger logger = LoggerFactory.getLogger(KeyStoreManager.class);
 
+    /**
+     * Loads a keystore from the filesystem
+     *
+     * @param keyStoreName name of the keystore
+     * @param path path to the given keystore
+     * @param password password for the keystore
+     * @return null if the path is null, {@link KeyStore} if not
+     */
     public static KeyStore loadKeyStore(String keyStoreName, String path, String password) {
         if (path == null) {
             return null;
@@ -22,6 +33,14 @@ public class KeyStoreManager {
         return openKeyStore(path + keyStoreName, password);
     }
 
+    /**
+     * Create a keystore and save it to the filesystem
+     *
+     * @param keyStoreName name of the keystore
+     * @param path path to save the keystore to
+     * @param password password to save the keystore with
+     * @return null if an error occurs, {@link KeyStore} if not
+     */
     public static KeyStore createKeystore(String keyStoreName, String path, String password) {
         if (keyStoreName == null) {
             return null;

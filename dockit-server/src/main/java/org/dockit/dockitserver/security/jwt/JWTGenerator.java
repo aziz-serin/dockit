@@ -19,17 +19,33 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
 
+/**
+ * Utility class responsible for generation of jwts
+ */
 @Component
 public class JWTGenerator {
 
     private final ConfigContainer configContainer;
     private final KeyStoreHandler keyStoreHandler;
 
+    /**
+     * @param configContainer {@link ConfigContainer} object to be injected
+     * @param keyStoreHandler {@link KeyStoreHandler} object to be injected
+     */
     public JWTGenerator(ConfigContainer configContainer, KeyStoreHandler keyStoreHandler) {
         this.configContainer = configContainer;
         this.keyStoreHandler = keyStoreHandler;
     }
 
+    /**
+     * Generates and signs the jwt
+     *
+     * @param subject the subject of the jwt, in this application's context, username for the
+     * {@link org.dockit.dockitserver.entities.Admin}
+     * @return string representing the generated jwt token
+     * @throws JOSEException if the created JWT cannot be signed
+     * @throws JWTSecretKeyException if JWT secret key is not found in the application's keystore
+     */
     public String generateToken(String subject) throws JOSEException, JWTSecretKeyException {
         Config config = configContainer.getConfig();
         Optional<Key> secret = keyStoreHandler.getKey(config.getJwtSecretAlias(), "".toCharArray());

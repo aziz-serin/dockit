@@ -13,10 +13,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.UUID;
 
+/**
+ * Entity object representing Admins in the database
+ */
 @Entity
 @Table(name= "admins")
 public class Admin implements DTO {
 
+    /**
+     * Enum containing roles for the Admin object
+     */
     public enum Role {
         SUPER,
         EDITOR,
@@ -61,6 +67,11 @@ public class Admin implements DTO {
         return password;
     }
 
+    /**
+     * Hashes the given password using {@link BCryptPasswordEncoder} then sets it as the password
+     *
+     * @param password password to be stored
+     */
     public void setPassword(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         this.password = encoder.encode(password);

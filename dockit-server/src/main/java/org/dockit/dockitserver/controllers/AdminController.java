@@ -21,15 +21,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Controller containing the endpoints for admin operations
+ */
 @RestController
 @RequestMapping(path = "/api/admin", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class AdminController {
     private final AdminService adminService;
 
+    /**
+     * @param adminService {@link AdminService} object to be injected
+     */
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
 
+    /**
+     * Returns all admins
+     *
+     * @return Response entity containing the response for the request
+     */
     @GetMapping
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR', 'VIEWER')")
     public ResponseEntity<?> getAdmins() {
@@ -37,6 +48,14 @@ public class AdminController {
         return ResponseEntity.ok().body(admins);
     }
 
+    /**
+     * Updates given admin username with a new one
+     *
+     * @param body Should contain parameters: <br>
+     *             "username" -> specifying the username to be changed <br>
+     *             "new_user_name" -> specifying the new username <br>
+     * @return Response entity containing the response
+     */
     @PutMapping("/updateUsername")
     @PreAuthorize("hasAuthority('SUPER')")
     public ResponseEntity<?> updateAdminUsername(@RequestBody @NonNull Map<String, ?> body) {
@@ -57,6 +76,14 @@ public class AdminController {
         }
     }
 
+    /**
+     * Updates given admin password with a new one
+     *
+     * @param body Should contain parameters: <br>
+     *             "username" -> specifying the user <br>
+     *             "new_password" -> specifying the new password for the given user <br>
+     * @return Response entity containing the response
+     */
     @PutMapping("/updatePassword")
     @PreAuthorize("hasAuthority('SUPER')")
     public ResponseEntity<?> updateAdminPassword(@RequestBody @NonNull Map<String, ?> body) {
@@ -77,6 +104,14 @@ public class AdminController {
         }
     }
 
+    /**
+     * Updates an admin role with a new one
+     *
+     * @param body Should contain parameters: <br>
+     *             "username" -> specifying the user <br>
+     *             "new_role" -> specifying the role to be changed to <br>
+     * @return Response entity containing the response
+     */
     @PutMapping("/updateRole")
     @PreAuthorize("hasAuthority('SUPER')")
     public ResponseEntity<?> updateAdminRole(@RequestBody @NonNull Map<String, ?> body) {
@@ -106,6 +141,15 @@ public class AdminController {
         }
     }
 
+    /**
+     * Creates a new admin
+     *
+     * @param body Should contain parameters: <br>
+     *             "username" -> username for the new user <br>
+     *             "password" -> password for the new user <br>
+     *             "role" -> role for the new user
+     * @return Response entity containing the response
+     */
     @PostMapping
     @PreAuthorize("hasAuthority('SUPER')")
     public ResponseEntity<?> createAdmin(@RequestBody @NonNull Map<String, ?> body) {
@@ -129,6 +173,12 @@ public class AdminController {
 
     }
 
+    /**
+     * Delete a given user with their username
+     *
+     * @param userName username of the user to be deleted
+     * @return Response entity containing the response
+     */
     @DeleteMapping
     @PreAuthorize("hasAuthority('SUPER')")
     public ResponseEntity<?> deleteAdmin(@RequestParam(name = "userName") @NonNull String userName) {

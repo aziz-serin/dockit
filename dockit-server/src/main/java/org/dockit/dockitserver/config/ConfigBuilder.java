@@ -1,5 +1,8 @@
 package org.dockit.dockitserver.config;
 
+/**
+ * Step-up builder object to be used when generating configuration
+ */
 public class ConfigBuilder {
 
     private ConfigBuilder() {}

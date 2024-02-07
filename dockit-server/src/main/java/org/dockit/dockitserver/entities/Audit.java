@@ -12,6 +12,9 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Entity object representing Audits in the database
+ */
 @Entity
 @Table(name = "audit")
 public class Audit implements DTO {

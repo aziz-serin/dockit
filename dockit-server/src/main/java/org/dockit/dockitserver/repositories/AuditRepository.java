@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
+/**
+ * Repository used to interact with {@link Audit}
+ */
 @Repository
 public interface AuditRepository extends JpaRepository<Audit, UUID> {
 }

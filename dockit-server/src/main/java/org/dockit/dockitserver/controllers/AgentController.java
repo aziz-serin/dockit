@@ -30,6 +30,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Controller containing the endpoints for agent operations
+ */
 @RestController
 @RequestMapping(path = "/api/agent", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class AgentController {
@@ -38,6 +41,12 @@ public class AgentController {
     private final KeyHandler keyHandler;
     private final KeyStoreHandler keyStoreHandler;
 
+    /**
+     * @param agentService {@link AgentService} to be injected
+     * @param apiKeyService {@link APIKeyService} to be injected
+     * @param keyHandler {@link KeyHandler} to be injected
+     * @param keyStoreHandler {@link KeyStoreHandler} to be injected
+     */
     public AgentController(AgentService agentService, APIKeyService apiKeyService, KeyHandler keyHandler,
                            KeyStoreHandler keyStoreHandler) {
         this.agentService = agentService;
@@ -46,6 +55,12 @@ public class AgentController {
         this.keyStoreHandler = keyStoreHandler;
     }
 
+    /**
+     * Return specified agent from their id
+     *
+     * @param id id of the agent to be returned
+     * @return Response entity containing the response
+     */
     @GetMapping
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR', 'VIEWER')")
     public ResponseEntity<?> getAgent(@RequestParam(name = "id") UUID id) {
@@ -57,6 +72,11 @@ public class AgentController {
         }
     }
 
+    /**
+     * Returns all agents from the response
+     *
+     * @return Response entity containing the response
+     */
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR', 'VIEWER')")
     public ResponseEntity<?> getAgents() {
@@ -64,6 +84,12 @@ public class AgentController {
         return ResponseEntity.ok(agents);
     }
 
+    /**
+     * Returns all agents by their creation date in the specified sorted order
+     *
+     * @param isAscending specifies the sorting order of the response
+     * @return Response entity containing the response
+     */
     @GetMapping("/creationDate")
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR', 'VIEWER')")
     public ResponseEntity<?> getAgentsByCreationDate(@RequestParam(name = "isAscending") boolean isAscending) {
@@ -74,12 +100,26 @@ public class AgentController {
         }
     }
 
+    /**
+     * Returns all agents active in given minutes
+     *
+     * @param minutes an integer value representing the interval in minutes
+     * @return Response entity containing the response
+     */
     @GetMapping("/active")
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR', 'VIEWER')")
     public ResponseEntity<?> getAgentsLastActiveInGivenMinutes(@RequestParam(name = "time") int minutes) {
         return ResponseEntity.ok().body(agentService.findAllRecentlyActiveInGivenMinutes(minutes));
     }
 
+    /**
+     * Creates a new agent and saves it in the database with its secret key
+     *
+     * @param body Should contain parameters: <br>
+     *             "agentName" -> name of the agent to be created <br>
+     *             "password" -> password for the new agent <br>
+     * @return Response entity containing the response
+     */
     @PostMapping
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR')")
     public ResponseEntity<?> creteAgent(@RequestBody @NonNull Map<String, ?> body) {
@@ -109,6 +149,12 @@ public class AgentController {
         }
     }
 
+    /**
+     * Delete an agent using their id
+     *
+     * @param id id of the agent to be deleted
+     * @return Response entity containing the response
+     */
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR')")
     public ResponseEntity<?> delete(@RequestParam(name = "id") UUID id) {
@@ -125,6 +171,14 @@ public class AgentController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Update the username of a given agent
+     *
+     * @param id id of the agent to be updated
+     * @param body Should contain the parameters: <br>
+     *             "agentName" -> new name for the specified agent <br>
+     * @return Response entity containing the response
+     */
     @PutMapping
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR')")
     public ResponseEntity<?> updateAgentName(@RequestParam(name = "id") UUID id,

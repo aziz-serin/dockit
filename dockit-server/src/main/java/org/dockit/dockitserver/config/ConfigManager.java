@@ -11,6 +11,9 @@ import java.util.Properties;
 
 import static org.dockit.dockitserver.config.PropertiesManager.generateConfigFromProperties;
 
+/**
+ * Manager class for the config of the application
+ */
 public final class ConfigManager {
     private Config config;
     private KeyStore keyStore;
@@ -18,6 +21,9 @@ public final class ConfigManager {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
 
+    /**
+     * Checks the OS and sets the path separator
+     */
     public ConfigManager() {
         if (OSUtils.OSDetector.isWindows()) {
             PATH_SEPARATOR = "\\";
@@ -27,18 +33,33 @@ public final class ConfigManager {
 
     }
 
+    /**
+     * @return Previously set path separator from {@link ConfigManager} constructor
+     */
     public static String getPathSeparator() {
         return PATH_SEPARATOR;
     }
 
+    /**
+     * @return {@link KeyStore} object
+     */
     public KeyStore getKeyStore() {
         return keyStore;
     }
 
+    /**
+     * @return {@link Config} object
+     */
     public Config getConfig() {
         return config;
     }
 
+    /**
+     * @param path Root folder path containing the config files
+     * @param configFileName Name of the config file
+     * @param keyStoreName Name of the keyStore file
+     * @return true if a complete config exists, false otherwise
+     */
     public boolean configExists(String path, String configFileName, String keyStoreName) {
         File rootDirectory = new File(path);
         if (!rootDirectory.isDirectory()) {
@@ -69,12 +90,27 @@ public final class ConfigManager {
         return KeyStoreManager.loadKeyStore(keyStoreName, path + PATH_SEPARATOR, keyStorePassword);
     }
 
+    /**
+     * Loads the config file and keystore file from the given path
+     *
+     * @param path Root folder path containing the config files
+     * @param configFileName Name of the config file
+     * @param keyStoreName Name of the keyStore file
+     */
     public void loadConfig(String path, String configFileName, String keyStoreName) {
         Properties properties = loadPropertiesConfig(path, configFileName);
         config = generateConfigFromProperties(properties);
         keyStore = loadKeystoreConfig(keyStoreName, path, config.getKeyStorePassword());
     }
 
+    /**
+     * @param rootPath Root folder path containing the config files
+     * @param configFileName Name of the config file
+     * @param keyStoreName Name of the keyStore file
+     * @param keyStorePassword Password to set for the generated keystore
+     * @param properties {@link Properties} containing the config of the application
+     * @throws ConfigWriterException if creation of the config fails
+     */
     public void createConfig(String rootPath, String configFileName, String keyStoreName,
                              String keyStorePassword, Properties properties) throws ConfigWriterException {
         ConfigWriter configWriter = new ConfigWriter();

@@ -6,16 +6,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Entity object representing APIKey in the database
+ */
 @Entity
 @Table(name = "api_key")
 public class APIKey implements DTO {
@@ -55,6 +56,11 @@ public class APIKey implements DTO {
         return token;
     }
 
+    /**
+     * Hashes the token using {@link BCryptPasswordEncoder} then sets it as the token
+     *
+     * @param token token to be stored
+     */
     public void setToken(String token) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         this.token = encoder.encode(token);

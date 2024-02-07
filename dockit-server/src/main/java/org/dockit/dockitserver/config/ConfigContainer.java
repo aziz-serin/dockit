@@ -6,11 +6,19 @@ import org.springframework.stereotype.Component;
 
 import java.security.KeyStore;
 
+/**
+ * Component containing the config and keysStore objects to be injected into different parts of the code
+ */
 @Component
 public class ConfigContainer {
     private final Config config;
     private final KeyStore keyStore;
 
+    /**
+     * Load the config and keystore if it exists, if not, generate them and cache them in this object.
+     *
+     * @param environment {@link Environment} containing config from application.properties
+     */
     @Autowired
     public ConfigContainer(Environment environment) {
         ConfigManager configManager = new ConfigManager();
@@ -31,10 +39,17 @@ public class ConfigContainer {
 
     }
 
+    /**
+     * @return {@link Config} object
+     */
     public Config getConfig() {
         return this.config;
     }
 
+
+    /**
+     * @return {@link KeyStore} object
+     */
     public KeyStore getKeyStore() {
         return this.keyStore;
     }

@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
+/**
+ * Repository used to interact with {@link Agent}
+ */
 @Repository
 public interface AgentRepository extends JpaRepository<Agent, UUID> {
 }

@@ -27,8 +27,8 @@ public class StartupInitialisation {
     private final ConfigurableApplicationContext applicationContext;
 
     /**
-     * @param adminService admin Service to be injected
-     * @param applicationContext application context to be injected
+     * @param adminService {@link AdminService} to be injected
+     * @param applicationContext {@link ConfigurableApplicationContext} to be injected
      */
     public StartupInitialisation(AdminService adminService, ConfigurableApplicationContext applicationContext) {
         this.adminService = adminService;

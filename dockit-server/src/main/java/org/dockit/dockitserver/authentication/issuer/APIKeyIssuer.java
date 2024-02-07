@@ -15,17 +15,32 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Issuer class responsible for the generation of API keys
+ */
 @Component
 public class APIKeyIssuer {
     private final APIKeyService apiKeyService;
     private final AgentService agentService;
     private final AdminService adminService;
 
+    /**
+     * @param apiKeyService {@link APIKeyService} to be injected
+     * @param agentService {@link AgentService} to be injected
+     * @param adminService {@link AdminService} to be injected
+     */
     public APIKeyIssuer(APIKeyService apiKeyService, AgentService agentService, AdminService adminService) {
         this.apiKeyService = apiKeyService;
         this.agentService = agentService;
         this.adminService = adminService;
     }
+
+    /**
+     * @param username username for {@link Admin}
+     * @param password password for {@link Admin}
+     * @param agentId id field of {@link Agent}
+     * @return {@link Optional} containing the {@link APIKey} if successful, empty if not
+     */
     public Optional<String> issueKey(String username, String password, UUID agentId) {
         Optional<Admin> admin = adminService.findByUsername(username);
         if (admin.isEmpty()) {

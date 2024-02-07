@@ -12,18 +12,31 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * Authentication service responsible for the generation of {@link APIKeyAuthentication} object for API key
+ * authentication
+ */
 @Component
 public class APIKeyAuthenticationService {
     private static final String AUTH_TOKEN_HEADER_NAME = "X-API-KEY";
     private static APIKeyService apiKeyService;
 
+    /**
+     * @param apiKeyService {@link APIKeyService} object to be injected
+     */
     public APIKeyAuthenticationService(APIKeyService apiKeyService) {
         APIKeyAuthenticationService.apiKeyService = apiKeyService;
     }
 
-    public static Authentication getAuthentication(HttpServletRequest request) {
+    /**
+     * Extracts the apikey from the request headers, and validates it
+     *
+     * @param request Incoming http request
+     * @return {@link APIKeyAuthentication} if successfully authenticated
+     * @throws BadCredentialsException if given apikey is not valid
+     */
+    public static Authentication getAuthentication(HttpServletRequest request) throws BadCredentialsException {
         String apiKey = request.getHeader(AUTH_TOKEN_HEADER_NAME);
         if (apiKey == null || !validAPIKey(apiKey)) {
             throw new BadCredentialsException("Invalid API Key!");

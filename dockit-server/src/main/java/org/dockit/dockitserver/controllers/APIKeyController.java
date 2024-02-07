@@ -15,16 +15,28 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Controller containing the endpoints for apikey operations
+ */
 @RestController
 @RequestMapping(path = "/api/apikey", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class APIKeyController {
 
     private final APIKeyService apiKeyService;
 
+    /**
+     * @param apiKeyService {@link APIKeyService} to be injected
+     */
     public APIKeyController(APIKeyService apiKeyService) {
         this.apiKeyService = apiKeyService;
     }
 
+    /**
+     * Deletes the apiKey of an agent by using agent's id
+     *
+     * @param agentId agentId specified to find the apikey
+     * @return Response entity containing the response
+     */
     @DeleteMapping
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR')")
     public ResponseEntity<?> revoke(@RequestParam(name="agentId") @NonNull String agentId) {
@@ -37,6 +49,12 @@ public class APIKeyController {
         }
     }
 
+    /**
+     * An endpoint to check if an apiKey exists for the given agent
+     *
+     * @param agentId agentId specified to find the apikey
+     * @return Response entity containing the response
+     */
     @GetMapping
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR', 'VIEWER')")
     public ResponseEntity<?> get(@RequestParam(name="agentId") @NonNull String agentId) {

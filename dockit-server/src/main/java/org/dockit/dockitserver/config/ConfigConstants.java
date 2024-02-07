@@ -1,5 +1,8 @@
 package org.dockit.dockitserver.config;
 
+/**
+ * An enum containing various constants which are used for the {@link Config} object.
+ */
 public enum ConfigConstants {
     MAX_AGENT_AMOUNT,
     DEFAULT_MAX_AGENT_AMOUNT,
@@ -21,7 +24,7 @@ public enum ConfigConstants {
     JWT_ISSUER,
     DEFAULT_JWT_EXPIRATION_TIME,
     DEFAULT_JWT_SECRET_ALIAS,
-    DEFAULT_JWT_ISSUER;;
+    DEFAULT_JWT_ISSUER;
 
     public String toString() {
         return switch (this) {

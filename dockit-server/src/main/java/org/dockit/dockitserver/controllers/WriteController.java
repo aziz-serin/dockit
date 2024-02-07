@@ -21,6 +21,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Controller class containing the endpoints for write operations for {@link Audit}
+ */
 @RestController
 @RequestMapping(path = "/api/write", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class WriteController {
@@ -28,12 +31,28 @@ public class WriteController {
     private final AgentService agentService;
     private final WriteProcessor writeProcessor;
 
+    /**
+     * @param auditService {@link AuditService} object to be injected
+     * @param writeProcessor {@link WriteProcessor} object to be injected
+     * @param agentService {@link AgentService} object to be injected
+     */
     public WriteController(AuditService auditService, WriteProcessor writeProcessor, AgentService agentService) {
         this.auditService = auditService;
         this.agentService = agentService;
         this.writeProcessor = writeProcessor;
     }
 
+    /**
+     * Creates a new {@link Audit} entry
+     *
+     * @param body should contain the parameters: <br>
+     *             "vmId" -> vmId string for the audit <br>
+     *             "category" -> category string for the audit <br>
+     *             "timeStamp" -> timeStamps string in
+     *             <a href="https://www.iso.org/iso-8601-date-and-time-format.html">ISO Local Date Time format</a> <br>
+     * @param id id of an {@link Agent} which sent the request
+     * @return Response entity containing the response
+     */
     @PostMapping
     public ResponseEntity<?> write(@RequestBody @NonNull Map<String, ?> body, @RequestParam(name = "id") UUID id) {
         // Here check if the request contains required parameters, decrypt the data, create audit entity using it,

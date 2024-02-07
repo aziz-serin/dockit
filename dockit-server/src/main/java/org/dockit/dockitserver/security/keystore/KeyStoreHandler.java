@@ -14,17 +14,32 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.util.Optional;
 
+/**
+ * Utility class to handle key store operations
+ */
 @Component
 public class KeyStoreHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(KeyStoreHandler.class);
     private final ConfigContainer configContainer;
 
+
+    /**
+     * @param configContainer {@link ConfigContainer} object to be injected
+     */
     @Autowired
     public KeyStoreHandler(ConfigContainer configContainer) {
         this.configContainer = configContainer;
     }
 
+    /**
+     * Save a given key in the keystore
+     *
+     * @param alias alias with to store the key
+     * @param secretKey {@link SecretKey} to be stored
+     * @param pwdArray password for the key to be stored
+     * @return true if successfully saved, false if an error occurs
+     */
     public boolean saveKey(String alias, SecretKey secretKey, char[] pwdArray) {
         KeyStore.SecretKeyEntry secret
                 = new KeyStore.SecretKeyEntry(secretKey);
@@ -40,6 +55,13 @@ public class KeyStoreHandler {
         }
     }
 
+    /**
+     * Get key from the keystore
+     *
+     * @param alias alias of the stored key
+     * @param pwdArray password for the stored key
+     * @return {@link Optional} empty if key doesn't exist, key if it does
+     */
     public Optional<Key> getKey(String alias, char[] pwdArray) {
         KeyStore keyStore = configContainer.getKeyStore();
         try {
@@ -56,6 +78,12 @@ public class KeyStoreHandler {
         }
     }
 
+    /**
+     * Check if a key with the given alias exists
+     *
+     * @param alias alias of the stored key
+     * @return true if key exists, false if not
+     */
     public boolean keyExists(String alias) {
         KeyStore keyStore = configContainer.getKeyStore();
         try {
@@ -66,6 +94,11 @@ public class KeyStoreHandler {
         }
     }
 
+    /**
+     * Delete a stored key from the keystore
+     *
+     * @param alias alias of the stored key
+     */
     public void deleteKey(String alias) {
         KeyStore keyStore = configContainer.getKeyStore();
         try {

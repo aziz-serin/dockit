@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * Used to handle Authentication errors for REST requests and returns 401 when it encounters one.
+ */
 @Component
 public class AuthEntryPoint implements AuthenticationEntryPoint {
     private static final Logger logger = LoggerFactory.getLogger(AuthEntryPoint.class);

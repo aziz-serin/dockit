@@ -21,15 +21,30 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Decrypting tool for the database {@link Audit} entries.
+ */
 @Component
 public class AuditDataDecryptFromDatabase {
     private static final Logger logger = LoggerFactory.getLogger(AuditDataDecryptFromDatabase.class);
     private final KeyStoreHandler keyStoreHandler;
 
+
+    /**
+     * @param keyStoreHandler {@link KeyStoreHandler} object to be injected
+     */
     public AuditDataDecryptFromDatabase(KeyStoreHandler keyStoreHandler) {
         this.keyStoreHandler = keyStoreHandler;
     }
 
+    /**
+     * Decrypt the data field of each given {@link Audit} object
+     *
+     * @param audits list of {@link Audit} data
+     * @return list of {@link Audit} with decrypted data fields
+     * @throws EncryptionException when the data cannot be decrypted
+     * @throws KeyStoreException when a database key is missing
+     */
     public List<Audit> decryptAudits(List<Audit> audits) throws EncryptionException, KeyStoreException {
         Optional<Key> key = keyStoreHandler.getKey(KeyConstants.DB_KEY_ALIAS, "".toCharArray());
         if (key.isEmpty()) {
@@ -46,11 +61,19 @@ public class AuditDataDecryptFromDatabase {
                 })
                 .toList();
         if (decryptedAudits.contains(null)) {
-            throw new EncryptionException("Could not encrypt the given data!");
+            throw new EncryptionException("Could not decrypt the given data!");
         }
         return decryptedAudits;
     }
 
+    /**
+     * Decrypt the data field of a given {@link Audit} object
+     *
+     * @param audit {@link Audit} data
+     * @return {@link Audit} with decrypted data fields
+     * @throws EncryptionException when the data cannot be decrypted
+     * @throws KeyStoreException when a database key is missing
+     */
     public Audit decryptAudit(Audit audit) throws EncryptionException, KeyStoreException {
         Optional<Key> key = keyStoreHandler.getKey(KeyConstants.DB_KEY_ALIAS, "".toCharArray());
         if (key.isEmpty()) {

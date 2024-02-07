@@ -16,11 +16,17 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Set;
 
+/**
+ * Authentication filter used for the jwt authentication method
+ */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     private final Set<String> excludedUrls = Set.of("/api/write/**", "/api/authenticate/**", "/api/actuator/**");
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
         return excludedUrls.stream().anyMatch(url -> {
@@ -29,6 +35,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {

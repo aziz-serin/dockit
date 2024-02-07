@@ -9,10 +9,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Utility class to handle property operations.
+ */
 public class PropertiesManager {
 
     private static final Logger logger = LoggerFactory.getLogger(PropertiesManager.class);
 
+    /**
+     * Read the properties file from the filesystem.
+     *
+     * @param path path to the properties file
+     * @param fileName name of the properties file
+     * @return the properties file's contents as a {@link Properties} object.
+     */
     public static Properties readProperties(String path, String fileName) {
         Properties properties = new Properties();
         try {
@@ -25,6 +35,11 @@ public class PropertiesManager {
         return properties;
     }
 
+    /**
+     * Generate default config and convert it to properties using the constants from the {@link ConfigConstants} class
+     *
+     * @return {@link Properties} object containing the properties for the application.
+     */
     public static Properties generateDefaultProperties() {
         Properties properties = new Properties();
         properties.put(ConfigConstants.MAX_AGENT_AMOUNT.toString(), ConfigConstants.DEFAULT_MAX_AGENT_AMOUNT.toString());
@@ -39,6 +54,14 @@ public class PropertiesManager {
         return properties;
     }
 
+
+    /**
+     * Creates a {@link Config} object from the properties
+     *
+     * @param properties containing the application properties
+     * @return {@link Config} object generated using the properties.
+     * @throws InvalidPropertyException if a property is null or not the required type
+     */
     public static Config generateConfigFromProperties(Properties properties) throws InvalidPropertyException {
         String maxAgentCacheSize = properties.getProperty(ConfigConstants.AGENT_CACHE_SIZE.toString());
         String maxAuditCacheSize = properties.getProperty(ConfigConstants.AUDIT_CACHE_SIZE.toString());
@@ -72,7 +95,7 @@ public class PropertiesManager {
             return true;
         }
         try {
-            int i = Integer.parseInt(value);
+            Integer.parseInt(value);
             return false;
         } catch (NumberFormatException e) {
             return true;

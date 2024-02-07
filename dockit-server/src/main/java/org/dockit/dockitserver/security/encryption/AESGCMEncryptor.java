@@ -16,8 +16,27 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+/**
+ * Class to handle AES-GCM encryption operations. Check
+ * <a href="https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-38d.pdf">this link</a>
+ * for more information on the encryption algorithm
+ */
 public class AESGCMEncryptor {
 
+    /**
+     * Encrypt using AES-GCM algorithm
+     *
+     * @param data input string to be encrypted
+     * @param aad additional authentication data for integrity checking
+     * @param key {@link SecretKey} to be used when encrypting
+     * @return
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidAlgorithmParameterException
+     * @throws InvalidKeyException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     */
     public static String encrypt(String data, String aad, SecretKey key) throws NoSuchPaddingException,
             NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException,
             BadPaddingException {
@@ -36,6 +55,20 @@ public class AESGCMEncryptor {
         return Base64.getEncoder().encodeToString(cipherByte);
     }
 
+    /**
+     * Decrypt using AES-GCM algorithm
+     *
+     * @param data input string to be decrypted
+     * @param aad additional authentication data for integrity checking
+     * @param key {@link SecretKey} to be used when decrypting
+     * @return
+     * @throws InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     */
     public static String decrypt(String data, String aad, SecretKey key) throws
             InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,
             IllegalBlockSizeException, BadPaddingException {
