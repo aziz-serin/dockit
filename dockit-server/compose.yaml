@@ -7,3 +7,13 @@ services:
       - 'POSTGRES_USER=admin'
     ports:
       - '5432:5432'
+  dockit-server:
+    build:
+      dockerfile: ./Dockerfile
+      tags:
+        - "dockit-server"
+    environment:
+      - 'USERNAME=admin'
+      - 'PASSWORD=changeit'
+    ports:
+      - '8080:8080'
