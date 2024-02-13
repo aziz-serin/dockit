@@ -39,6 +39,7 @@ public class PropertiesUtils {
         properties.setProperty(ConfigConstants.DOCKER, "true");
         properties.setProperty(ConfigConstants.VM_DATA, "true");
         properties.setProperty(ConfigConstants.INTERVAL, "5");
+        properties.setProperty(ConfigConstants.ZONE_ID, "Europe/London");
         return properties;
     }
 }

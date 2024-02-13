@@ -9,4 +9,5 @@ public final class ConfigConstants {
     public static final String VM_DATA = "vm_data";
     public static final String KEY = "key";
     public static final String ID = "id";
+    public static final String ZONE_ID = "zone_id";
 }

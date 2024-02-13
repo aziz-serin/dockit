@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.DateTimeException;
+import java.time.ZoneId;
+import java.time.zone.ZoneRulesException;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -47,17 +50,21 @@ public class PropertiesConfigReader implements ConfigReader {
         try {
             int interval = Integer.parseInt((String) properties.get(ConfigConstants.INTERVAL));
             boolean docker = Boolean.parseBoolean((String) properties.get(ConfigConstants.DOCKER));
-            boolean vm_data = Boolean.parseBoolean((String) properties.get(ConfigConstants.VM_DATA));
+            boolean vmData = Boolean.parseBoolean((String) properties.get(ConfigConstants.VM_DATA));
             String key = (String) properties.get(ConfigConstants.KEY);
             String id = (String) properties.get(ConfigConstants.ID);
+            String zoneId = (String) properties.get(ConfigConstants.ZONE_ID);
+
+            ZoneId zoneIdObject = ZoneId.of(zoneId);
 
             Config config = Config.INSTANCE.getInstance();
             config.setINTERVAL(interval);
             config.setDOCKER(docker);
-            config.setVM_DATA(vm_data);
+            config.setVM_DATA(vmData);
             config.setKEY(key);
             config.setID(id);
-        } catch (ClassCastException | NumberFormatException e) {
+            config.setZONE_ID(zoneIdObject);
+        } catch (ClassCastException | NumberFormatException | DateTimeException e) {
             logger.error("Could not parse the input properties, check their types are correct!");
             throw new ConfigException();
         }

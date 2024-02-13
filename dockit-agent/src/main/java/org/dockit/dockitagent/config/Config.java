@@ -1,6 +1,8 @@
 package org.dockit.dockitagent.config;
 
 
+import java.time.ZoneId;
+
 /**
  * Singleton configuration enum for config information of the agent.
  */
@@ -12,6 +14,7 @@ public enum Config {
     private boolean VM_DATA;
     private String KEY;
     private String ID;
+    private ZoneId ZONE_ID;
 
     /**
      * @return an instance of {@link Config}
@@ -89,5 +92,19 @@ public enum Config {
      */
     void setID(String ID) {
         this.ID = ID;
+    }
+
+    /**
+     * @return specified zone, e.g. "Europe/London"
+     */
+    public ZoneId getZONE_ID() {
+        return ZONE_ID;
+    }
+
+    /**
+     * @param ZONE_ID specified zone, e.g. "Europe/London"
+     */
+    void setZONE_ID(ZoneId ZONE_ID) {
+        this.ZONE_ID = ZONE_ID;
     }
 }
