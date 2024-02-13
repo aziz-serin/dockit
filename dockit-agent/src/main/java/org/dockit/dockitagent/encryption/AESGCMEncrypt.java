@@ -36,7 +36,7 @@ public class AESGCMEncrypt {
      * Encrypt using AES-GCM algorithm
      *
      * @param data input string to be encrypted
-     * @return
+     * @return encrypted data
      * @throws NoSuchPaddingException
      * @throws NoSuchAlgorithmException
      * @throws InvalidAlgorithmParameterException
