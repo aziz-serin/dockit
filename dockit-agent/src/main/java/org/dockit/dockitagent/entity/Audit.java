@@ -1,6 +1,7 @@
 package org.dockit.dockitagent.entity;
 
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 /**
  * Audit entity to be passed around after collecting the information
@@ -52,5 +53,17 @@ public class Audit {
      */
     public String getData() {
         return data;
+    }
+
+    /**
+     * @return {@link Map} representation of the entity
+     */
+    public Map<String, ?> toMap() {
+        return Map.of(
+                "vmId", vmId,
+                "category", category,
+                "timeStamp", timeStamp,
+                "data", data
+        );
     }
 }
