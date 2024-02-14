@@ -40,6 +40,8 @@ public class PropertiesUtils {
         properties.setProperty(ConfigConstants.VM_DATA, "true");
         properties.setProperty(ConfigConstants.INTERVAL, "5");
         properties.setProperty(ConfigConstants.ZONE_ID, "Europe/London");
+        properties.setProperty(ConfigConstants.DOCKER_URL, "http://docker");
+        properties.setProperty(ConfigConstants.SERVER_URL, "http://server");
         return properties;
     }
 }

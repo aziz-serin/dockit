@@ -65,5 +65,11 @@ class PropertiesConfigReaderTest {
                 .isEqualTo(Boolean.parseBoolean((String) properties.get(ConfigConstants.DOCKER)));
         assertThat(Config.INSTANCE.getInstance().isDOCKER())
                 .isEqualTo(Boolean.parseBoolean((String) properties.get(ConfigConstants.VM_DATA)));
+        assertThat(Config.INSTANCE.getInstance().getZONE_ID().toString())
+                .isEqualTo((String) properties.get(ConfigConstants.INTERVAL));
+        assertThat(Config.INSTANCE.getInstance().getDOCKER_URL())
+                .isEqualTo((String) properties.get(ConfigConstants.INTERVAL));
+        assertThat(Config.INSTANCE.getInstance().getSERVER_URL())
+                .isEqualTo((String) properties.get(ConfigConstants.INTERVAL));
     }
 }

@@ -10,4 +10,7 @@ public final class ConfigConstants {
     public static final String KEY = "key";
     public static final String ID = "id";
     public static final String ZONE_ID = "zone_id";
+    public static final String DOCKER_URL = "docker_url";
+    public static final String SERVER_URL = "server_url";
+
 }

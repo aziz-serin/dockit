@@ -15,6 +15,8 @@ public enum Config {
     private String KEY;
     private String ID;
     private ZoneId ZONE_ID;
+    private String DOCKER_URL;
+    private String SERVER_URL;
 
     /**
      * @return an instance of {@link Config}
@@ -106,5 +108,33 @@ public enum Config {
      */
     void setZONE_ID(ZoneId ZONE_ID) {
         this.ZONE_ID = ZONE_ID;
+    }
+
+    /**
+     * @return url to send the docker api requests
+     */
+    public String getDOCKER_URL() {
+        return DOCKER_URL;
+    }
+
+    /**
+     * @param DOCKER_URL url to send the docker api requests
+     */
+    void setDOCKER_URL(String DOCKER_URL) {
+        this.DOCKER_URL = DOCKER_URL;
+    }
+
+    /**
+     * @return url to send the audit requests
+     */
+    public String getSERVER_URL() {
+        return SERVER_URL;
+    }
+
+    /**
+     * @param SERVER_URL url to send the audit requests
+     */
+    void setSERVER_URL(String SERVER_URL) {
+        this.SERVER_URL = SERVER_URL;
     }
 }
