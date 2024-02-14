@@ -6,7 +6,7 @@ import java.util.List;
  * Helper class to build string from a list of data
  */
 public final class InformationBuilderHelper {
-    public static final String DELIMITER = "/////////////////////";
+    public static final String DELIMITER = "/_/_/";
 
     /**
      * Build one large string with a delimiter from list of data
