@@ -27,7 +27,7 @@ public class VmFileSystemCollector implements Collector {
         SystemInfo systemInfo = new SystemInfo();
         OperatingSystem operatingSystem = systemInfo.getOperatingSystem();
         FileSystem fileSystem = operatingSystem.getFileSystem();
-        List<OSFileStore> fileStores = fileSystem.getFileStores();
+        List<OSFileStore> fileStores = fileSystem.getFileStores(true);
         List<String> fileStoreInformation = fileStores.stream()
                 .map(fileStore -> {
                     Gson gson = new Gson();
