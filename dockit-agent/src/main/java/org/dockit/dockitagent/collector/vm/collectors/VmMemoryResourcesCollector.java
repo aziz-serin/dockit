@@ -8,8 +8,16 @@ import oshi.hardware.HardwareAbstractionLayer;
 
 import java.util.Map;
 
+/**
+ * Utility class to collect information about the memory load of the system
+ */
 public class VmMemoryResourcesCollector implements Collector {
 
+    /**
+     * Collect total and available memory in bytes
+     *
+     * @return JSON representation of collected data in string format
+     */
     @Override
     public String collect() {
         SystemInfo systemInfo = new SystemInfo();

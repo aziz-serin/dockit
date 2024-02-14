@@ -11,6 +11,9 @@ import org.dockit.dockitagent.collector.vm.collectors.VmUsersCollector;
 
 import java.util.List;
 
+/**
+ * Registry class that contains all the collectors for instantiation later on.
+ */
 public final class VMInformationCollectorRegistry {
     public static final List<Class<? extends Collector>> vmCollectors = List.of(
             VmCpuUsageCollector.class,

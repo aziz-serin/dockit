@@ -8,9 +8,17 @@ import oshi.hardware.HardwareAbstractionLayer;
 
 import java.util.Map;
 
+/**
+ * Utility class to collect information about the system's CPU usage
+ */
 public class VmCpuUsageCollector implements Collector {
     private static final int DELAY = 100;
 
+    /**
+     * Collect cpu load of the system
+     *
+     * @return JSON representation of collected data in string format
+     */
     @Override
     public String collect() {
         SystemInfo systemInfo = new SystemInfo();

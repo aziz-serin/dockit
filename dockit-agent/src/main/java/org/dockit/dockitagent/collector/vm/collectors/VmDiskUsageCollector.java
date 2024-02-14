@@ -10,8 +10,16 @@ import oshi.hardware.HardwareAbstractionLayer;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Utility class to collect information about the storage disk of the system
+ */
 public class VmDiskUsageCollector implements Collector {
 
+    /**
+     * Collect name, size and bytes written/read from the disk.
+     *
+     * @return JSON representation of collected data in string format
+     */
     @Override
     public String collect() {
         SystemInfo systemInfo = new SystemInfo();

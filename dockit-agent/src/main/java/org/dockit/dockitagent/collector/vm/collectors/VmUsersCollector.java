@@ -10,8 +10,16 @@ import oshi.software.os.OperatingSystem;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Utility class to collect information about the system's users
+ */
 public class VmUsersCollector implements Collector {
 
+    /**
+     * Collect information about the active sessions in the system
+     *
+     * @return JSON representation of collected data in string format
+     */
     @Override
     public String collect() {
         SystemInfo systemInfo = new SystemInfo();
