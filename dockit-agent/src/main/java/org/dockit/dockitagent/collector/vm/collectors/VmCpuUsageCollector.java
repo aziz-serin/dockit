@@ -13,7 +13,7 @@ import java.util.Map;
  * Utility class to collect information about the system's CPU usage
  */
 public class VmCpuUsageCollector implements Collector {
-    private static final int DELAY = 100;
+    private static final int DELAY = 500;
 
     /**
      * Collect cpu load of the system
