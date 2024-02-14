@@ -3,6 +3,7 @@ package org.dockit.dockitagent.collector.vm.collectors;
 import com.google.gson.Gson;
 import org.dockit.dockitagent.collector.Collector;
 import org.dockit.dockitagent.collector.utils.InformationBuilderHelper;
+import org.dockit.dockitagent.collector.vm.collectors.constants.VmCollectorConstants;
 import oshi.SystemInfo;
 import oshi.software.os.FileSystem;
 import oshi.software.os.OSFileStore;
@@ -31,8 +32,8 @@ public class VmFileSystemCollector implements Collector {
                 .map(fileStore -> {
                     Gson gson = new Gson();
                     Map<String, ?> data = Map.of(
-                            "total_space", fileStore.getTotalSpace(),
-                            "free_space", fileStore.getFreeSpace()
+                            VmCollectorConstants.FILE_SYSTEM_TOTAL_SPACE, fileStore.getTotalSpace(),
+                            VmCollectorConstants.FILE_SYSTEM_FREE_SPACE, fileStore.getFreeSpace()
                     );
                     return gson.toJson(data);
                 }).toList();

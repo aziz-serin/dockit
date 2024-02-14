@@ -3,6 +3,7 @@ package org.dockit.dockitagent.collector.vm.collectors;
 import com.google.gson.Gson;
 import org.dockit.dockitagent.collector.Collector;
 import org.dockit.dockitagent.collector.utils.InformationBuilderHelper;
+import org.dockit.dockitagent.collector.vm.collectors.constants.VmCollectorConstants;
 import oshi.SystemInfo;
 import oshi.software.os.InternetProtocolStats;
 import oshi.software.os.OperatingSystem;
@@ -30,12 +31,12 @@ public class VmNetworkUsageCollector implements Collector {
                 .map(connection -> {
                     Gson gson = new Gson();
                     Map<String, ?> data = Map.of(
-                            "pid", connection.getowningProcessId(),
-                            "foreign_address", connection.getForeignAddress(),
-                            "local_address", connection.getLocalAddress(),
-                            "foreign_port", connection.getForeignPort(),
-                            "local_port", connection.getLocalPort(),
-                            "type", connection.getType()
+                            VmCollectorConstants.NETWORK_PID, connection.getowningProcessId(),
+                            VmCollectorConstants.NETWORK_FOREIGN_ADDRESS, connection.getForeignAddress(),
+                            VmCollectorConstants.NETWORK_LOCAL_ADDRESS, connection.getLocalAddress(),
+                            VmCollectorConstants.NETWORK_FOREIGN_PORT, connection.getForeignPort(),
+                            VmCollectorConstants.NETWORK_LOCAL_PORT, connection.getLocalPort(),
+                            VmCollectorConstants.NETWORK_TYPE, connection.getType()
                     );
                     return gson.toJson(data);
                 }).toList();

@@ -2,6 +2,7 @@ package org.dockit.dockitagent.collector.vm.collectors;
 
 import com.google.gson.Gson;
 import org.dockit.dockitagent.collector.Collector;
+import org.dockit.dockitagent.collector.vm.collectors.constants.VmCollectorConstants;
 import oshi.SystemInfo;
 import oshi.hardware.GlobalMemory;
 import oshi.hardware.HardwareAbstractionLayer;
@@ -26,8 +27,8 @@ public class VmMemoryResourcesCollector implements Collector {
 
         Gson gson = new Gson();
         Map<String, ?> data = Map.of(
-                "total", memory.getTotal(),
-                "available", memory.getAvailable()
+                VmCollectorConstants.MEMORY_TOTAL, memory.getTotal(),
+                VmCollectorConstants.MEMORY_AVAILABLE, memory.getAvailable()
         );
         return gson.toJson(data);
     }

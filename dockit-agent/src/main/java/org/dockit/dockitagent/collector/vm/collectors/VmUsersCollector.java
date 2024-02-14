@@ -3,6 +3,7 @@ package org.dockit.dockitagent.collector.vm.collectors;
 import com.google.gson.Gson;
 import org.dockit.dockitagent.collector.Collector;
 import org.dockit.dockitagent.collector.utils.InformationBuilderHelper;
+import org.dockit.dockitagent.collector.vm.collectors.constants.VmCollectorConstants;
 import oshi.SystemInfo;
 import oshi.software.os.OSSession;
 import oshi.software.os.OperatingSystem;
@@ -29,9 +30,9 @@ public class VmUsersCollector implements Collector {
                 .map(session -> {
                     Gson gson = new Gson();
                     Map<String, ?> data = Map.of(
-                            "user_name", session.getUserName(),
-                            "host", session.getHost(),
-                            "login_time", session.getLoginTime()
+                            VmCollectorConstants.USER_USER_NAME, session.getUserName(),
+                            VmCollectorConstants.USER_HOST, session.getHost(),
+                            VmCollectorConstants.USER_LOGIN_TIME, session.getLoginTime()
                     );
                     return gson.toJson(data);
                 })

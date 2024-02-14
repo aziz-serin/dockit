@@ -2,6 +2,7 @@ package org.dockit.dockitagent.collector.vm.collectors;
 
 import com.google.gson.Gson;
 import org.dockit.dockitagent.collector.Collector;
+import org.dockit.dockitagent.collector.vm.collectors.constants.VmCollectorConstants;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.HardwareAbstractionLayer;
@@ -27,7 +28,7 @@ public class VmCpuUsageCollector implements Collector {
         Gson gson = new Gson();
         Map<String, ?> data = Map.of(
                 // Delay is the milliseconds to wait
-                "cpu_load", processor.getSystemCpuLoad(DELAY)
+                VmCollectorConstants.CPU_LOAD, processor.getSystemCpuLoad(DELAY)
         );
         return gson.toJson(data);
     }

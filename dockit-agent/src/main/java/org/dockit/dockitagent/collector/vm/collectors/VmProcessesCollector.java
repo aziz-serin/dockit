@@ -3,6 +3,7 @@ package org.dockit.dockitagent.collector.vm.collectors;
 import com.google.gson.Gson;
 import org.dockit.dockitagent.collector.Collector;
 import org.dockit.dockitagent.collector.utils.InformationBuilderHelper;
+import org.dockit.dockitagent.collector.vm.collectors.constants.VmCollectorConstants;
 import oshi.SystemInfo;
 import oshi.software.os.OSProcess;
 import oshi.software.os.OperatingSystem;
@@ -29,10 +30,10 @@ public class VmProcessesCollector implements Collector {
                 .map(process -> {
                     Gson gson = new Gson();
                     Map<String, ?> data = Map.of(
-                            "user", process.getUser(),
-                            "pid", process.getProcessID(),
-                            "name", process.getName(),
-                            "up_time", process.getUpTime()
+                            VmCollectorConstants.PROCESS_USER, process.getUser(),
+                            VmCollectorConstants.PROCESS_PID, process.getProcessID(),
+                            VmCollectorConstants.PROCESS_NAME, process.getName(),
+                            VmCollectorConstants.PROCESS_UP_TIME, process.getUpTime()
                     );
                     return gson.toJson(data);
                         })

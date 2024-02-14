@@ -3,6 +3,7 @@ package org.dockit.dockitagent.collector.vm.collectors;
 import com.google.gson.Gson;
 import org.dockit.dockitagent.collector.Collector;
 import org.dockit.dockitagent.collector.utils.InformationBuilderHelper;
+import org.dockit.dockitagent.collector.vm.collectors.constants.VmCollectorConstants;
 import oshi.SystemInfo;
 import oshi.hardware.HWDiskStore;
 import oshi.hardware.HardwareAbstractionLayer;
@@ -29,10 +30,10 @@ public class VmDiskUsageCollector implements Collector {
                 .map(diskStore -> {
                     Gson gson = new Gson();
                     Map<String, ?> data = Map.of(
-                            "name", diskStore.getName(),
-                            "size", diskStore.getSize(),
-                            "read_bytes", diskStore.getReadBytes(),
-                            "write_bytes", diskStore.getWriteBytes()
+                            VmCollectorConstants.DISK_STORE_NAME, diskStore.getName(),
+                            VmCollectorConstants.DISK_STORE_SIZE, diskStore.getSize(),
+                            VmCollectorConstants.DISK_STORE_READ, diskStore.getReadBytes(),
+                            VmCollectorConstants.DISK_STORE_WRITE, diskStore.getWriteBytes()
                     );
                     return gson.toJson(data);
                 })
