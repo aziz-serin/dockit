@@ -13,6 +13,9 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// Uncomment below to ignore this test case if you do not have a docker engine api running or you are not interested in
+// docker running functionality
+//@Ignore("Ignored because docker engine not available/not used")
 public class DockerContainerFileSystemCollectorTest {
 
     private Collector collector;
