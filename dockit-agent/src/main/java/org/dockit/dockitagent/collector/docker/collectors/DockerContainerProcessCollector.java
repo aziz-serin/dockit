@@ -2,7 +2,6 @@ package org.dockit.dockitagent.collector.docker.collectors;
 
 import com.google.inject.Inject;
 import org.dockit.dockitagent.collector.Collector;
-import org.dockit.dockitagent.connection.ConnectionManager;
 import org.dockit.dockitagent.connection.DockerConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +11,7 @@ public class DockerContainerProcessCollector extends DockerCollector implements 
     private static final String CONTAINERS_ENDPOINT = "/containers/json";
     private static final String PROCESS_ENDPOINT = "/containers/%s/top";
 
-    private final ConnectionManager connectionManager;
+    private final DockerConnectionManager connectionManager;
 
     @Inject
     public DockerContainerProcessCollector(DockerConnectionManager connectionManager) {

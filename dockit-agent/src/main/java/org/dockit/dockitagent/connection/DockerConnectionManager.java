@@ -17,7 +17,7 @@ import java.util.Optional;
  * Manage interaction with the Docker Engine API. See the link for the API documentation
  * <a href="https://docs.docker.com/engine/api/v1.43/#tag/Container">here</a>
  */
-public class DockerConnectionManager implements ConnectionManager {
+public class DockerConnectionManager {
 
     private static final Logger logger = LoggerFactory.getLogger(DockerConnectionManager.class);
 

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 import org.dockit.dockitagent.collector.Collector;
 import org.dockit.dockitagent.collector.utils.InformationBuilderHelper;
-import org.dockit.dockitagent.connection.ConnectionManager;
 import org.dockit.dockitagent.connection.DockerConnectionManager;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.Optional;
 public class DockerContainerCollector implements Collector {
     private static final String ENDPOINT = "/containers/json";
 
-    private final ConnectionManager connectionManager;
+    private final DockerConnectionManager connectionManager;
 
     @Inject
     public DockerContainerCollector(DockerConnectionManager connectionManager) {

@@ -2,7 +2,7 @@ package org.dockit.dockitagent.collector.docker.collectors;
 
 import org.dockit.dockitagent.collector.utils.GetContainerIds;
 import org.dockit.dockitagent.collector.utils.InformationBuilderHelper;
-import org.dockit.dockitagent.connection.ConnectionManager;
+import org.dockit.dockitagent.connection.DockerConnectionManager;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public abstract class DockerCollector {
      * @param logger {@link Logger} instance to log incidents
      * @return response body in string format
      */
-    protected String send(ConnectionManager connectionManager, String id_endpoint, String response_endpoint, Logger logger) {
+    protected String send(DockerConnectionManager connectionManager, String id_endpoint, String response_endpoint, Logger logger) {
         Optional<String> idResponse = connectionManager.sendRequest(id_endpoint);
         if (idResponse.isEmpty()) {
             return null;
