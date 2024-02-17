@@ -49,7 +49,7 @@ public class DockerConnectionManager implements ConnectionManager {
                 return false;
             }
         } catch (IOException | InterruptedException e) {
-            logger.error(e.getMessage());
+            logger.error(e.toString());
             return false;
         }
     }
@@ -57,11 +57,15 @@ public class DockerConnectionManager implements ConnectionManager {
     /**
      * Send the specified get request to the docker engine api
      *
-     * @return response body in string format if everything is fine, empty if there was an error.
+     * @return response body in string format if OK response is received, empty if there was an error.
      */
     public Optional<String> sendRequest(String endpoint) {
         try {
             HttpResponse<String> response = getResponse(endpoint, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                logger.info(response.body());
+                return Optional.empty();
+            }
             return Optional.of(response.body());
         } catch (IOException | InterruptedException e) {
             logger.error(e.getMessage());
