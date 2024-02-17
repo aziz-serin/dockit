@@ -5,7 +5,6 @@ import org.dockit.dockitagent.collector.docker.collectors.DockerContainerCollect
 import org.dockit.dockitagent.collector.docker.collectors.DockerContainerFileSystemCollector;
 import org.dockit.dockitagent.collector.docker.collectors.DockerContainerProcessCollector;
 import org.dockit.dockitagent.collector.docker.collectors.DockerContainerResourceCollector;
-import org.dockit.dockitagent.collector.docker.collectors.DockerEventCollector;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -21,8 +20,7 @@ public class DockerInformationCollectorRegistryTest {
                 DockerContainerCollector.class,
                 DockerContainerFileSystemCollector.class,
                 DockerContainerProcessCollector.class,
-                DockerContainerResourceCollector.class,
-                DockerEventCollector.class
+                DockerContainerResourceCollector.class
         );
     }
 }
