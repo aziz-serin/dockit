@@ -15,7 +15,7 @@ public class DockerContainerProcessCollector extends DockerCollector implements 
     private final ConnectionManager connectionManager;
 
     @Inject
-    public DockerContainerProcessCollector(ConnectionManager connectionManager) {
+    public DockerContainerProcessCollector(DockerConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
     }
 
