@@ -16,7 +16,6 @@ import static org.mockito.Mockito.when;
 public class ServerConnectionManagerTest {
     private static final String SERVER_URL = "http://localhost:8080";
     private static final String FAKE_URL = "http://someurl:7545";
-    private static final String SOME_ENDPOINT = "/api/write";
     private static final String API_KEY = "api_key";
     private static final String FAKE_ENDPOINT = "/fake";
 
