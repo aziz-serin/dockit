@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public class DockerContainerResourceCollector extends DockerCollector implements Collector {
     private static final Logger logger = LoggerFactory.getLogger(DockerContainerResourceCollector.class);
     private static final String CONTAINERS_ENDPOINT = "/containers/json";
-    private static final String RESOURCE_ENDPOINT = "/containers/%s/stats";
+    private static final String RESOURCE_ENDPOINT = "/containers/%s/stats?stream=false&one-shot=true";
 
     private final ConnectionManager connectionManager;
 
