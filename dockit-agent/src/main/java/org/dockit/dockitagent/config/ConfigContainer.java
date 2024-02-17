@@ -35,7 +35,7 @@ public class ConfigContainer implements Container {
             String path = System.getenv(CONFIG_PATH);
             configLoader.readConfig(path);
             temporaryConfig = Config.INSTANCE.getInstance();
-            byte[] decodedKey = Base64.getDecoder().decode(temporaryConfig.getKEY());
+            byte[] decodedKey = Base64.getDecoder().decode(temporaryConfig.getSECRET_KEY());
             temporaryKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
         } catch (SecurityException e) {
             logger.error("Host machine does not allow access to env variables");

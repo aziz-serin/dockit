@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.DateTimeException;
 import java.time.ZoneId;
-import java.time.zone.ZoneRulesException;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -51,7 +50,8 @@ public class PropertiesConfigReader implements ConfigReader {
             int interval = Integer.parseInt((String) properties.get(ConfigConstants.INTERVAL));
             boolean docker = Boolean.parseBoolean((String) properties.get(ConfigConstants.DOCKER));
             boolean vmData = Boolean.parseBoolean((String) properties.get(ConfigConstants.VM_DATA));
-            String key = (String) properties.get(ConfigConstants.KEY);
+            String key = (String) properties.get(ConfigConstants.SECRET_KEY);
+            String apiKey = (String) properties.get(ConfigConstants.API_KEY);
             String id = (String) properties.get(ConfigConstants.ID);
             String zoneId = (String) properties.get(ConfigConstants.ZONE_ID);
             String docker_url = (String) properties.get(ConfigConstants.DOCKER_URL);
@@ -63,7 +63,8 @@ public class PropertiesConfigReader implements ConfigReader {
             config.setINTERVAL(interval);
             config.setDOCKER(docker);
             config.setVM_DATA(vmData);
-            config.setKEY(key);
+            config.setSECRET_KEY(key);
+            config.setAPI_KEY(apiKey);
             config.setID(id);
             config.setZONE_ID(zoneIdObject);
             config.setDOCKER_URL(docker_url);

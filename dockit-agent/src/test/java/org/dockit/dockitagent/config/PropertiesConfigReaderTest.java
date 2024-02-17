@@ -58,7 +58,8 @@ class PropertiesConfigReaderTest {
         propertiesConfigReader.generateConfig(properties);
 
         assertThat(Config.INSTANCE.getInstance().getID()).isEqualTo(properties.get(ConfigConstants.ID));
-        assertThat(Config.INSTANCE.getInstance().getKEY()).isEqualTo(properties.get(ConfigConstants.KEY));
+        assertThat(Config.INSTANCE.getInstance().getSECRET_KEY()).isEqualTo(properties.get(ConfigConstants.SECRET_KEY));
+        assertThat(Config.INSTANCE.getInstance().getAPI_KEY()).isEqualTo(properties.get(ConfigConstants.API_KEY));
         assertThat(Config.INSTANCE.getInstance().getINTERVAL())
                 .isEqualTo(Integer.parseInt((String) properties.get(ConfigConstants.INTERVAL)));
         assertThat(Config.INSTANCE.getInstance().isDOCKER())

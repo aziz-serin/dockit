@@ -12,7 +12,8 @@ public enum Config {
     private int INTERVAL;
     private boolean DOCKER;
     private boolean VM_DATA;
-    private String KEY;
+    private String SECRET_KEY;
+    private String API_KEY;
     private String ID;
     private ZoneId ZONE_ID;
     private String DOCKER_URL;
@@ -70,16 +71,16 @@ public enum Config {
     /**
      * @return secret key string
      */
-    String getKEY() {
-        return KEY;
+    String getSECRET_KEY() {
+        return SECRET_KEY;
     }
 
 
     /**
-     * @param KEY secret key string
+     * @param SECRET_KEY secret key string
      */
-    void setKEY(String KEY) {
-        this.KEY = KEY;
+    void setSECRET_KEY(String SECRET_KEY) {
+        this.SECRET_KEY = SECRET_KEY;
     }
 
     /**
@@ -136,5 +137,20 @@ public enum Config {
      */
     void setSERVER_URL(String SERVER_URL) {
         this.SERVER_URL = SERVER_URL;
+    }
+
+
+    /**
+     * @return api key to be used for authentication
+     */
+    public String getAPI_KEY() {
+        return API_KEY;
+    }
+
+    /**
+     * @param API_KEY api key to be used for authentication
+     */
+    void setAPI_KEY(String API_KEY) {
+        this.API_KEY = API_KEY;
     }
 }

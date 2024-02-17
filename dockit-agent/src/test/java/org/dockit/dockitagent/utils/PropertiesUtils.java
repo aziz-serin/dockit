@@ -35,7 +35,8 @@ public class PropertiesUtils {
     public static Properties generateMockProperties() {
         Properties properties = new Properties();
         properties.setProperty(ConfigConstants.ID, "given_id");
-        properties.setProperty(ConfigConstants.KEY, "secret_key");
+        properties.setProperty(ConfigConstants.SECRET_KEY, "secret_key");
+        properties.setProperty(ConfigConstants.API_KEY, "api_key");
         properties.setProperty(ConfigConstants.DOCKER, "true");
         properties.setProperty(ConfigConstants.VM_DATA, "true");
         properties.setProperty(ConfigConstants.INTERVAL, "5");
