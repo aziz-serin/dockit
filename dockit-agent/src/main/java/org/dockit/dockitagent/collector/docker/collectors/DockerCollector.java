@@ -12,9 +12,6 @@ import java.util.Optional;
 public abstract class DockerCollector {
 
     protected String send(ConnectionManager connectionManager, String id_endpoint, String response_endpoint, Logger logger) {
-        if (!connectionManager.isAlive()) {
-            return null;
-        }
         Optional<String> idResponse = connectionManager.sendRequest(id_endpoint);
         if (idResponse.isEmpty()) {
             return null;

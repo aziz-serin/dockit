@@ -18,11 +18,7 @@ public class DockerContainerCollector implements Collector {
 
     @Override
     public String collect() {
-        if (connectionManager.isAlive()) {
-            Optional<String> response = connectionManager.sendRequest(ENDPOINT);
-            return response.orElse(null);
-        } else {
-            return null;
-        }
+        Optional<String> response = connectionManager.sendRequest(ENDPOINT);
+        return response.orElse(null);
     }
 }
