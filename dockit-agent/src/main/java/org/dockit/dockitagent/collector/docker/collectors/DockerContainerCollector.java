@@ -11,16 +11,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Utility class to collect information about running containers from docker
+ */
 public class DockerContainerCollector implements Collector {
     private static final String ENDPOINT = "/containers/json";
 
     private final DockerConnectionManager connectionManager;
 
+    /**
+     * @param connectionManager {@link DockerConnectionManager} instance to be injected
+     */
     @Inject
     public DockerContainerCollector(DockerConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
     }
 
+    /**
+     * Collect information about all running docker containers
+     *
+     * @return null if there is an error with the request,
+     * or string representation of data for container information
+     */
     @Override
     public String collect() {
         Optional<String> response = connectionManager.sendRequest(ENDPOINT);
