@@ -2,6 +2,7 @@ package org.dockit.dockitagent.connection;
 
 import com.google.inject.Inject;
 import org.dockit.dockitagent.config.ConfigContainer;
+import org.dockit.dockitagent.config.templates.Container;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,13 +23,13 @@ public class DockerConnectionManager implements ConnectionManager {
 
     private static final String PING_ENDPOINT = "/_ping";
 
-    private final ConfigContainer configContainer;
+    private final Container configContainer;
 
     /**
      * @param configContainer {@link ConfigContainer} instance to be injected
      */
     @Inject
-    public DockerConnectionManager(ConfigContainer configContainer) {
+    public DockerConnectionManager(Container configContainer) {
         this.configContainer = configContainer;
     }
 

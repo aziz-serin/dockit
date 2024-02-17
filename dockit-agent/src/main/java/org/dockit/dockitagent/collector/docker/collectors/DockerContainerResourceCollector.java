@@ -15,7 +15,7 @@ public class DockerContainerResourceCollector extends DockerCollector implements
     private final ConnectionManager connectionManager;
 
     @Inject
-    public DockerContainerResourceCollector(DockerConnectionManager connectionManager) {
+    public DockerContainerResourceCollector(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
     }
 

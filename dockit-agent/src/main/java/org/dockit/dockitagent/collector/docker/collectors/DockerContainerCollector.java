@@ -2,17 +2,17 @@ package org.dockit.dockitagent.collector.docker.collectors;
 
 import com.google.inject.Inject;
 import org.dockit.dockitagent.collector.Collector;
-import org.dockit.dockitagent.connection.DockerConnectionManager;
+import org.dockit.dockitagent.connection.ConnectionManager;
 
 import java.util.Optional;
 
 public class DockerContainerCollector implements Collector {
     private static final String ENDPOINT = "/containers/json";
 
-    private final DockerConnectionManager connectionManager;
+    private final ConnectionManager connectionManager;
 
     @Inject
-    public DockerContainerCollector(DockerConnectionManager connectionManager) {
+    public DockerContainerCollector(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
     }
 

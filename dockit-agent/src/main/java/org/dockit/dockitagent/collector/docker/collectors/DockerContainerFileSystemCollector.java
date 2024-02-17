@@ -15,7 +15,7 @@ public class DockerContainerFileSystemCollector extends DockerCollector implemen
     private final ConnectionManager connectionManager;
 
     @Inject
-    public DockerContainerFileSystemCollector(DockerConnectionManager connectionManager) {
+    public DockerContainerFileSystemCollector(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
     }
 
