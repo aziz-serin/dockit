@@ -9,8 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Abstract class to be used in some of the docker collector classes which obtain container-specific data
+ */
 public abstract class DockerCollector {
 
+    /**
+     * @param connectionManager {@link org.dockit.dockitagent.connection.DockerConnectionManager} instance to be used
+     * @param id_endpoint endpoint to retrieve container ids
+     * @param response_endpoint endpoint to send the request to
+     * @param logger {@link Logger} instance to log incidents
+     * @return response body in string format
+     */
     protected String send(ConnectionManager connectionManager, String id_endpoint, String response_endpoint, Logger logger) {
         Optional<String> idResponse = connectionManager.sendRequest(id_endpoint);
         if (idResponse.isEmpty()) {
