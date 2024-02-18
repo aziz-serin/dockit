@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.dockit.dockitagent.connection.ConnectionModule;
 import org.dockit.dockitagent.config.ConfigModule;
+import org.dockit.dockitagent.encryption.EncryptionModule;
 
 
 /**
@@ -13,7 +14,8 @@ public class GuiceTestInitialise {
     public static Injector injector() {
         return Guice.createInjector(
                 new ConfigModule(),
-                new ConnectionModule()
+                new ConnectionModule(),
+                new EncryptionModule()
         );
     }
 }
