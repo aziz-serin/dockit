@@ -2,6 +2,7 @@ package org.dockit.dockitagent.utils;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.dockit.dockitagent.collector.initialiser.CollectorInitialiserModule;
 import org.dockit.dockitagent.connection.ConnectionModule;
 import org.dockit.dockitagent.config.ConfigModule;
 import org.dockit.dockitagent.encryption.EncryptionModule;
@@ -17,7 +18,8 @@ public class GuiceTestInitialise {
                 new ConfigModule(),
                 new ConnectionModule(),
                 new EncryptionModule(),
-                new SenderModule()
+                new SenderModule(),
+                new CollectorInitialiserModule()
         );
     }
 }
