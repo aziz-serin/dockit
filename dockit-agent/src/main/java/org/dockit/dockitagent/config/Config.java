@@ -18,6 +18,7 @@ public enum Config {
     private ZoneId ZONE_ID;
     private String DOCKER_URL;
     private String SERVER_URL;
+    private String VM_ID;
 
     /**
      * @return an instance of {@link Config}
@@ -152,5 +153,19 @@ public enum Config {
      */
     void setAPI_KEY(String API_KEY) {
         this.API_KEY = API_KEY;
+    }
+
+    /**
+     * @return vm_id for the running vm
+     */
+    public String getVM_ID() {
+        return VM_ID;
+    }
+
+    /**
+     * @param VM_ID vm_id for the running vm
+     */
+    void setVM_ID(String VM_ID) {
+        this.VM_ID = VM_ID;
     }
 }

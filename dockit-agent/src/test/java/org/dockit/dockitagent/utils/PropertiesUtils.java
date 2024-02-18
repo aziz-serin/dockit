@@ -43,6 +43,7 @@ public class PropertiesUtils {
         properties.setProperty(ConfigConstants.ZONE_ID, "Europe/London");
         properties.setProperty(ConfigConstants.DOCKER_URL, "http://docker");
         properties.setProperty(ConfigConstants.SERVER_URL, "http://server");
+        properties.setProperty(ConfigConstants.VM_ID, "some_id_for_vm");
         return properties;
     }
 }

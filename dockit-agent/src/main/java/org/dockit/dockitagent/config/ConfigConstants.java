@@ -13,5 +13,6 @@ public final class ConfigConstants {
     public static final String ZONE_ID = "zone_id";
     public static final String DOCKER_URL = "docker_url";
     public static final String SERVER_URL = "server_url";
+    public static final String VM_ID = "vm_id";
 
 }

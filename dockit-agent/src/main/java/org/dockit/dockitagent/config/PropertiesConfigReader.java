@@ -56,6 +56,7 @@ public class PropertiesConfigReader implements ConfigReader {
             String zoneId = (String) properties.get(ConfigConstants.ZONE_ID);
             String docker_url = (String) properties.get(ConfigConstants.DOCKER_URL);
             String server_url = (String) properties.get(ConfigConstants.SERVER_URL);
+            String vm_id = (String) properties.get(ConfigConstants.VM_ID);
 
             ZoneId zoneIdObject = ZoneId.of(zoneId);
 
@@ -69,6 +70,7 @@ public class PropertiesConfigReader implements ConfigReader {
             config.setZONE_ID(zoneIdObject);
             config.setDOCKER_URL(docker_url);
             config.setSERVER_URL(server_url);
+            config.setVM_ID(vm_id);
         } catch (ClassCastException | NumberFormatException | DateTimeException e) {
             logger.error("Could not parse the input properties, check their types are correct!");
             throw new ConfigException();

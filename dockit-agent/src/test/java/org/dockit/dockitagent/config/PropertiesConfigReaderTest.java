@@ -72,5 +72,7 @@ class PropertiesConfigReaderTest {
                 .isEqualTo((String) properties.get(ConfigConstants.DOCKER_URL));
         assertThat(Config.INSTANCE.getInstance().getSERVER_URL())
                 .isEqualTo((String) properties.get(ConfigConstants.SERVER_URL));
+        assertThat(Config.INSTANCE.getInstance().getVM_ID())
+                .isEqualTo((String) properties.get(ConfigConstants.VM_ID));
     }
 }
