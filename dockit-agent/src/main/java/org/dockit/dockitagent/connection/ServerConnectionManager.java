@@ -102,9 +102,12 @@ public class ServerConnectionManager {
         String url = container.getConfig().getSERVER_URL();
         HttpClient client = HttpClient.newHttpClient();
 
-        HttpRequest request = HttpRequest.newBuilder(URI.create(url +  endpoint))
+        String uriString = url + endpoint + "?id=%s".formatted(container.getConfig().getID());
+
+        HttpRequest request = HttpRequest.newBuilder(URI.create(uriString))
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .headers("accept", "application/json",
+                        "Content-Type", "application/json",
                         AUTH_TOKEN_HEADER_NAME, container.getConfig().getAPI_KEY())
                 .build();
 

@@ -2,7 +2,9 @@ package org.dockit.dockitagent.entity;
 
 import com.google.gson.Gson;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 /**
  * Audit entity to be passed around after collecting the information
@@ -61,6 +63,12 @@ public class Audit {
      */
     public String toMap() {
         Gson gson = new Gson();
-        return gson.toJson(this);
+        Map<String, String> json = Map.of(
+                "vmId", vmId,
+                "category", category,
+                "timeStamp", timeStamp.toLocalDateTime().toString(),
+                "data", data
+        );
+        return gson.toJson(json);
     }
 }
