@@ -18,6 +18,9 @@ public final class ConfigManager {
     private Config config;
     private KeyStore keyStore;
     private static String PATH_SEPARATOR;
+    public static String KEY_STORE_PATH;
+    public static String KEY_STORE_PASSWORD;
+
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
 
@@ -101,6 +104,10 @@ public final class ConfigManager {
         Properties properties = loadPropertiesConfig(path, configFileName);
         config = generateConfigFromProperties(properties);
         keyStore = loadKeystoreConfig(keyStoreName, path, config.getKeyStorePassword());
+
+        // Set these to use later to save the keystore after a modification
+        KEY_STORE_PATH = path + PATH_SEPARATOR + keyStoreName;
+        KEY_STORE_PASSWORD = config.getKeyStorePassword();
     }
 
     /**
@@ -120,6 +127,9 @@ public final class ConfigManager {
         if (savedProperties != null && ks != null) {
             config = generateConfigFromProperties(properties);
             keyStore = ks;
+            // Set these to use later to save the keystore after a modification
+            KEY_STORE_PATH = path + PATH_SEPARATOR + keyStoreName;
+            KEY_STORE_PASSWORD = keyStorePassword;
         } else {
             throw new ConfigWriterException("Could not create keystore and/or properties config");
         }

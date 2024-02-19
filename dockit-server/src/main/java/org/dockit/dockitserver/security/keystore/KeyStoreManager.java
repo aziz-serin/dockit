@@ -1,5 +1,6 @@
 package org.dockit.dockitserver.security.keystore;
 
+import org.dockit.dockitserver.config.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +69,23 @@ public class KeyStoreManager {
         } catch (NoSuchAlgorithmException e) {
             logger.error("Specified algorithm does not exist: \n {}", e.getMessage());
             return null;
+        }
+    }
+
+    public static void saveKeyStore(KeyStore keyStore) {
+        try (FileOutputStream fos = new FileOutputStream(ConfigManager.KEY_STORE_PATH)) {
+            char[] pwdArray = ConfigManager.KEY_STORE_PASSWORD.toCharArray();
+            keyStore.store(fos, pwdArray);
+        } catch (FileNotFoundException e) {
+            logger.error("Could not find the keyStore in the given path, {}", ConfigManager.KEY_STORE_PATH);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        } catch (CertificateException e) {
+            logger.error("Invalid certificate, check exception, \n {}", e.getMessage());
+        } catch (KeyStoreException e) {
+            logger.error("Could not create the keystore, check the exception: \n {}", e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("Specified algorithm does not exist: \n {}", e.getMessage());
         }
     }
 

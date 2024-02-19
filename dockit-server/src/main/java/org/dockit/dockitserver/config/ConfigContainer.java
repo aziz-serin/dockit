@@ -36,7 +36,6 @@ public class ConfigContainer {
         }
         this.config = configManager.getConfig();
         this.keyStore = configManager.getKeyStore();
-
     }
 
     /**

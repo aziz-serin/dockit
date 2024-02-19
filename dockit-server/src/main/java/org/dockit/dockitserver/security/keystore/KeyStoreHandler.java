@@ -48,6 +48,7 @@ public class KeyStoreHandler {
         KeyStore keyStore = configContainer.getKeyStore();
         try {
             keyStore.setEntry(alias, secret, password);
+            KeyStoreManager.saveKeyStore(keyStore);
             return true;
         } catch (KeyStoreException e) {
             logger.debug("Possibly invalid password, check the exception: {}", e.getMessage());
@@ -103,6 +104,7 @@ public class KeyStoreHandler {
         KeyStore keyStore = configContainer.getKeyStore();
         try {
             keyStore.deleteEntry(alias);
+            KeyStoreManager.saveKeyStore(keyStore);
         } catch (KeyStoreException e) {
             logger.debug("Could not delete the key {}, check: {}", alias, e.getMessage());
         }

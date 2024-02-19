@@ -27,11 +27,15 @@ public class KeyStoreInitializer {
     @Autowired
     public KeyStoreInitializer(ConfigContainer configContainer, KeyStoreHandler keyStoreHandler, KeyHandler keyHandler)
             throws KeyStoreException {
-        // Generate key to be used in jwt generation
-        Key jwt_key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.JWT_KEY_SIZE).get();
-        keyStoreHandler.saveKey(configContainer.getConfig().getJwtSecretAlias(), (SecretKey) jwt_key, "".toCharArray());
-
-        // Generate key to be used in symmetric encryption for data saved and save it in keystore
-        keyHandler.generateKeyForDBEncryption(KeyConstants.DB_KEY_ALIAS, "");
+        String jwtSecretAlias = configContainer.getConfig().getJwtSecretAlias();
+        if (!keyStoreHandler.keyExists(jwtSecretAlias)) {
+            // Generate key to be used in jwt generation
+            Key jwt_key = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.JWT_KEY_SIZE).get();
+            keyStoreHandler.saveKey(jwtSecretAlias, (SecretKey) jwt_key, "".toCharArray());
+        }
+        if(!keyStoreHandler.keyExists(KeyConstants.DB_KEY_ALIAS)) {
+            // Generate key to be used in symmetric encryption for data saved and save it in keystore
+            keyHandler.generateKeyForDBEncryption(KeyConstants.DB_KEY_ALIAS, "");
+        }
     }
 }
