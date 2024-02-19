@@ -22,7 +22,7 @@ import java.util.Set;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
-    private final Set<String> excludedUrls = Set.of("/api/write/**", "/api/authenticate/**", "/api/actuator/**");
+    private final Set<String> excludedUrls = Set.of("/api/write/**", "/api/authenticate/**", "/actuator/**");
 
     /**
      * {@inheritDoc}

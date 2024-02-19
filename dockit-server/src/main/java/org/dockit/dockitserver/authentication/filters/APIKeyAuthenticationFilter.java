@@ -23,7 +23,7 @@ public class APIKeyAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(APIKeyAuthenticationFilter.class);
 
-    private final Set<String> excludedUrls = Set.of("/api/admin/**", "/api/authenticate/**", "/api/actuator/**",
+    private final Set<String> excludedUrls = Set.of("/api/admin/**", "/api/authenticate/**", "/actuator/**",
             "/api/audit/**", "/api/agent/**", "/api/apiKey/**");
 
     /**

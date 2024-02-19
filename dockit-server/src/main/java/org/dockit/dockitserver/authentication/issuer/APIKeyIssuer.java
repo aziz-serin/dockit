@@ -54,6 +54,7 @@ public class APIKeyIssuer {
         if (agent.isEmpty()) {
             return Optional.empty();
         }
+        // Return empty here if agent already has a key, check that
         String generatedKey = APIKeyGenerator.generateApiKey();
         Optional<APIKey> apiKey = EntityCreator.createAPIKey(generatedKey, agent.get());
         if (apiKey.isPresent()) {
