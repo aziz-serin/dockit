@@ -11,9 +11,15 @@ import org.dockit.dockitagent.scheduler.JobScheduler;
 import org.dockit.dockitagent.scheduler.SchedulerModule;
 import org.dockit.dockitagent.sender.SenderModule;
 
+/**
+ * Guice configuration for the application
+ */
 public class ApplicationGuiceInitialiser {
     private final Injector injector;
 
+    /**
+     * No-args constructor to initialise the guice {@link Injector} to be used to start the application
+     */
     public ApplicationGuiceInitialiser() {
         this.injector = Guice.createInjector(
                 new ConfigModule(),
@@ -26,6 +32,9 @@ public class ApplicationGuiceInitialiser {
         );
     }
 
+    /**
+     * @return {@link JobScheduler} instance to
+     */
     public JobScheduler getJobScheduler() {
         return injector.getInstance(JobScheduler.class);
     }

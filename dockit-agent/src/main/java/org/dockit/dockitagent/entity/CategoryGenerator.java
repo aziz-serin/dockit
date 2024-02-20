@@ -13,6 +13,9 @@ import org.dockit.dockitagent.collector.vm.collectors.VmNetworkUsageCollector;
 import org.dockit.dockitagent.collector.vm.collectors.VmProcessesCollector;
 import org.dockit.dockitagent.collector.vm.collectors.VmUsersCollector;
 
+/**
+ * Utility class to generate categories to be used in the construction of {@link Audit} object
+ */
 public final class CategoryGenerator {
     // Docker collected categories
     private static final String DOCKER_CONTAINERS = "containers";
@@ -29,6 +32,13 @@ public final class CategoryGenerator {
     private static final String VM_PROCESS = "vm_process";
     private static final String VM_USERS = "vm_users";
 
+
+    /**
+     * Given the class, return the appropriate category
+     *
+     * @param clazz the class for the given {@link Collector} instance
+     * @return pre-defined category for the given collector
+     */
     public static String getCategory(Class<? extends Collector> clazz) {
         if (clazz.equals(DockerContainerCollector.class)) {
             return DOCKER_CONTAINERS;

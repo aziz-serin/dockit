@@ -16,9 +16,19 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
+/**
+ * A collection job to collect the audit data
+ */
 public class CollectJob implements Job {
     private static final Logger logger = LoggerFactory.getLogger(CollectJob.class);
 
+    /**
+     * Take a {@link Collector} instance, {@link AuditSender} and {@link AuditConstructor} as input using
+     * the {@link JobDataMap}, collect the data using the collector, construct the audit, and send it to the server.
+     *
+     * @param context contains details about the job and utility classes in {@link JobDataMap} to be used
+     * @throws JobExecutionException if any exception occurs with the execution of the job
+     */
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDataMap jobDataMap = context.getMergedJobDataMap();
