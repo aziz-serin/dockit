@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.UUID;
  * Entity object representing alerts in the database
  */
 @Entity
+@Table(name = "alert")
 public class Alert implements DTO {
     /**
      * Enum containing importance indicator for Alerts
@@ -23,7 +25,8 @@ public class Alert implements DTO {
     public enum Importance {
         CRITICAL,
         MEDIUM,
-        LOW
+        LOW,
+        NONE
     }
 
     @Id
