@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Analyze filesystem usage of running vm
+ */
 @Component
 public class VmFileSystemUsageAnalyzer implements Analyzer {
     private static final String NAME = "name";
@@ -21,10 +24,16 @@ public class VmFileSystemUsageAnalyzer implements Analyzer {
 
     private final AlertGenerator alertGenerator;
 
+    /**
+     * @param alertGenerator {@link AlertGenerator instance to be injected}
+     */
     public VmFileSystemUsageAnalyzer(AlertGenerator alertGenerator) {
         this.alertGenerator = alertGenerator;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Alert> analyze(Audit audit) {
         String data = audit.getData();

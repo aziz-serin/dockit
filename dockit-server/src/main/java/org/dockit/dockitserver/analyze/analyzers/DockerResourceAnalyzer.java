@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Analyze resource usage of docker containers
+ */
 @Component
 public class DockerResourceAnalyzer implements Analyzer {
     private static final String MEMORY_STATS = "memory_stats";
@@ -22,10 +25,16 @@ public class DockerResourceAnalyzer implements Analyzer {
 
     private final AlertGenerator alertGenerator;
 
+    /**
+     * @param alertGenerator {@link AlertGenerator instance to be injected}
+     */
     public DockerResourceAnalyzer(AlertGenerator alertGenerator) {
         this.alertGenerator = alertGenerator;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Alert> analyze(Audit audit) {
         List<String> containerInformation = AnalyzingUtils.splitData(audit.getData());

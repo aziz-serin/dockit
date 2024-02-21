@@ -1,5 +1,8 @@
 package org.dockit.dockitserver.analyze.analyzers.utils;
 
+/**
+ * Class containing template messages to be formatted for each alert
+ */
 public class AlertMessageTemplates {
     public static final String DOCKER_CONTAINER_RESOURCE_MESSAGE = "Container running in VM with vmId" +
             " %s has high resource usage as following: %s. ALERT LEVEL: %s";

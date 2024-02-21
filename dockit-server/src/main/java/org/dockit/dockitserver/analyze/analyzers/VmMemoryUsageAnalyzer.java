@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Analyze memory usage of the running vm
+ */
 @Component
 public class VmMemoryUsageAnalyzer implements Analyzer {
     private static final String TOTAL = "total";
@@ -18,10 +21,16 @@ public class VmMemoryUsageAnalyzer implements Analyzer {
 
     private final AlertGenerator alertGenerator;
 
+    /**
+     * @param alertGenerator {@link AlertGenerator instance to be injected}
+     */
     public VmMemoryUsageAnalyzer(AlertGenerator alertGenerator) {
         this.alertGenerator = alertGenerator;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Alert> analyze(Audit audit) {
         String data = audit.getData();

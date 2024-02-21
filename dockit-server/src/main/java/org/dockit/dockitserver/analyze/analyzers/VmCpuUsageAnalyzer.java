@@ -11,16 +11,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
+/**
+ * Analyze cpu usage of the running VM
+ */
 @Component
 public class VmCpuUsageAnalyzer implements Analyzer {
     private static final String CPU_LOAD = "cpu_load";
 
     private final AlertGenerator alertGenerator;
 
+    /**
+     * @param alertGenerator {@link AlertGenerator instance to be injected}
+     */
     public VmCpuUsageAnalyzer(AlertGenerator alertGenerator) {
         this.alertGenerator = alertGenerator;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Alert> analyze(Audit audit) {
         String data = audit.getData();

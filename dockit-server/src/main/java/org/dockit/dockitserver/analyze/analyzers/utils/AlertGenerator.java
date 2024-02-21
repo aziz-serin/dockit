@@ -8,9 +8,20 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+/**
+ * Generator utility class for alerts
+ */
 @Component
 public class AlertGenerator {
 
+    /**
+     * Generate alert for resource-usage related data
+     *
+     * @param audit {@link Audit} to generate the {@link Alert} for
+     * @param importance importance level for the alert
+     * @param message message about the alert
+     * @return {@link Optional} empty if alert can be created, empty if not
+     */
     public Optional<Alert> generateAlert(Audit audit, Alert.Importance importance, String message) {
         String formattedMessage = getMessage(audit.getCategory(), audit.getVmId(), message, importance.toString());
 
@@ -18,6 +29,13 @@ public class AlertGenerator {
                 importance, audit.getTimeStamp(), formattedMessage);
     }
 
+    /**
+     * Generate alert for user login related data
+     *
+     * @param audit {@link Audit} to generate the {@link Alert} for
+     * @param message message about the alert
+     * @return {@link Optional} empty if alert can be created, empty if not
+     */
     public Optional<Alert> generateIntrusionAlert(Audit audit, String message) {
 
         return EntityCreator.createAlert(audit.getVmId(), audit.getAgent(),

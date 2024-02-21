@@ -1,5 +1,8 @@
 package org.dockit.dockitserver.analyze;
 
+/**
+ * Class containing all the categories sent by the dockit-agent
+ */
 public class AuditCategories {
     public static final String DOCKER_CONTAINERS = "containers";
     public static final String DOCKER_CONTAINER_FILESYSTEM = "container_filesystem";

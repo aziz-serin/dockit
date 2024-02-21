@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Analyze logged-in users to the vm
+ */
 @Component
 public class VmUsersAnalyzer implements Analyzer {
     private static  String USERNAME = "username";
@@ -26,11 +29,17 @@ public class VmUsersAnalyzer implements Analyzer {
 
     private final AlertGenerator alertGenerator;
 
+    /**
+     * @param alertGenerator {@link AlertGenerator instance to be injected}
+     */
     @Autowired
     public VmUsersAnalyzer(AlertGenerator alertGenerator) {
         this.alertGenerator = alertGenerator;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Alert> analyze(Audit audit) {
         String data  = audit.getData();

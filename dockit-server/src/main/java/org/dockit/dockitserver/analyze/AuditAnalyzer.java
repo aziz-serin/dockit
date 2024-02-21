@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Utility class which brings all the analyzers together
+ */
 @Component
 public class AuditAnalyzer {
 
@@ -21,6 +24,15 @@ public class AuditAnalyzer {
     private final VmMemoryUsageAnalyzer vmMemoryUsageAnalyzer;
     private final VmUsersAnalyzer vmUsersAnalyzer;
 
+    /**
+     * Constructor which contains all the analyzers
+     *
+     * @param dockerResourceAnalyzer {@link DockerResourceAnalyzer} to be injected
+     * @param vmCpuUsageAnalyzer {@link VmCpuUsageAnalyzer} to be injected
+     * @param vmFileSystemUsageAnalyzer {@link VmFileSystemUsageAnalyzer} to be injected
+     * @param vmMemoryUsageAnalyzer {@link VmMemoryUsageAnalyzer} to be injected
+     * @param vmUsersAnalyzer {@link VmUsersAnalyzer} to be injected
+     */
     @Autowired
     public AuditAnalyzer(DockerResourceAnalyzer dockerResourceAnalyzer,
                                        VmCpuUsageAnalyzer vmCpuUsageAnalyzer, VmFileSystemUsageAnalyzer vmFileSystemUsageAnalyzer,
@@ -32,6 +44,12 @@ public class AuditAnalyzer {
         this.vmUsersAnalyzer = vmUsersAnalyzer;
     }
 
+    /**
+     * Depending on the given audit's category, generate appropriate alerts and return them
+     *
+     * @param audit {@link Audit} to be analyzed
+     * @return list of generated alerts
+     */
     public List<Alert> analyze(Audit audit) {
         String category = audit.getCategory();
 
