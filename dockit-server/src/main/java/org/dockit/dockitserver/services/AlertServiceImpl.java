@@ -59,4 +59,19 @@ public class AlertServiceImpl implements AlertService {
                 .limit(count)
                 .toList();
     }
+
+    @Override
+    public List<Alert> findByImportance(Alert.Importance importance) {
+        return alertRepository.findAll().stream()
+                .filter(alert -> alert.getImportance().equals(importance))
+                .toList();
+    }
+
+    @Override
+    public List<Alert> findByImportanceWithSameVmId(Alert.Importance importance, String vmId) {
+        return alertRepository.findAll().stream()
+                .filter(alert -> alert.getVmId().equals(vmId)
+                        && alert.getImportance().equals(importance))
+                .toList();
+    }
 }

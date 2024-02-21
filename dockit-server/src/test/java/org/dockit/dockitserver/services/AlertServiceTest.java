@@ -45,13 +45,16 @@ public class AlertServiceTest {
                 LocalDateTime.now(), LocalDateTime.now()).get();
         agentService.save(agent);
 
-        alert1 = EntityCreator.createAlert(VM_ID, agent, LocalDateTime.now(), "message").get();
+        alert1 = EntityCreator.createAlert(VM_ID, agent, Alert.Importance.CRITICAL, LocalDateTime.now(),
+                "message").get();
         alertService.save(alert1);
 
-        Alert alert2 = EntityCreator.createAlert(VM_ID, agent, LocalDateTime.now(), "message").get();
+        Alert alert2 = EntityCreator.createAlert(VM_ID, agent, Alert.Importance.MEDIUM, LocalDateTime.now(),
+                "message").get();
         alertService.save(alert2);
 
-        Alert alert3 = EntityCreator.createAlert("differentVmId", agent, LocalDateTime.now(), "message").get();
+        Alert alert3 = EntityCreator.createAlert("differentVmId", agent, Alert.Importance.LOW,
+                LocalDateTime.now(), "message").get();
         alertService.save(alert3);
     }
 
@@ -78,5 +81,24 @@ public class AlertServiceTest {
         assertThat(alerts.size()).isEqualTo(1);
         assertThat(alerts.get(0).getVmId()).isEqualTo(VM_ID);
         assertThat(alerts.get(0).getAuditTimeStamp()).isAfter(alert1.getAuditTimeStamp());
+    }
+
+    @Test
+    public void findByImportanceReturnsSameImportance() {
+        List<Alert> alerts = alertService.findByImportance(Alert.Importance.CRITICAL);
+        alerts.forEach(
+                alert -> {assertThat(alert.getImportance()).isEqualTo(Alert.Importance.CRITICAL);}
+        );
+    }
+
+    @Test
+    public void findByImportanceWithSameVmReturnsSameImportanceAndVm() {
+        List<Alert> alerts = alertService.findByImportanceWithSameVmId(Alert.Importance.CRITICAL, VM_ID);
+        alerts.forEach(
+                alert -> {
+                    assertThat(alert.getImportance()).isEqualTo(Alert.Importance.CRITICAL);
+                    assertThat(alert.getVmId()).isEqualTo(VM_ID);
+                }
+        );
     }
 }

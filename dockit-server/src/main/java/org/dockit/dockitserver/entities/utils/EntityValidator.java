@@ -74,12 +74,14 @@ public class EntityValidator {
      *
      * @param vmId string specifying the vmId of the {@link Alert}
      * @param agent {@link Agent} instance for the {@link Alert}
+     * @param importance importance of the alert
      * @param auditTimeStamp time taken from the {@link Audit} objects timestamp
      * @param message string message about the description of the alert
      * @return true if valid, false if not
      */
-    protected static boolean validAlert(String vmId, Agent agent, LocalDateTime auditTimeStamp, String message) {
-        return vmId != null && agent != null && auditTimeStamp.isBefore(LocalDateTime.now()) && message != null &&
-                vmId.length() < 255;
+    protected static boolean validAlert(String vmId, Agent agent, Alert.Importance importance,
+                                        LocalDateTime auditTimeStamp, String message) {
+        return vmId != null && agent != null && importance != null && auditTimeStamp.isBefore(LocalDateTime.now())
+                && message != null && vmId.length() < 255;
     }
 }

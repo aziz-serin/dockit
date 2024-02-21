@@ -50,4 +50,21 @@ public interface AlertService {
      * @return List of alerts
      */
     List<Alert> findMostRecentWithVmId(String vmId, int count);
+
+    /**
+     * Find all the alerts with the same importance
+     *
+     * @param importance importance of the alert
+     * @return List of alerts
+     */
+    List<Alert> findByImportance(Alert.Importance importance);
+
+    /**
+     * Find all the alerts with the same importance and vmId
+     *
+     * @param importance importance of the alert
+     * @return List of alerts
+     */
+    List<Alert> findByImportanceWithSameVmId(Alert.Importance importance, String vmId);
+
 }

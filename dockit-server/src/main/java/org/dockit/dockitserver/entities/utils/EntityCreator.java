@@ -97,20 +97,23 @@ public class EntityCreator {
     }
 
     /**
-     * Create new alert entity
+     * Create a new alert entity
      *
      * @param vmId string specifying the vmId of the {@link Alert}
      * @param agent {@link Agent} instance for the {@link Alert}
+     * @param importance importance of the alert
      * @param auditTimeStamp time taken from the {@link Audit} objects timestamp
      * @param message string message about the description of the alert
      * @return {@link Optional} alert if successful, empty if not
      */
-    public static Optional<Alert> createAlert(String vmId, Agent agent, LocalDateTime auditTimeStamp, String message) {
-        if (!EntityValidator.validAlert(vmId, agent, auditTimeStamp, message)) {
+    public static Optional<Alert> createAlert(String vmId, Agent agent, Alert.Importance importance,
+                                              LocalDateTime auditTimeStamp, String message) {
+        if (!EntityValidator.validAlert(vmId, agent, importance, auditTimeStamp, message)) {
             return Optional.empty();
         }
         Alert alert = new Alert();
         alert.setAgent(agent);
+        alert.setImportance(importance);
         alert.setVmId(vmId);
         alert.setAuditTimeStamp(auditTimeStamp);
         alert.setMessage(message);

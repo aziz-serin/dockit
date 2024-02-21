@@ -17,6 +17,14 @@ import java.util.UUID;
  */
 @Entity
 public class Alert implements DTO {
+    /**
+     * Enum containing importance indicator for Alerts
+     */
+    public enum Importance {
+        CRITICAL,
+        MEDIUM,
+        LOW
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,7 +37,12 @@ public class Alert implements DTO {
 
     @ManyToOne
     @JoinColumn(name = "agent_id")
+    @NotEmpty
     private Agent agent;
+
+    @NotEmpty
+    @Column(name = "importance")
+    private Importance importance;
 
     @NotEmpty
     @Column(name = "audit_timestamp")
@@ -38,15 +51,6 @@ public class Alert implements DTO {
     @NotEmpty
     @Column(name = "message", columnDefinition = "TEXT")
     private String message;
-
-    public Agent getAgent() {
-        return agent;
-    }
-
-    public void setAgent(Agent agent) {
-        this.agent = agent;
-    }
-
 
     @Override
     public UUID getId() {
@@ -64,6 +68,22 @@ public class Alert implements DTO {
 
     public void setVmId(String vmId) {
         this.vmId = vmId;
+    }
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void setAgent(Agent agent) {
+        this.agent = agent;
+    }
+
+    public Importance getImportance() {
+        return importance;
+    }
+
+    public void setImportance(Importance importance) {
+        this.importance = importance;
     }
 
     public LocalDateTime getAuditTimeStamp() {
