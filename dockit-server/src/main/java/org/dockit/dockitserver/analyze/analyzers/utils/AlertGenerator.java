@@ -18,6 +18,12 @@ public class AlertGenerator {
                 importance, audit.getTimeStamp(), formattedMessage);
     }
 
+    public Optional<Alert> generateIntrusionAlert(Audit audit, String message) {
+
+        return EntityCreator.createAlert(audit.getVmId(), audit.getAgent(),
+                Alert.Importance.CRITICAL, audit.getTimeStamp(), message);
+    }
+
     private String getMessage(String category, String vmId, String message, String importance) {
         switch (category) {
             case AuditCategories.DOCKER_CONTAINER_RESOURCE -> {
