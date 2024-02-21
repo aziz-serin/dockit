@@ -3,6 +3,7 @@ package org.dockit.dockitserver.entities.utils;
 import org.dockit.dockitserver.entities.APIKey;
 import org.dockit.dockitserver.entities.Admin;
 import org.dockit.dockitserver.entities.Agent;
+import org.dockit.dockitserver.entities.Alert;
 import org.dockit.dockitserver.entities.Audit;
 
 import java.time.LocalDateTime;
@@ -93,5 +94,27 @@ public class EntityCreator {
         APIKey.setToken(token);
         APIKey.setAgent(agent);
         return Optional.of(APIKey);
+    }
+
+    /**
+     * Create new alert entity
+     *
+     * @param vmId string specifying the vmId of the {@link Alert}
+     * @param agent {@link Agent} instance for the {@link Alert}
+     * @param auditTimeStamp time taken from the {@link Audit} objects timestamp
+     * @param message string message about the description of the alert
+     * @return {@link Optional} alert if successful, empty if not
+     */
+    public static Optional<Alert> createAlert(String vmId, Agent agent, LocalDateTime auditTimeStamp, String message) {
+        if (!EntityValidator.validAlert(vmId, agent, auditTimeStamp, message)) {
+            return Optional.empty();
+        }
+        Alert alert = new Alert();
+        alert.setAgent(agent);
+        alert.setVmId(vmId);
+        alert.setAuditTimeStamp(auditTimeStamp);
+        alert.setMessage(message);
+
+        return Optional.of(alert);
     }
 }

@@ -3,6 +3,7 @@ package org.dockit.dockitserver.entities.utils;
 import org.dockit.dockitserver.entities.APIKey;
 import org.dockit.dockitserver.entities.Admin;
 import org.dockit.dockitserver.entities.Agent;
+import org.dockit.dockitserver.entities.Alert;
 import org.dockit.dockitserver.entities.Audit;
 
 import java.time.LocalDateTime;
@@ -66,5 +67,19 @@ public class EntityValidator {
      */
     protected static boolean validAPIKey(String token, Agent agent) {
         return token != null && agent != null;
+    }
+
+    /**
+     * Validate attributes for a new alert entity
+     *
+     * @param vmId string specifying the vmId of the {@link Alert}
+     * @param agent {@link Agent} instance for the {@link Alert}
+     * @param auditTimeStamp time taken from the {@link Audit} objects timestamp
+     * @param message string message about the description of the alert
+     * @return true if valid, false if not
+     */
+    protected static boolean validAlert(String vmId, Agent agent, LocalDateTime auditTimeStamp, String message) {
+        return vmId != null && agent != null && auditTimeStamp.isBefore(LocalDateTime.now()) && message != null &&
+                vmId.length() < 255;
     }
 }
