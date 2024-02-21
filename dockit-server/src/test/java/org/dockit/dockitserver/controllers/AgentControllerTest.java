@@ -69,7 +69,8 @@ public class AgentControllerTest {
 
     @BeforeAll
     public void setup() {
-        agent = EntityCreator.createAgent(AGENT_NAME, AGENT_PASSWORD, LocalDateTime.now(), LocalDateTime.now()).get();
+        agent = EntityCreator.createAgent(AGENT_NAME, AGENT_PASSWORD, LocalDateTime.now(), LocalDateTime.now(),
+                List.of("")).get();
         agentService.save(agent);
 
         Admin admin = EntityCreator.createAdmin(ADMIN_USERNAME, ADMIN_PASSWORD, Admin.Role.SUPER).get();
@@ -169,7 +170,8 @@ public class AgentControllerTest {
         String jwt = TokenObtain.getJwt(ADMIN_USERNAME, ADMIN_PASSWORD, client);
         Map<String, Object> json = Map.of(
                 "agentName", AGENT_NAME,
-                "password", AGENT_PASSWORD
+                "password", AGENT_PASSWORD,
+                "allowedUsers", "user"
         );
 
         client.post().uri("/api/agent")
@@ -204,7 +206,8 @@ public class AgentControllerTest {
         // Create an agent with post request to generate the API key for it
         Map<String, Object> json = Map.of(
                 "agentName", AGENT_NAME,
-                "password", AGENT_PASSWORD
+                "password", AGENT_PASSWORD,
+                "allowedUsers", "user"
         );
         AtomicReference<UUID> id = new AtomicReference<>(); 
 

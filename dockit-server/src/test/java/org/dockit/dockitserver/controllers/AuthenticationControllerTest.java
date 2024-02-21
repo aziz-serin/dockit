@@ -32,6 +32,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -72,7 +73,7 @@ public class AuthenticationControllerTest {
         adminService.save(admin);
 
         agent = EntityCreator.createAgent("agent1", "password1",
-                LocalDateTime.now(), LocalDateTime.now()).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
         agentService.save(agent);
 
         client = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();

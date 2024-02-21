@@ -1,7 +1,9 @@
 package org.dockit.dockitserver.entities;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,6 +13,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -41,6 +44,10 @@ public class Agent implements DTO {
     @NotEmpty
     @Column(name = "last_active_time")
     private LocalDateTime lastActiveTime;
+
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    @Column(name = "allowedUsers")
+    private List<String> allowedUsers;
 
     public UUID getId() {
         return id;
@@ -86,5 +93,13 @@ public class Agent implements DTO {
 
     public void setLastActiveTime(LocalDateTime lastActiveTime) {
         this.lastActiveTime = lastActiveTime;
+    }
+
+    public List<String> getAllowedUsers() {
+        return allowedUsers;
+    }
+
+    public void setAllowedUsers(List<String> allowedUsers) {
+        this.allowedUsers = allowedUsers;
     }
 }

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Key;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -118,6 +119,7 @@ public class AgentController {
      * @param body Should contain parameters: <br>
      *             "agentName" -> name of the agent to be created <br>
      *             "password" -> password for the new agent <br>
+     *             "allowedUsers" -> list of allowed users seperated by space in the form of string <br>
      * @return Response entity containing the response
      */
     @PostMapping
@@ -125,12 +127,15 @@ public class AgentController {
     public ResponseEntity<?> creteAgent(@RequestBody @NonNull Map<String, ?> body) {
         String agentName = (String) body.get("agentName");
         String password = (String) body.get("password");
-        if (ParameterValidator.invalid(agentName, password)) {
+        String allowedUsers = (String) body.get("allowedUsers");
+        if (ParameterValidator.invalid(agentName, password, allowedUsers)) {
             return ResponseEntity.badRequest().body("Invalid request!");
         }
         LocalDateTime creationTime = LocalDateTime.now();
         LocalDateTime lastActiveTime = LocalDateTime.now();
-        Optional<Agent> agent = EntityCreator.createAgent(agentName, password, creationTime, lastActiveTime);
+        List<String> listAllowedUsers = Arrays.stream(allowedUsers.split(" ")).toList();
+        Optional<Agent> agent = EntityCreator.createAgent(agentName, password, creationTime, lastActiveTime,
+                listAllowedUsers);
 
         if (agent.isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid request!");

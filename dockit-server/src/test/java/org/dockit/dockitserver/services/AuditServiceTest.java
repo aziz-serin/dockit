@@ -55,7 +55,7 @@ public class AuditServiceTest {
     @BeforeAll
     public void setup() {
         agent = EntityCreator.createAgent("name", "password", LocalDateTime.now(),
-                LocalDateTime.now()).get();
+                LocalDateTime.now(), List.of("")).get();
         agentService.save(agent);
 
         audit1 = EntityCreator.createAudit("vm1", "resource_usage", LocalDateTime.now(), "data1", agent).get();

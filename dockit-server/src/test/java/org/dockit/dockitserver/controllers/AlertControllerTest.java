@@ -64,7 +64,8 @@ public class AlertControllerTest {
         Admin viewer = EntityCreator.createAdmin(VIEWER_ADMIN_USERNAME, ADMIN_PASSWORD, Admin.Role.VIEWER).get();
         adminService.save(viewer);
 
-        agent = EntityCreator.createAgent(AGENT_NAME, AGENT_PASSWORD, LocalDateTime.now(), LocalDateTime.now()).get();
+        agent = EntityCreator.createAgent(AGENT_NAME, AGENT_PASSWORD, LocalDateTime.now(), LocalDateTime.now(),
+                List.of("")).get();
         agentService.save(agent);
 
         generateAlert();

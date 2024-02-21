@@ -54,15 +54,15 @@ public class APIKeyServiceTest {
     @BeforeAll
     public void setup() {
         agent1 = EntityCreator.createAgent("agent1", "password1",
-                LocalDateTime.now(), LocalDateTime.now()).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
         agentService.save(agent1);
 
         agent2 = EntityCreator.createAgent("agent2", "password2",
-                LocalDateTime.now(), LocalDateTime.now()).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
         agentService.save(agent2);
 
         agent3 = EntityCreator.createAgent("agent3", "password3",
-                LocalDateTime.now(), LocalDateTime.now()).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
         agentService.save(agent3);
 
         APIKey1 = EntityCreator.createAPIKey("token1", agent1).get();
@@ -97,7 +97,7 @@ public class APIKeyServiceTest {
     public void saveCachesTheResultOfTheOperation() {
         Cache cache = cacheManager.getCache(CACHE_NAME);
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "tempAgent",
-                LocalDateTime.now(), LocalDateTime.now()).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
         agentService.save(tempAgent);
 
         APIKey tempToken = EntityCreator.createAPIKey("token", tempAgent).get();
@@ -119,10 +119,10 @@ public class APIKeyServiceTest {
         Cache cache = cacheManager.getCache(CACHE_NAME);
 
         Agent tempAgent1 = EntityCreator.createAgent("tempAgent1", "tempAgent1",
-                LocalDateTime.now(), LocalDateTime.now()).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
         agentService.save(tempAgent1);
         Agent tempAgent2 = EntityCreator.createAgent("tempAgent2", "tempAgent2",
-                LocalDateTime.now(), LocalDateTime.now()).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
         agentService.save(tempAgent2);
 
         APIKey tempToken1 = EntityCreator.createAPIKey("token", tempAgent1).get();

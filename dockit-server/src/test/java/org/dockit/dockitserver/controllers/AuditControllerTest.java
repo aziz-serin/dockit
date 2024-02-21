@@ -82,8 +82,8 @@ public class AuditControllerTest {
 
         key = (SecretKey) keyStoreHandler.getKey(KeyConstants.DB_KEY_ALIAS, "".toCharArray()).get();
 
-        agent = EntityCreator.createAgent(AGENT_NAME, AGENT_PASSWORD, LocalDateTime.now(), LocalDateTime.now())
-                .get();
+        agent = EntityCreator.createAgent(AGENT_NAME, AGENT_PASSWORD, LocalDateTime.now(), LocalDateTime.now(),
+                        List.of("")).get();
 
         agentService.save(agent);
 

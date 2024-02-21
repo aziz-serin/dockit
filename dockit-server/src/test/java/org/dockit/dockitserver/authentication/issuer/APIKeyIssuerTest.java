@@ -1,5 +1,6 @@
 package org.dockit.dockitserver.authentication.issuer;
 
+import java.util.List;
 import java.util.Optional;
 import org.dockit.dockitserver.DockitServerApplication;
 import org.dockit.dockitserver.entities.APIKey;
@@ -53,7 +54,7 @@ public class APIKeyIssuerTest {
     @BeforeAll
     public void setup() {
         agent = EntityCreator.createAgent("agent1", "password1",
-                LocalDateTime.now(), LocalDateTime.now()).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
         agentService.save(agent);
 
         admin = EntityCreator.createAdmin(USERNAME, PASSWORD, Admin.Role.SUPER).get();

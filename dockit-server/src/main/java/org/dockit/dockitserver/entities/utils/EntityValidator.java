@@ -7,6 +7,7 @@ import org.dockit.dockitserver.entities.Alert;
 import org.dockit.dockitserver.entities.Audit;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,9 +24,10 @@ public class EntityValidator {
      * @return {@link Optional} agent if successful, empty if not
      */
     protected static boolean validAgent(String agentName, String password, LocalDateTime creationTime,
-                                        LocalDateTime lastActiveTime) {
+                                        LocalDateTime lastActiveTime, List<String> allowedUsers) {
         return agentName != null && password != null && creationTime.isBefore(LocalDateTime.now())
-                && lastActiveTime.isBefore(LocalDateTime.now()) && agentName.length() < 255 && password.length() < 255;
+                && lastActiveTime.isBefore(LocalDateTime.now()) && agentName.length() < 255 && password.length() < 255
+                && !allowedUsers.isEmpty();
     }
 
     /**

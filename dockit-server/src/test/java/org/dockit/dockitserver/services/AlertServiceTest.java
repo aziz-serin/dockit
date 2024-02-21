@@ -42,7 +42,7 @@ public class AlertServiceTest {
     @BeforeAll
     public void setup() {
         agent = EntityCreator.createAgent("agent", "password",
-                LocalDateTime.now(), LocalDateTime.now()).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
         agentService.save(agent);
 
         alert1 = EntityCreator.createAlert(VM_ID, agent, Alert.Importance.CRITICAL, LocalDateTime.now(),

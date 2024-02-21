@@ -117,7 +117,8 @@ public class APIKeyControllerTest {
         String jwt = TokenObtain.getJwt(ADMIN_USERNAME, ADMIN_PASSWORD, client);
         Map<String, Object> json = Map.of(
                 "agentName", AGENT_NAME,
-                "password", AGENT_PASSWORD
+                "password", AGENT_PASSWORD,
+                "allowedUsers", "user"
         );
 
         client.post().uri("/api/agent")
