@@ -77,7 +77,8 @@ public class WriteController {
         if (dataToWrite.isEmpty()) {
             return ResponseEntity.internalServerError().build();
         }
-        Optional<Audit> audit = EntityCreator.createAudit(vmId, category, timeStamp.get(), dataToWrite.get());
+        Optional<Audit> audit = EntityCreator.createAudit(vmId, category, timeStamp.get(), dataToWrite.get(),
+                agent.get());
         if (audit.isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid request!");
         }

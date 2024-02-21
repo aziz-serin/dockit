@@ -2,12 +2,14 @@ package org.dockit.dockitserver.controllers;
 
 import org.dockit.dockitserver.DockitServerApplication;
 import org.dockit.dockitserver.entities.Admin;
+import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.Audit;
 import org.dockit.dockitserver.entities.utils.EntityCreator;
 import org.dockit.dockitserver.security.encryption.AESCBCEncryptor;
 import org.dockit.dockitserver.security.key.KeyConstants;
 import org.dockit.dockitserver.security.keystore.KeyStoreHandler;
 import org.dockit.dockitserver.services.templates.AdminService;
+import org.dockit.dockitserver.services.templates.AgentService;
 import org.dockit.dockitserver.services.templates.AuditService;
 import org.dockit.dockitserver.testUtils.TokenObtain;
 import org.junit.jupiter.api.BeforeAll;
@@ -50,6 +52,8 @@ public class AuditControllerTest {
     @Autowired
     AdminService adminService;
     @Autowired
+    AgentService agentService;
+    @Autowired
     KeyStoreHandler keyStoreHandler;
 
     static final String VM_ID = "vmId";
@@ -59,10 +63,13 @@ public class AuditControllerTest {
     static final String ADMIN_USERNAME = "admin";
     static final String VIEWER_ADMIN_USERNAME = "viewer";
     static final String ADMIN_PASSWORD = "password";
+    static final String AGENT_NAME = "agentName";
+    static final String AGENT_PASSWORD = "agentPassword";
 
     WebTestClient client;
     Audit audit;
     SecretKey key;
+    Agent agent;
 
     @BeforeAll
     public void setup() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
@@ -74,6 +81,11 @@ public class AuditControllerTest {
         adminService.save(viewerAdmin);
 
         key = (SecretKey) keyStoreHandler.getKey(KeyConstants.DB_KEY_ALIAS, "".toCharArray()).get();
+
+        agent = EntityCreator.createAgent(AGENT_NAME, AGENT_PASSWORD, LocalDateTime.now(), LocalDateTime.now())
+                .get();
+
+        agentService.save(agent);
 
         createAuditAndSave();
 
@@ -252,7 +264,7 @@ public class AuditControllerTest {
             IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         String encryptedData = AESCBCEncryptor.encrypt(DATA, key);
 
-        audit = EntityCreator.createAudit(VM_ID, CATEGORY, TIME_STAMP, encryptedData).get();
+        audit = EntityCreator.createAudit(VM_ID, CATEGORY, TIME_STAMP, encryptedData, agent).get();
         auditService.save(audit);
     }
 }

@@ -1,5 +1,6 @@
 package org.dockit.dockitserver.controllers.utils;
 
+import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.Audit;
 import org.dockit.dockitserver.entities.utils.EntityCreator;
 import org.dockit.dockitserver.exceptions.encryption.EncryptionException;
@@ -45,6 +46,9 @@ public class AuditDataDecryptFromDatabaseTest {
     @InjectMocks
     private AuditDataDecryptFromDatabase auditDataDecryptFromDatabase;
 
+    @Mock
+    private Agent agent;
+
     private Optional<Key> dbSecretKey;
     private Audit audit;
     // This has undecryptable data as its data to check exception handling
@@ -56,8 +60,9 @@ public class AuditDataDecryptFromDatabaseTest {
         dbSecretKey = AESKeyGenerator.generateKey(KeyConstants.AES_CIPHER, KeyConstants.JWT_KEY_SIZE);
         String encryptedData = AESCBCEncryptor.encrypt(DATA, (SecretKey) dbSecretKey.get());
 
-        audit = EntityCreator.createAudit(VM_ID, CATEGORY, LocalDateTime.now(), encryptedData).get();
-        invalidAudit = EntityCreator.createAudit(VM_ID, CATEGORY, LocalDateTime.now(), DATA).get();
+
+        audit = EntityCreator.createAudit(VM_ID, CATEGORY, LocalDateTime.now(), encryptedData, agent).get();
+        invalidAudit = EntityCreator.createAudit(VM_ID, CATEGORY, LocalDateTime.now(), DATA, agent).get();
     }
 
     @Test

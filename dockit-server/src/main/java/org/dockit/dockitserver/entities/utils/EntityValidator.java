@@ -21,9 +21,10 @@ public class EntityValidator {
      * @param lastActiveTime time specifying the last active time of the {@link Agent}
      * @return {@link Optional} agent if successful, empty if not
      */
-    protected static boolean validAgent(String agentName, String password, LocalDateTime creationTime, LocalDateTime lastActiveTime) {
+    protected static boolean validAgent(String agentName, String password, LocalDateTime creationTime,
+                                        LocalDateTime lastActiveTime) {
         return agentName != null && password != null && creationTime.isBefore(LocalDateTime.now())
-                && lastActiveTime.isBefore(LocalDateTime.now());
+                && lastActiveTime.isBefore(LocalDateTime.now()) && agentName.length() < 255 && password.length() < 255;
     }
 
     /**
@@ -35,7 +36,8 @@ public class EntityValidator {
      * @return {@link Optional} admin if successful, empty if not
      */
     protected static boolean validAdmin(String username, String password, Admin.Role privilege) {
-        return username != null && password != null && privilege != null;
+        return username != null && password != null && privilege != null &&
+                username.length() < 255 && password.length() < 255;
     }
 
     /**
@@ -45,10 +47,14 @@ public class EntityValidator {
      * @param category string specifying the category of the {@link Audit}
      * @param timeStamp time specifying the timeStamp of the {@link Audit}
      * @param data string specifying the data of the {@link Audit}
+     * @param agent {@link Agent} sender of the {@link Audit}
      * @return {@link Optional} audit if successful, empty if not
      */
-    protected static boolean validAudit(String vmId, String category, LocalDateTime timeStamp, String data) {
-        return vmId != null && category != null && timeStamp.isBefore(LocalDateTime.now()) && data != null;
+    protected static boolean validAudit(String vmId, String category, LocalDateTime timeStamp, String data,
+                                        Agent agent) {
+        // Check if any null, and check char limits for string fields
+        return vmId != null && category != null && timeStamp.isBefore(LocalDateTime.now()) && data != null
+                && agent != null && vmId.length() < 255 && category.length() < 255;
     }
 
     /**

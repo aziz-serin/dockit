@@ -2,7 +2,9 @@ package org.dockit.dockitserver.services;
 
 import org.dockit.dockitserver.DockitServerApplication;
 import org.dockit.dockitserver.caching.CacheNames;
+import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.Audit;
+import org.dockit.dockitserver.services.templates.AgentService;
 import org.dockit.dockitserver.services.templates.AuditService;
 import org.dockit.dockitserver.entities.utils.EntityCreator;
 import org.junit.jupiter.api.BeforeAll;
@@ -39,6 +41,8 @@ public class AuditServiceTest {
     @Autowired
     private AuditService auditService;
     @Autowired
+    private AgentService agentService;
+    @Autowired
     private CacheManager cacheManager;
 
     private Cache cache;
@@ -46,19 +50,24 @@ public class AuditServiceTest {
     private Audit audit2;
     private Audit audit3;
     private Audit audit4;
+    private Agent agent;
 
     @BeforeAll
     public void setup() {
-        audit1 = EntityCreator.createAudit("vm1", "resource_usage", LocalDateTime.now(), "data1").get();
+        agent = EntityCreator.createAgent("name", "password", LocalDateTime.now(),
+                LocalDateTime.now()).get();
+        agentService.save(agent);
+
+        audit1 = EntityCreator.createAudit("vm1", "resource_usage", LocalDateTime.now(), "data1", agent).get();
         auditService.save(audit1);
 
-        audit2 = EntityCreator.createAudit("vm2", "network_usage", LocalDateTime.now().minusDays(3), "data2").get();
+        audit2 = EntityCreator.createAudit("vm2", "network_usage", LocalDateTime.now().minusDays(3), "data2", agent).get();
         auditService.save(audit2);
 
-        audit3 = EntityCreator.createAudit("vm2", "running_processes", LocalDateTime.now().minusMinutes(15), "data3").get();
+        audit3 = EntityCreator.createAudit("vm2", "running_processes", LocalDateTime.now().minusMinutes(15), "data3", agent).get();
         auditService.save(audit3);
 
-        audit4 = EntityCreator.createAudit("vm4", "resource_usage", LocalDateTime.now().minusHours(5), "data4").get();
+        audit4 = EntityCreator.createAudit("vm4", "resource_usage", LocalDateTime.now().minusHours(5), "data4", agent).get();
         auditService.save(audit4);
 
         cache = Objects.requireNonNull(cacheManager.getCache(CACHE_NAME));
@@ -206,7 +215,7 @@ public class AuditServiceTest {
         Audit tempAudit = EntityCreator.createAudit("vm4",
                 "resource_usage",
                 LocalDateTime.now().minusHours(5),
-                "data4").get();
+                "data4", agent).get();
         auditService.save(tempAudit);
 
         Audit cachedAudit = (Audit) cache.get(tempAudit.getId()).get();
@@ -222,7 +231,7 @@ public class AuditServiceTest {
         Audit tempAudit = EntityCreator.createAudit("vm4",
                 "resource_usage",
                 LocalDateTime.now().minusHours(5),
-                "data4").get();
+                "data4", agent).get();
         auditService.save(tempAudit);
 
         auditService.deleteById(tempAudit.getId());

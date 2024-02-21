@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -28,6 +30,11 @@ public class Audit implements DTO {
     @NotEmpty
     @Column(name = "vm_id")
     private String vmId;
+
+    @ManyToOne
+    @JoinColumn(name = "agent_id")
+    @NotEmpty
+    private Agent agent;
 
     @NotEmpty
     @Column(name = "category")
@@ -54,6 +61,14 @@ public class Audit implements DTO {
 
     public void setVmId(String vmId) {
         this.vmId = vmId;
+    }
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
     public String getCategory() {

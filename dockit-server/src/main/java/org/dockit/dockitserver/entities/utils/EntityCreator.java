@@ -60,17 +60,21 @@ public class EntityCreator {
      * @param category string specifying the category of the {@link Audit}
      * @param timeStamp time specifying the timeStamp of the {@link Audit}
      * @param data string specifying the data of the {@link Audit}
+     * @param agent {@link Agent} sender of the {@link Audit}
      * @return {@link Optional} audit if successful, empty if not
      */
-    public static Optional<Audit> createAudit(String vmId, String category, LocalDateTime timeStamp, String data) {
-        if (!EntityValidator.validAudit(vmId, category, timeStamp, data)) {
+    public static Optional<Audit> createAudit(String vmId, String category, LocalDateTime timeStamp, String data,
+                                              Agent agent) {
+        if (!EntityValidator.validAudit(vmId, category, timeStamp, data, agent)) {
             return Optional.empty();
         }
         Audit audit = new Audit();
         audit.setVmId(vmId);
+        audit.setAgent(agent);
         audit.setCategory(category);
         audit.setTimeStamp(timeStamp);
         audit.setData(data);
+
         return Optional.of(audit);
     }
 
