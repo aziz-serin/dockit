@@ -32,6 +32,7 @@ public class VmFileSystemCollector implements Collector {
                 .map(fileStore -> {
                     Gson gson = new Gson();
                     Map<String, ?> data = Map.of(
+                            VmCollectorConstants.FILE_SYSTEM_NAME, fileStore.getName(),
                             VmCollectorConstants.FILE_SYSTEM_TOTAL_SPACE, fileStore.getTotalSpace(),
                             VmCollectorConstants.FILE_SYSTEM_FREE_SPACE, fileStore.getFreeSpace()
                     );

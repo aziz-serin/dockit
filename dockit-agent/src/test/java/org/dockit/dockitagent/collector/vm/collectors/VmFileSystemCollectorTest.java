@@ -14,7 +14,6 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-
 public class VmFileSystemCollectorTest {
     public String collectedData;
 
@@ -33,6 +32,7 @@ public class VmFileSystemCollectorTest {
         Map<String, ?> data = gson.fromJson(allData.get(0), Map.class);
 
         assertThat(data).containsOnlyKeys(
+                VmCollectorConstants.FILE_SYSTEM_NAME,
                 VmCollectorConstants.FILE_SYSTEM_TOTAL_SPACE,
                 VmCollectorConstants.FILE_SYSTEM_FREE_SPACE);
     }
@@ -46,6 +46,8 @@ public class VmFileSystemCollectorTest {
         Map<String, ?> data = gson.fromJson(allData.get(0), Map.class);
 
         // Assume both are larger than a gb
+        assertThat((String) data.get(VmCollectorConstants.FILE_SYSTEM_NAME)).isNotBlank();
+
         assertThat((Double) data.get(VmCollectorConstants.FILE_SYSTEM_FREE_SPACE) / Math.pow(1024, 3))
                 .isGreaterThan(1D);
 

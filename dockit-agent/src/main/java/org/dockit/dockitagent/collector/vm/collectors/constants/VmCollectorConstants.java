@@ -6,6 +6,7 @@ public final class VmCollectorConstants {
     public static final String DISK_STORE_SIZE = "size";
     public static final String DISK_STORE_READ = "read_bytes";
     public static final String DISK_STORE_WRITE = "write_bytes";
+    public static final String FILE_SYSTEM_NAME = "name";
     public static final String FILE_SYSTEM_TOTAL_SPACE = "total_space";
     public static final String FILE_SYSTEM_FREE_SPACE = "free_space";
     public static final String MEMORY_TOTAL = "total";
