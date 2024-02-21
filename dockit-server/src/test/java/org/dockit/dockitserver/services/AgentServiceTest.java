@@ -187,6 +187,21 @@ public class AgentServiceTest {
     }
 
     @Test
+    public void updateAllowedUsersReturnEmptyIfIdDoesNotExist() {
+        assertFalse(agentService.updateAllowedUsers(UUID.randomUUID(), List.of()).isPresent());
+    }
+
+    @Test
+    public void updateAllowedUsersUpdatesAgent() {
+        List<String> beforeUpdate = agent2.getAllowedUsers();
+        List<String> updateValue = List.of("someUser");
+        Optional<Agent> agent = agentService.updateAllowedUsers(agent2.getId(), updateValue);
+
+        assertTrue(agent.isPresent());
+        assertThat(agent.get().getAllowedUsers()).containsExactlyInAnyOrderElementsOf(updateValue);
+    }
+
+    @Test
     public void saveCachesResult() {
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
                 LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();

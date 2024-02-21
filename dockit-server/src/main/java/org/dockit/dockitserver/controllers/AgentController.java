@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Key;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -184,7 +185,7 @@ public class AgentController {
      *             "agentName" -> new name for the specified agent <br>
      * @return Response entity containing the response
      */
-    @PutMapping
+    @PutMapping("/name")
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR')")
     public ResponseEntity<?> updateAgentName(@RequestParam(name = "id") UUID id,
                                                     @RequestBody @NonNull Map<String, ?> body) {
@@ -193,6 +194,31 @@ public class AgentController {
             return ResponseEntity.badRequest().body("Invalid request!");
         }
         Optional<Agent> agent = agentService.updateAgentName(id, name);
+        if (agent.isEmpty()) {
+            return ResponseEntity.badRequest().body("Invalid request!");
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Update the allowedUsers list of a given agent
+     *
+     * @param id id of the agent to be updated
+     * @param body Should contain the parameters: <br>
+     *             "allowedUsers" -> list of allowed users seperated by space in the form of string <br>
+     * @return Response entity containing the response
+     */
+    @PutMapping("/allowedUsers")
+    @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR')")
+    public ResponseEntity<?> updateAllowedUsers(@RequestParam(name = "id") UUID id,
+                                             @RequestBody @NonNull Map<String, ?> body) {
+        String allowedUsers = (String) body.get("allowedUsers");
+        if (ParameterValidator.invalid(allowedUsers)) {
+            return ResponseEntity.badRequest().body("Invalid request!");
+        }
+        List<String> allowedUserList = new ArrayList<>(List.of(allowedUsers.split(" ")));
+
+        Optional<Agent> agent = agentService.updateAllowedUsers(id, allowedUserList);
         if (agent.isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid request!");
         }

@@ -38,6 +38,15 @@ public interface AgentService {
     Optional<Agent> updateLastActiveTime(UUID id, LocalDateTime lastActiveTime);
 
     /**
+     * Update the agent's allowed users
+     *
+     * @param id id of the {@link Agent} to be updated
+     * @param allowedUsers list of allowed users
+     * @return {@link Optional} Agent if agent exists, empty if not
+     */
+    Optional<Agent> updateAllowedUsers(UUID id, List<String> allowedUsers);
+
+    /**
      * Delete agent using its id
      *
      * @param id of the {@link Agent} to be deleted

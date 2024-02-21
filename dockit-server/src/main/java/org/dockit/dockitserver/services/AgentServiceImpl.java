@@ -62,6 +62,18 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
+    @CachePut(key = "#id")
+    public Optional<Agent> updateAllowedUsers(UUID id, List<String> allowedUsers) {
+        Optional<Agent> optionalAgent = agentRepository.findById(id);
+        if (optionalAgent.isPresent()) {
+            Agent agent = optionalAgent.get();
+            agent.setAllowedUsers(allowedUsers);
+            return Optional.of(agentRepository.save(agent));
+        }
+        return Optional.empty();
+    }
+
+    @Override
     @CacheEvict(key = "#id")
     public void deleteById(UUID id) {
         agentRepository.deleteById(id);

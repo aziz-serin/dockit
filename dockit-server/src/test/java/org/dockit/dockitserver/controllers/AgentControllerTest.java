@@ -241,7 +241,7 @@ public class AgentControllerTest {
     public void updateAgentNameFailsGivenInsufficientPermission() {
         String jwt = TokenObtain.getJwt(VIEWER_ADMIN_USERNAME, ADMIN_PASSWORD, client);
 
-        client.put().uri("/api/agent?id=999")
+        client.put().uri("/api/agent/name?id=999")
                 .header("Authorization", jwt)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -255,7 +255,7 @@ public class AgentControllerTest {
                 "agentNme", AGENT_NAME
         );
 
-        client.put().uri("/api/agent?id=999")
+        client.put().uri("/api/agent/name?id=999")
                 .header("Authorization", jwt)
                 .body(BodyInserters.fromValue(json))
                 .accept(MediaType.APPLICATION_JSON)
@@ -270,7 +270,48 @@ public class AgentControllerTest {
                 "agentName", AGENT_NAME
         );
 
-        client.put().uri("/api/agent?id=" + agent.getId())
+        client.put().uri("/api/agent/name?id=" + agent.getId())
+                .header("Authorization", jwt)
+                .body(BodyInserters.fromValue(json))
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    public void updateAllowedUsersFailsGivenInsufficientPermission() {
+        String jwt = TokenObtain.getJwt(VIEWER_ADMIN_USERNAME, ADMIN_PASSWORD, client);
+
+        client.put().uri("/api/agent/allowedUsers?id=999")
+                .header("Authorization", jwt)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().is4xxClientError();
+    }
+
+    @Test
+    public void updateAllowedUsersFailsGivenInvalidBody() {
+        String jwt = TokenObtain.getJwt(ADMIN_USERNAME, ADMIN_PASSWORD, client);
+        Map<String, Object> json = Map.of(
+                "allowedUsrs", "newUser"
+        );
+
+        client.put().uri("/api/agent/allowedUsers?id=999")
+                .header("Authorization", jwt)
+                .body(BodyInserters.fromValue(json))
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().is4xxClientError();
+    }
+
+    @Test
+    public void updateAllowedUsersSucceed() {
+        String jwt = TokenObtain.getJwt(ADMIN_USERNAME, ADMIN_PASSWORD, client);
+        Map<String, Object> json = Map.of(
+                "allowedUsers", "newUser"
+        );
+
+        client.put().uri("/api/agent/allowedUsers?id=" + agent.getId())
                 .header("Authorization", jwt)
                 .body(BodyInserters.fromValue(json))
                 .accept(MediaType.APPLICATION_JSON)
