@@ -1,6 +1,7 @@
 package org.dockit.dockitserver.controllers;
 
 import org.dockit.dockitserver.entities.APIKey;
+import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.services.templates.APIKeyService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -58,11 +59,15 @@ public class APIKeyController {
     @GetMapping
     @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR', 'VIEWER')")
     public ResponseEntity<?> get(@RequestParam(name="agentId") @NonNull String agentId) {
-        Optional<APIKey> apiKey = apiKeyService.findByAgentId(UUID.fromString(agentId));
-        if (apiKey.isPresent()) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
+        try {
+            Optional<APIKey> apiKey = apiKeyService.findByAgentId(UUID.fromString(agentId));
+            if (apiKey.isPresent()) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }
