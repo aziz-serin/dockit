@@ -40,6 +40,11 @@ public class VmFileSystemUsageAnalyzer implements Analyzer {
 
             double space_usage = (total_space - free_space) / total_space * 100;
             Alert.Importance importance = AnalyzingUtils.getImportanceFromPercentage(space_usage);
+
+            if (importance.equals(Alert.Importance.NONE)) {
+                continue;
+            }
+
             String message = name + ": " + space_usage;
 
             Optional<Alert> optionalAlert = alertGenerator.generateAlert(audit, importance, message);

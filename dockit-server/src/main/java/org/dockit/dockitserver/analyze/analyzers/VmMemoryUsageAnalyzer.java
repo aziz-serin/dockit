@@ -35,6 +35,10 @@ public class VmMemoryUsageAnalyzer implements Analyzer {
 
         Alert.Importance importance = AnalyzingUtils.getImportanceFromPercentage(usage);
 
+        if (importance.equals(Alert.Importance.NONE)) {
+            return List.of();
+        }
+
         Optional<Alert> alert = alertGenerator.generateAlert(audit, importance, String.valueOf(usage));
 
         return alert.map(List::of).orElseGet(List::of);

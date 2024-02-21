@@ -31,8 +31,11 @@ public class VmCpuUsageAnalyzer implements Analyzer {
 
         Alert.Importance importance = AnalyzingUtils.getImportanceFromPercentage(cpuUsage);
 
-        Optional<Alert> alert = alertGenerator.generateAlert(audit, importance, String.valueOf(cpuUsage));
+        if (importance.equals(Alert.Importance.NONE)) {
+            return List.of();
+        }
 
+        Optional<Alert> alert = alertGenerator.generateAlert(audit, importance, String.valueOf(cpuUsage));
         return alert.map(List::of).orElseGet(List::of);
     }
 }
