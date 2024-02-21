@@ -6,7 +6,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.crypto.KeyGenerator;
@@ -59,7 +62,12 @@ public class KeyStoreHandlerTest {
     public void saveKeySucceeds() {
         when(configContainer.getKeyStore()).thenReturn(keyStore);
 
-        assertTrue(keyStoreHandler.saveKey(ALIAS, key, PASSWORD.toCharArray()));
+        try (MockedStatic<KeyStoreManager> removerMock = Mockito.mockStatic(KeyStoreManager.class)) {
+            removerMock.when(() -> KeyStoreManager.saveKeyStore(keyStore)).thenAnswer((Answer<Void>) invocation -> null);
+
+            assertTrue(keyStoreHandler.saveKey(ALIAS, key, PASSWORD.toCharArray()));
+            removerMock.verify(() -> KeyStoreManager.saveKeyStore(keyStore));
+        }
     }
 
    @Test
@@ -74,31 +82,48 @@ public class KeyStoreHandlerTest {
     @Test
     public void getKeyReturnsEmptyGivenKeyExistsButPasswordNull() {
         when(configContainer.getKeyStore()).thenReturn(keyStore);
-        assertTrue(keyStoreHandler.saveKey(ALIAS, key, PASSWORD.toCharArray()));
 
-        Optional<Key> savedKey = keyStoreHandler.getKey(ALIAS, null);
+        try (MockedStatic<KeyStoreManager> removerMock = Mockito.mockStatic(KeyStoreManager.class)) {
+            removerMock.when(() -> KeyStoreManager.saveKeyStore(keyStore)).thenAnswer((Answer<Void>) invocation -> null);
 
-        assertTrue(savedKey.isEmpty());
+            assertTrue(keyStoreHandler.saveKey(ALIAS, key, PASSWORD.toCharArray()));
+            removerMock.verify(() -> KeyStoreManager.saveKeyStore(keyStore));
+
+            Optional<Key> savedKey = keyStoreHandler.getKey(ALIAS, null);
+            assertTrue(savedKey.isEmpty());
+        }
     }
 
     @Test
     public void getKeyReturnsEmptyGivenKeyExistsButPasswordIsWrong() {
         when(configContainer.getKeyStore()).thenReturn(keyStore);
-        assertTrue(keyStoreHandler.saveKey(ALIAS, key, PASSWORD.toCharArray()));
 
-        Optional<Key> savedKey = keyStoreHandler.getKey(ALIAS, "wrong_password".toCharArray());
+        try (MockedStatic<KeyStoreManager> removerMock = Mockito.mockStatic(KeyStoreManager.class)) {
+            removerMock.when(() -> KeyStoreManager.saveKeyStore(keyStore)).thenAnswer((Answer<Void>) invocation -> null);
 
-        assertTrue(savedKey.isEmpty());
+            assertTrue(keyStoreHandler.saveKey(ALIAS, key, PASSWORD.toCharArray()));
+            removerMock.verify(() -> KeyStoreManager.saveKeyStore(keyStore));
+
+            Optional<Key> savedKey = keyStoreHandler.getKey(ALIAS, "wrong_password".toCharArray());
+
+            assertTrue(savedKey.isEmpty());
+        }
     }
 
     @Test
     public void getKeyReturnsKey() {
         when(configContainer.getKeyStore()).thenReturn(keyStore);
-        assertTrue(keyStoreHandler.saveKey(ALIAS, key, PASSWORD.toCharArray()));
 
-        Optional<Key> savedKey = keyStoreHandler.getKey(ALIAS, PASSWORD.toCharArray());
+        try (MockedStatic<KeyStoreManager> removerMock = Mockito.mockStatic(KeyStoreManager.class)) {
+            removerMock.when(() -> KeyStoreManager.saveKeyStore(keyStore)).thenAnswer((Answer<Void>) invocation -> null);
 
-        assertTrue(savedKey.isPresent());
+            assertTrue(keyStoreHandler.saveKey(ALIAS, key, PASSWORD.toCharArray()));
+            removerMock.verify(() -> KeyStoreManager.saveKeyStore(keyStore));
+
+            Optional<Key> savedKey = keyStoreHandler.getKey(ALIAS, PASSWORD.toCharArray());
+
+            assertTrue(savedKey.isPresent());
+        }
     }
 
     @Test
@@ -111,19 +136,31 @@ public class KeyStoreHandlerTest {
     @Test
     public void keyExistsReturnsTrueGivenKeyDoesNotExist() {
         when(configContainer.getKeyStore()).thenReturn(keyStore);
-        assertTrue(keyStoreHandler.saveKey(ALIAS, key, PASSWORD.toCharArray()));
 
-        assertTrue(keyStoreHandler.keyExists(ALIAS));
+        try (MockedStatic<KeyStoreManager> removerMock = Mockito.mockStatic(KeyStoreManager.class)) {
+            removerMock.when(() -> KeyStoreManager.saveKeyStore(keyStore)).thenAnswer((Answer<Void>) invocation -> null);
+
+            assertTrue(keyStoreHandler.saveKey(ALIAS, key, PASSWORD.toCharArray()));
+            removerMock.verify(() -> KeyStoreManager.saveKeyStore(keyStore));
+
+            assertTrue(keyStoreHandler.keyExists(ALIAS));
+        }
     }
 
     @Test
     public void deleteKeyDeletesKey() {
         when(configContainer.getKeyStore()).thenReturn(keyStore);
-        assertTrue(keyStoreHandler.saveKey(ALIAS, key, PASSWORD.toCharArray()));
-        assertTrue(keyStoreHandler.keyExists(ALIAS));
+        try (MockedStatic<KeyStoreManager> removerMock = Mockito.mockStatic(KeyStoreManager.class)) {
+            removerMock.when(() -> KeyStoreManager.saveKeyStore(keyStore)).thenAnswer((Answer<Void>) invocation -> null);
 
-        keyStoreHandler.deleteKey(ALIAS);
+            assertTrue(keyStoreHandler.saveKey(ALIAS, key, PASSWORD.toCharArray()));
+            removerMock.verify(() -> KeyStoreManager.saveKeyStore(keyStore));
 
-        assertFalse(keyStoreHandler.keyExists(ALIAS));
+            assertTrue(keyStoreHandler.keyExists(ALIAS));
+
+            keyStoreHandler.deleteKey(ALIAS);
+
+            assertFalse(keyStoreHandler.keyExists(ALIAS));
+        }
     }
 }
