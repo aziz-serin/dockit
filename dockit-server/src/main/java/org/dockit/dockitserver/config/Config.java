@@ -1,5 +1,7 @@
 package org.dockit.dockitserver.config;
 
+import org.dockit.dockitserver.entities.Alert;
+
 import java.util.Properties;
 
 /**
@@ -16,6 +18,8 @@ public class Config {
     private final String jwtIssuer;
     private final String jwtSecretAlias;
     private final Integer jwtExpirationTime;
+    private final Alert.Importance importance;
+    private final String sendingEmailAddress;
 
     /**
      * @param maxAgentCacheSize Agent cache size from the config file
@@ -30,7 +34,7 @@ public class Config {
      */
     protected Config(Long maxAgentCacheSize, Long maxAuditCacheSize, Long maxAdminCacheSize, Long maxAccessTokenCacheSize,
                      Integer maxAgentSize, String keyStorePassword, String jwtIssuer, String jwtSecretAlias,
-                     Integer jwtExpirationTime) {
+                     Integer jwtExpirationTime, Alert.Importance importance, String sendingEmailAddress) {
         this.maxAgentCacheSize = maxAgentCacheSize;
         this.maxAuditCacheSize = maxAuditCacheSize;
         this.maxAdminCacheSize = maxAdminCacheSize;
@@ -40,6 +44,8 @@ public class Config {
         this.jwtIssuer = jwtIssuer;
         this.jwtSecretAlias = jwtSecretAlias;
         this.jwtExpirationTime = jwtExpirationTime;
+        this.importance = importance;
+        this.sendingEmailAddress = sendingEmailAddress;
     }
 
     public Long getMaxAgentCacheSize() {
@@ -78,6 +84,14 @@ public class Config {
         return jwtExpirationTime;
     }
 
+    public Alert.Importance getImportance() {
+        return importance;
+    }
+
+    public String getSendingEmailAddress() {
+        return sendingEmailAddress;
+    }
+
     /**
      * @return {@link Properties} object generated from individual properties
      */
@@ -92,6 +106,9 @@ public class Config {
         properties.put(ConfigConstants.JWT_ISSUER.toString(), jwtIssuer);
         properties.put(ConfigConstants.JWT_SECRET_ALIAS.toString(), jwtSecretAlias);
         properties.put(ConfigConstants.JWT_EXPIRATION_TIME.toString(), jwtExpirationTime.toString());
+        properties.put(ConfigConstants.IMPORTANCE.toString(), importance.toString());
+        properties.put(ConfigConstants.SENDING_MAIL_ADDRESS.toString(), sendingEmailAddress);
+
         return properties;
     }
 }

@@ -1,5 +1,7 @@
 package org.dockit.dockitserver.config;
 
+import org.dockit.dockitserver.entities.Alert;
+import org.dockit.dockitserver.entities.utils.AlertImportanceConverter;
 import org.dockit.dockitserver.exceptions.config.InvalidPropertyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -51,6 +54,8 @@ public class PropertiesManager {
         properties.put(ConfigConstants.JWT_ISSUER.toString(), ConfigConstants.DEFAULT_JWT_ISSUER.toString());
         properties.put(ConfigConstants.JWT_SECRET_ALIAS.toString(), ConfigConstants.DEFAULT_JWT_SECRET_ALIAS.toString());
         properties.put(ConfigConstants.JWT_EXPIRATION_TIME.toString(), ConfigConstants.DEFAULT_JWT_EXPIRATION_TIME.toString());
+        properties.put(ConfigConstants.IMPORTANCE.toString(), ConfigConstants.DEFAULT_IMPORTANCE.toString());
+        properties.put(ConfigConstants.SENDING_MAIL_ADDRESS.toString(), ConfigConstants.DEFAULT_SENDING_MAIL_ADDRESS.toString());
         return properties;
     }
 
@@ -72,9 +77,13 @@ public class PropertiesManager {
         String jwtIssuer = properties.getProperty(ConfigConstants.JWT_ISSUER.toString());
         String jwtSecretAlias = properties.getProperty(ConfigConstants.JWT_SECRET_ALIAS.toString());
         String jwtExpirationTime = properties.getProperty(ConfigConstants.JWT_EXPIRATION_TIME.toString());
+        Optional<Alert.Importance> importance = AlertImportanceConverter.getImportance(properties
+                .getProperty(ConfigConstants.IMPORTANCE.toString()));
+        String sendingMailAddress = properties.getProperty(ConfigConstants.SENDING_MAIL_ADDRESS.toString());
 
         if (isNotInt(maxAgentSize) || isNotInt(maxAgentCacheSize) || isNotInt(maxAuditCacheSize)
-                || isNotInt(maxAdminCacheSize) || isNotInt(maxAccessTokenCacheSize) || isNotInt(jwtExpirationTime)) {
+                || isNotInt(maxAdminCacheSize) || isNotInt(maxAccessTokenCacheSize) || isNotInt(jwtExpirationTime)
+                || importance.isEmpty()) {
             throw new InvalidPropertyException("Invalid property type provided!");
         }
         return ConfigBuilder.newBuilder()
@@ -87,6 +96,8 @@ public class PropertiesManager {
                 .jwtIssuer(jwtIssuer)
                 .jwtSecretAlias(jwtSecretAlias)
                 .jwtExpirationTime(Integer.parseInt(jwtExpirationTime))
+                .importance(importance.get())
+                .sendingMailAddress(sendingMailAddress)
                 .build();
     }
 

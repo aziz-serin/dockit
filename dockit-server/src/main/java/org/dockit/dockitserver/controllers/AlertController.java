@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.dockit.dockitserver.entities.utils.AlertImportanceConverter.getImportance;
+
 /**
  * Controller containing the endpoints for {@link Alert} operations
  */
@@ -149,18 +151,4 @@ public class AlertController {
             return ResponseEntity.badRequest().build();
         }
     }
-
-    private Optional<Alert.Importance> getImportance(String importance) {
-        if (importance == null)
-            return Optional.empty();
-        else {
-            return switch (importance) {
-                case "CRITICAL" -> Optional.of(Alert.Importance.CRITICAL);
-                case "MEDIUM" -> Optional.of(Alert.Importance.MEDIUM);
-                case "LOW" -> Optional.of(Alert.Importance.LOW);
-                default -> Optional.empty();
-            };
-        }
-    }
-
 }

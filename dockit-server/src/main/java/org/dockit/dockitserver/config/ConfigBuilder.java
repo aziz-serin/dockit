@@ -1,5 +1,7 @@
 package org.dockit.dockitserver.config;
 
+import org.dockit.dockitserver.entities.Alert;
+
 /**
  * Step-up builder object to be used when generating configuration
  */
@@ -44,7 +46,15 @@ public class ConfigBuilder {
     }
 
     public interface JwtExpirationTime {
-        Build jwtExpirationTime(Integer jwtExpirationTime);
+        Importance jwtExpirationTime(Integer jwtExpirationTime);
+    }
+
+    public interface Importance {
+        SendingMailAddress importance (Alert.Importance importance);
+    }
+
+    public interface SendingMailAddress {
+        Build sendingMailAddress(String sendingMailAddress);
     }
 
     public interface Build {
@@ -53,7 +63,7 @@ public class ConfigBuilder {
 
     private static class Builder implements MaxAgentCacheSize, MaxAuditCacheSize, MaxAdminCacheSize,
             MaxAccessTokenCacheSize, MaxAgentSize, KeyStorePassword, JwtIssuer, JwtSecretAlias, JwtExpirationTime,
-            Build {
+            Importance, SendingMailAddress, Build {
 
         private Long maxAgentCacheSize;
         private Long maxAuditCacheSize;
@@ -64,6 +74,8 @@ public class ConfigBuilder {
         private String jwtIssuer;
         private String jwtSecretAlias;
         private Integer jwtExpirationTime;
+        private Alert.Importance importance;
+        private String sendingMailAddress;
 
         @Override
         public MaxAuditCacheSize maxAgentCacheSize(Long maxAgentCacheSize) {
@@ -114,8 +126,20 @@ public class ConfigBuilder {
         }
 
         @Override
-        public Build jwtExpirationTime(Integer jwtExpirationTime) {
+        public Importance jwtExpirationTime(Integer jwtExpirationTime) {
             this.jwtExpirationTime = jwtExpirationTime;
+            return this;
+        }
+
+        @Override
+        public SendingMailAddress importance(Alert.Importance importance) {
+            this.importance = importance;
+            return this;
+        }
+
+        @Override
+        public Build sendingMailAddress(String sendingMailAddress) {
+            this.sendingMailAddress = sendingMailAddress;
             return this;
         }
 
@@ -130,7 +154,9 @@ public class ConfigBuilder {
                     this.keyStorePassword,
                     this.jwtIssuer,
                     this.jwtSecretAlias,
-                    this.jwtExpirationTime
+                    this.jwtExpirationTime,
+                    this.importance,
+                    this.sendingMailAddress
             );
         }
     }

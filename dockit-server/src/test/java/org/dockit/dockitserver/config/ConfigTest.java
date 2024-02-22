@@ -1,5 +1,6 @@
 package org.dockit.dockitserver.config;
 
+import org.dockit.dockitserver.entities.Alert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +16,8 @@ public class ConfigTest {
     static final String JWT_ISSUER = "http://dockit.server.io";
     static final String JWT_SECRET_ALIAS = "jwtsecret";
     static final Integer JWT_EXPIRATION_TIME = 60;
+    static final Alert.Importance IMPORTANCE = Alert.Importance.LOW;
+    static final String SENDING_MAIL_ADDRESS = "";
 
     @BeforeAll
     public static void setup() {
@@ -28,6 +31,8 @@ public class ConfigTest {
                 .jwtIssuer(JWT_ISSUER)
                 .jwtSecretAlias(JWT_SECRET_ALIAS)
                 .jwtExpirationTime(JWT_EXPIRATION_TIME)
+                .importance(IMPORTANCE)
+                .sendingMailAddress(SENDING_MAIL_ADDRESS)
                 .build();
     }
 
@@ -77,6 +82,16 @@ public class ConfigTest {
     }
 
     @Test
+    public void getImportanceReturnsImportance() {
+        assertThat(IMPORTANCE).isEqualTo(config.getImportance());
+    }
+
+    @Test
+    public void getSendingMailReturnsSendingMail() {
+        assertThat(SENDING_MAIL_ADDRESS).isEqualTo(config.getSendingEmailAddress());
+    }
+
+    @Test
     public void toPropertiesReturnsProperties() {
         assertThat(config.toProperties()).isInstanceOf(Properties.class);
     }
@@ -101,5 +116,9 @@ public class ConfigTest {
                 .isEqualTo(JWT_SECRET_ALIAS);
         assertThat(properties.getProperty(ConfigConstants.JWT_EXPIRATION_TIME.toString()))
                 .isEqualTo(JWT_EXPIRATION_TIME.toString());
+        assertThat(properties.getProperty(ConfigConstants.IMPORTANCE.toString()))
+                .isEqualTo(IMPORTANCE.toString());
+        assertThat(properties.getProperty(ConfigConstants.SENDING_MAIL_ADDRESS.toString()))
+                .isEqualTo(SENDING_MAIL_ADDRESS);
     }
 }

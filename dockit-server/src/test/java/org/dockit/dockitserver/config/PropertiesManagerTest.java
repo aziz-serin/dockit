@@ -26,6 +26,8 @@ public class PropertiesManagerTest {
     final static String JWT_ISSUER_KEY = ConfigConstants.JWT_ISSUER.toString();
     final static String JWT_SECRET_ALIAS_KEY = ConfigConstants.JWT_SECRET_ALIAS.toString();
     final static String JWT_EXPIRATION_TIME_KEY = ConfigConstants.JWT_EXPIRATION_TIME.toString();
+    final static String IMPORTANCE_KEY = ConfigConstants.IMPORTANCE.toString();
+    final static String SENDING_MAIL_KEY = ConfigConstants.SENDING_MAIL_ADDRESS.toString();
 
     final static String CACHE_SIZE_VALUE = "15";
     final static String PASSWORD_VALUE = "password";
@@ -33,6 +35,8 @@ public class PropertiesManagerTest {
     final static String JWT_ISSUER_VALUE = "http://dockit.server.io";
     final static String JWT_SECRET_ALIAS_VALUE = "jwtsecret";
     final static String JWT_EXPIRATION_TIME_VALUE = "60";
+    final static String IMPORTANCE = "LOW";
+    final static String SENDING_MAIL = "";
     final static String EXCEPTION_MESSAGE = "Invalid property type provided!";
     static String path;
 
@@ -54,6 +58,8 @@ public class PropertiesManagerTest {
         properties.put(JWT_ISSUER_KEY, JWT_ISSUER_VALUE);
         properties.put(JWT_SECRET_ALIAS_KEY, JWT_SECRET_ALIAS_VALUE);
         properties.put(JWT_EXPIRATION_TIME_KEY, JWT_EXPIRATION_TIME_VALUE);
+        properties.put(IMPORTANCE_KEY, IMPORTANCE);
+        properties.put(SENDING_MAIL_KEY, SENDING_MAIL);
         propertiesTestUtils = new PropertiesTestUtils();
         path = tempDir.toString() + File.pathSeparator;
         propertiesTestUtils.createPropertiesFile(path, fileName, properties);
@@ -70,7 +76,7 @@ public class PropertiesManagerTest {
     public void readPropertiesReturnPropertiesIfItExists() {
         assertThat(PropertiesManager.readProperties(path, fileName))
                 .isInstanceOf(Properties.class)
-                .hasSize(9)
+                .hasSize(11)
                 .containsEntry(AGENT_CACHE_SIZE_KEY, CACHE_SIZE_VALUE)
                 .containsEntry(ADMIN_CACHE_SIZE_KEY, CACHE_SIZE_VALUE)
                 .containsEntry(AUDIT_CACHE_SIZE_KEY, CACHE_SIZE_VALUE)
@@ -79,7 +85,9 @@ public class PropertiesManagerTest {
                 .containsEntry(MAX_AGENT_KEY, MAX_AGENT_SIZE_VALUE)
                 .containsEntry(JWT_ISSUER_KEY, JWT_ISSUER_VALUE)
                 .containsEntry(JWT_SECRET_ALIAS_KEY, JWT_SECRET_ALIAS_VALUE)
-                .containsEntry(JWT_EXPIRATION_TIME_KEY, JWT_EXPIRATION_TIME_VALUE);
+                .containsEntry(JWT_EXPIRATION_TIME_KEY, JWT_EXPIRATION_TIME_VALUE)
+                .containsEntry(IMPORTANCE_KEY, IMPORTANCE)
+                .containsEntry(SENDING_MAIL_KEY, SENDING_MAIL);
     }
 
     @Test
@@ -92,6 +100,8 @@ public class PropertiesManagerTest {
         assertThat(config.getJwtIssuer()).isEqualTo(JWT_ISSUER_VALUE);
         assertThat(config.getJwtSecretAlias()).isEqualTo(JWT_SECRET_ALIAS_VALUE);
         assertThat(config.getJwtExpirationTime().toString()).isEqualTo(JWT_EXPIRATION_TIME_VALUE);
+        assertThat(config.getImportance().toString()).isEqualTo(IMPORTANCE);
+        assertThat(config.getSendingEmailAddress()).isEqualTo(SENDING_MAIL);
     }
 
     @Test
@@ -107,6 +117,8 @@ public class PropertiesManagerTest {
             exceptionProperties.put(JWT_ISSUER_KEY, JWT_ISSUER_VALUE);
             exceptionProperties.put(JWT_SECRET_ALIAS_KEY, JWT_SECRET_ALIAS_VALUE);
             exceptionProperties.put(JWT_EXPIRATION_TIME_KEY, JWT_EXPIRATION_TIME_VALUE);
+            exceptionProperties.put(IMPORTANCE_KEY, IMPORTANCE);
+            exceptionProperties.put(SENDING_MAIL_KEY, SENDING_MAIL);
             PropertiesManager.generateConfigFromProperties(exceptionProperties);
         });
         assertEquals(EXCEPTION_MESSAGE, exception.getMessage());
@@ -125,6 +137,8 @@ public class PropertiesManagerTest {
             exceptionProperties.put(JWT_ISSUER_KEY, JWT_ISSUER_VALUE);
             exceptionProperties.put(JWT_SECRET_ALIAS_KEY, JWT_SECRET_ALIAS_VALUE);
             exceptionProperties.put(JWT_EXPIRATION_TIME_KEY, JWT_EXPIRATION_TIME_VALUE);
+            exceptionProperties.put(IMPORTANCE_KEY, IMPORTANCE);
+            exceptionProperties.put(SENDING_MAIL_KEY, SENDING_MAIL);
             PropertiesManager.generateConfigFromProperties(exceptionProperties);
         });
         assertEquals(EXCEPTION_MESSAGE, exception.getMessage());
@@ -143,6 +157,8 @@ public class PropertiesManagerTest {
             exceptionProperties.put(JWT_ISSUER_KEY, JWT_ISSUER_VALUE);
             exceptionProperties.put(JWT_SECRET_ALIAS_KEY, JWT_SECRET_ALIAS_VALUE);
             exceptionProperties.put(JWT_EXPIRATION_TIME_KEY, "str");
+            exceptionProperties.put(IMPORTANCE_KEY, IMPORTANCE);
+            exceptionProperties.put(SENDING_MAIL_KEY, SENDING_MAIL);
             PropertiesManager.generateConfigFromProperties(exceptionProperties);
         });
         assertEquals(EXCEPTION_MESSAGE, exception.getMessage());

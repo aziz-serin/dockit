@@ -24,7 +24,11 @@ public enum ConfigConstants {
     JWT_ISSUER,
     DEFAULT_JWT_EXPIRATION_TIME,
     DEFAULT_JWT_SECRET_ALIAS,
-    DEFAULT_JWT_ISSUER;
+    DEFAULT_JWT_ISSUER,
+    IMPORTANCE,
+    DEFAULT_IMPORTANCE,
+    SENDING_MAIL_ADDRESS,
+    DEFAULT_SENDING_MAIL_ADDRESS;
 
     public String toString() {
         return switch (this) {
@@ -49,6 +53,10 @@ public enum ConfigConstants {
             case DEFAULT_JWT_EXPIRATION_TIME -> "60";
             case DEFAULT_JWT_SECRET_ALIAS -> "jwtsecret";
             case DEFAULT_JWT_ISSUER -> "http://dockit.server.io";
+            case IMPORTANCE -> "importance";
+            case DEFAULT_IMPORTANCE -> "LOW";
+            case SENDING_MAIL_ADDRESS -> "sending_mail_address";
+            case DEFAULT_SENDING_MAIL_ADDRESS -> "";
         };
     }
 }

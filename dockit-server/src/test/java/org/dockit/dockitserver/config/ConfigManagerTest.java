@@ -29,12 +29,16 @@ public class ConfigManagerTest {
     final static String JWT_ISSUER_KEY = ConfigConstants.JWT_ISSUER.toString();
     final static String JWT_SECRET_ALIAS_KEY = ConfigConstants.JWT_SECRET_ALIAS.toString();
     final static String JWT_EXPIRATION_TIME_KEY = ConfigConstants.JWT_EXPIRATION_TIME.toString();
+    final static String IMPORTANCE_KEY = ConfigConstants.IMPORTANCE.toString();
+    final static String SENDING_MAIL_KEY = ConfigConstants.SENDING_MAIL_ADDRESS.toString();
 
     final static String CACHE_SIZE_VALUE = "15";
     final static String MAX_AGENT_SIZE_VALUE = "12";
     final static String JWT_ISSUER_VALUE = "http://dockit.server.io";
     final static String JWT_SECRET_ALIAS_VALUE = "jwtsecret";
     final static String JWT_EXPIRATION_TIME_VALUE = "60";
+    final static String IMPORTANCE = "LOW";
+    final static String SENDING_MAIL = "";
     static final String SEPARATOR = File.separator;
 
     static ConfigManager configManager;
@@ -58,6 +62,8 @@ public class ConfigManagerTest {
         properties.put(JWT_ISSUER_KEY, JWT_ISSUER_VALUE);
         properties.put(JWT_SECRET_ALIAS_KEY, JWT_SECRET_ALIAS_VALUE);
         properties.put(JWT_EXPIRATION_TIME_KEY, JWT_EXPIRATION_TIME_VALUE);
+        properties.put(IMPORTANCE_KEY, IMPORTANCE);
+        properties.put(SENDING_MAIL_KEY, SENDING_MAIL);
     }
 
     @Test
@@ -157,7 +163,7 @@ public class ConfigManagerTest {
         Properties returnedProperties = configWriter
                 .createProperties(rootCreationResult + File.separator, CONFIG_FILE_NAME, properties);
         assertThat(returnedProperties).isNotNull();
-        assertThat(returnedProperties).hasSize(9);
+        assertThat(returnedProperties).hasSize(11);
 
         configManager.loadConfig(rootCreationResult + File.separator, CONFIG_FILE_NAME, KEY_STORE_NAME);
 
