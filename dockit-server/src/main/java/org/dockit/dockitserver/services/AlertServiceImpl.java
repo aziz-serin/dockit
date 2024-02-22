@@ -28,6 +28,11 @@ public class AlertServiceImpl implements AlertService {
     }
 
     @Override
+    public List<Alert> save(List<Alert> alerts) {
+        return alertRepository.saveAll(alerts);
+    }
+
+    @Override
     public List<Alert> findByAgent(Agent agent) {
         return alertRepository.findAll().stream()
                 .filter(alert -> alert.getAgent().getId().equals(agent.getId()))

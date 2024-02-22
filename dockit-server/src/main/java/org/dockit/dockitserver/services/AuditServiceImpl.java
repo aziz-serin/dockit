@@ -2,6 +2,7 @@ package org.dockit.dockitserver.services;
 
 import org.dockit.dockitserver.caching.CacheNames;
 import org.dockit.dockitserver.entities.Audit;
+import org.dockit.dockitserver.events.publisher.EntityEventPublisher;
 import org.dockit.dockitserver.repositories.AuditRepository;
 import org.dockit.dockitserver.services.templates.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,20 @@ import java.util.UUID;
 public class AuditServiceImpl implements AuditService {
 
     private final AuditRepository auditRepository;
+    private final EntityEventPublisher entityEventPublisher;
 
     @Autowired
-    public AuditServiceImpl(AuditRepository auditRepository) {
+    public AuditServiceImpl(AuditRepository auditRepository, EntityEventPublisher entityEventPublisher) {
         this.auditRepository = auditRepository;
+        this.entityEventPublisher = entityEventPublisher;
     }
 
     @Override
     @CachePut(key = "#audit.id")
     public Audit save(Audit audit) {
-        return auditRepository.save(audit);
+        Audit savedAudit =  auditRepository.save(audit);
+        entityEventPublisher.publishAuditCreationEvent(savedAudit);
+        return savedAudit;
     }
 
     @Override

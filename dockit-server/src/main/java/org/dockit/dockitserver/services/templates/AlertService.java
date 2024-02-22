@@ -20,6 +20,15 @@ public interface AlertService {
     Alert save(Alert alert);
 
     /**
+     *
+     * Save the alert objects
+     *
+     * @param alert {@link Alert}s to be saved
+     * @return {@link Alert} saved alerts
+     */
+    List<Alert> save(List<Alert> alert);
+
+    /**
      * Return all alerts saved by an agent
      *
      * @param agent {@link Agent} instance
