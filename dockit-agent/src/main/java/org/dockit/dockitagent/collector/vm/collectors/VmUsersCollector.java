@@ -8,6 +8,7 @@ import oshi.SystemInfo;
 import oshi.software.os.OSSession;
 import oshi.software.os.OperatingSystem;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,17 +27,19 @@ public class VmUsersCollector implements Collector {
         SystemInfo systemInfo = new SystemInfo();
         OperatingSystem operatingSystem = systemInfo.getOperatingSystem();
         List<OSSession> sessions = operatingSystem.getSessions();
-        List<String> sessionInformation = sessions.stream()
-                .map(session -> {
+        List<String> sessionInformation = new ArrayList<>();
+        sessions.forEach(session -> {
                     Gson gson = new Gson();
-                    Map<String, ?> data = Map.of(
-                            VmCollectorConstants.USER_USER_NAME, session.getUserName(),
-                            VmCollectorConstants.USER_HOST, session.getHost(),
-                            VmCollectorConstants.USER_LOGIN_TIME, session.getLoginTime()
-                    );
-                    return gson.toJson(data);
-                })
-                .toList();
+                    String userName = session.getUserName();
+                    if (sessionInformation.stream().noneMatch(sessionData -> sessionData.contains(userName))) {
+                        Map<String, ?> data = Map.of(
+                                VmCollectorConstants.USER_USER_NAME, userName,
+                                VmCollectorConstants.USER_HOST, session.getHost(),
+                                VmCollectorConstants.USER_LOGIN_TIME, session.getLoginTime()
+                        );
+                        sessionInformation.add(gson.toJson(data));
+                    }
+                });
         return InformationBuilderHelper.build(sessionInformation);
     }
 }
