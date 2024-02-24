@@ -3,7 +3,9 @@ package org.dockit.dockitserver.analyze.analyzers.utils;
 import org.dockit.dockitserver.entities.Alert;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Utility class containing methods to help processing of {@link org.dockit.dockitserver.analyze.analyzers.Analyzer}
@@ -19,7 +21,10 @@ public final class AnalyzingUtils {
      * @return list of split data
      */
     public static List<String> splitData(String data) {
-        return Arrays.stream(data.split(DELIMITER)).toList();
+        List<String> splitInformation =  Arrays.stream(data.split(DELIMITER)).toList();
+        // Sometimes duplicate entries are collected from the data collectors, get only unique audits
+        Set<String> setOfInformation = new HashSet<>(splitInformation);
+        return setOfInformation.stream().toList();
     }
 
     /**

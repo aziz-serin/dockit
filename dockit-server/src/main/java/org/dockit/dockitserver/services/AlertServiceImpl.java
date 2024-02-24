@@ -34,7 +34,11 @@ public class AlertServiceImpl implements AlertService {
 
     @Override
     public List<Alert> save(List<Alert> alerts) {
-        return alertRepository.saveAll(alerts);
+        List<Alert> savedAlerts = alertRepository.saveAll(alerts);
+        for (Alert alert : savedAlerts) {
+            entityEventPublisher.publishAlertCreationEvent(alert);
+        }
+        return savedAlerts;
     }
 
     @Override
