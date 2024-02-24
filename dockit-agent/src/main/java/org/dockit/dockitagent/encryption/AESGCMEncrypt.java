@@ -10,7 +10,9 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -59,12 +61,50 @@ public class AESGCMEncrypt {
         }
 
         byte[] IV = getRandomBytes();
-        Cipher cipher = initCipher(IV);
+        Cipher cipher = initCipher(Cipher.ENCRYPT_MODE, IV);
         cipher.updateAAD(id.getBytes());
 
         byte[] encryptedBytes = cipher.doFinal(data.getBytes());
         byte[] cipherByte = ArrayUtils.addAll(IV, encryptedBytes);
         return Base64.getEncoder().encodeToString(cipherByte);
+    }
+
+    /**
+     * Decrypt using AES-GCM algorithm
+     *
+     * @param data input string to be decrypted
+     * @return
+     * @throws InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     */
+    public String decrypt(String data) throws
+            InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,
+            IllegalBlockSizeException, BadPaddingException {
+
+        if (data == null) {
+            throw new IllegalArgumentException();
+        }
+
+        String id = configContainer.getConfig().getID();
+        if (id == null) {
+            logger.error("Agent id in config CANNOT be null!");
+            throw new IllegalArgumentException();
+        }
+
+        byte[] dataBytes = Base64.getDecoder().decode(data);
+        byte[] IV = ArrayUtils.subarray(dataBytes, 0, KeyConstants.IV_SIZE_GCM);
+        byte[] encryptedBytes = ArrayUtils.subarray(dataBytes, KeyConstants.IV_SIZE_GCM, dataBytes.length);
+
+        Cipher cipher = initCipher(Cipher.DECRYPT_MODE, IV);
+        cipher.updateAAD(id.getBytes());
+
+        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+
+        return new String(decryptedBytes, StandardCharsets.UTF_8);
     }
 
     private byte[] getRandomBytes() {
@@ -73,10 +113,10 @@ public class AESGCMEncrypt {
         return nonce;
     }
 
-    private Cipher initCipher(byte[] iv) throws InvalidKeyException,
+    private Cipher initCipher(int mode, byte[] iv) throws InvalidKeyException,
             InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchAlgorithmException {
         Cipher cipher = Cipher.getInstance(KeyConstants.AES_GCM_CIPHER);
-        cipher.init(Cipher.ENCRYPT_MODE, configContainer.getKey(),
+        cipher.init(mode, configContainer.getKey(),
                 new GCMParameterSpec(KeyConstants.GCM_TAG_LENGTH, iv));
         return cipher;
     }

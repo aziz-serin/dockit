@@ -2,12 +2,14 @@ package org.dockit.dockitagent.encryption;
 
 import org.dockit.dockitagent.config.Config;
 import org.dockit.dockitagent.config.ConfigContainer;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import javax.crypto.AEADBadTagException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
@@ -77,5 +79,41 @@ public class AESGCMEncryptTest {
 
         assertThat(encrypted).isNotEmpty();
         assertThat(encrypted).isNotEqualTo(DATA);
+    }
+
+    @Test
+    public void decryptThrowsExceptionGivenNullData() {
+        AESGCMEncrypt encrypt = new AESGCMEncrypt(configContainer);
+
+        Assert.assertThrows(IllegalArgumentException.class, () -> {
+            encrypt.decrypt(null);
+        });
+    }
+
+    @Test
+    public void decryptThrowsExceptionGivenInvalidId() {
+        when(configContainer.getConfig()).thenReturn(config);
+        when(config.getID()).thenReturn(null);
+
+        AESGCMEncrypt encrypt = new AESGCMEncrypt(configContainer);
+
+        Assert.assertThrows(IllegalArgumentException.class, () -> {
+            encrypt.decrypt(DATA);
+        });
+    }
+
+
+    @Test
+    public void decryptCanReverseEncryption() throws Exception {
+        when(configContainer.getConfig()).thenReturn(config);
+        when(configContainer.getKey()).thenReturn(validKey);
+        when(config.getID()).thenReturn(ID);
+
+        AESGCMEncrypt encrypt = new AESGCMEncrypt(configContainer);
+
+        String encrypted = encrypt.encrypt(DATA);
+        String decrypted = encrypt.decrypt(encrypted);
+
+        assertThat(decrypted).isEqualTo(DATA);
     }
 }
