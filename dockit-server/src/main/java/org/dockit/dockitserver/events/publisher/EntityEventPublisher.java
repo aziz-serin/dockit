@@ -33,6 +33,11 @@ public class EntityEventPublisher {
         eventPublisher.publishEvent(new AuditCreationEvent(audit));
     }
 
+    /**
+     * Creation event is published after the alert is saved in the database
+     *
+     * @param alert {@link Alert} instance which was saved
+     */
     public void publishAlertCreationEvent(Alert alert) {
         eventPublisher.publishEvent(new AlertCreationEvent(alert));
     }
