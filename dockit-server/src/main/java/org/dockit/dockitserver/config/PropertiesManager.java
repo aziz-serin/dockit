@@ -1,7 +1,7 @@
 package org.dockit.dockitserver.config;
 
 import org.dockit.dockitserver.entities.Alert;
-import org.dockit.dockitserver.entities.utils.AlertImportanceConverter;
+import org.dockit.dockitserver.entities.utils.AlertImportanceUtils;
 import org.dockit.dockitserver.exceptions.config.InvalidPropertyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +77,7 @@ public class PropertiesManager {
         String jwtIssuer = properties.getProperty(ConfigConstants.JWT_ISSUER.toString());
         String jwtSecretAlias = properties.getProperty(ConfigConstants.JWT_SECRET_ALIAS.toString());
         String jwtExpirationTime = properties.getProperty(ConfigConstants.JWT_EXPIRATION_TIME.toString());
-        Optional<Alert.Importance> importance = AlertImportanceConverter.getImportance(properties
+        Optional<Alert.Importance> importance = AlertImportanceUtils.getImportance(properties
                 .getProperty(ConfigConstants.IMPORTANCE.toString()));
         String sendingMailAddress = properties.getProperty(ConfigConstants.SENDING_MAIL_ADDRESS.toString());
 

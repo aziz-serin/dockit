@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.dockit.dockitserver.entities.utils.AlertImportanceConverter.getImportance;
+import static org.dockit.dockitserver.entities.utils.AlertImportanceUtils.getImportance;
 
 /**
  * Controller containing the endpoints for {@link Alert} operations

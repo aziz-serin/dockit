@@ -4,7 +4,7 @@ import org.dockit.dockitserver.entities.Alert;
 
 import java.util.Optional;
 
-public final class AlertImportanceConverter {
+public final class AlertImportanceUtils {
     public static Optional<Alert.Importance> getImportance(String importance) {
         if (importance == null)
             return Optional.empty();
@@ -17,4 +17,28 @@ public final class AlertImportanceConverter {
             };
         }
     }
+
+    public static int getImportanceValue(Alert.Importance importance) {
+        switch (importance) {
+            case NONE ->
+            {
+                return 0;
+            }
+            case LOW -> {
+                return 1;
+            }
+            case MEDIUM -> {
+                return 2;
+            }
+            case CRITICAL ->
+            {
+                return 3;
+            }
+            default -> {
+                return -9999;
+            }
+        }
+    }
+
+
 }
