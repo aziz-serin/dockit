@@ -54,9 +54,9 @@ public enum ConfigConstants {
             case DEFAULT_JWT_SECRET_ALIAS -> "jwtsecret";
             case DEFAULT_JWT_ISSUER -> "http://dockit.server.io";
             case IMPORTANCE -> "importance";
-            case DEFAULT_IMPORTANCE -> "LOW";
+            case DEFAULT_IMPORTANCE -> "MEDIUM";
             case SENDING_MAIL_ADDRESS -> "sending_mail_address";
-            case DEFAULT_SENDING_MAIL_ADDRESS -> "";
+            case DEFAULT_SENDING_MAIL_ADDRESS -> "update@thismail.com";
         };
     }
 }
