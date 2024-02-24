@@ -1,6 +1,8 @@
 package org.dockit.dockitserver.events.publisher;
 
+import org.dockit.dockitserver.entities.Alert;
 import org.dockit.dockitserver.entities.Audit;
+import org.dockit.dockitserver.events.event.AlertCreationEvent;
 import org.dockit.dockitserver.events.event.AuditCreationEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,5 +31,9 @@ public class EntityEventPublisher {
      */
     public void publishAuditCreationEvent(Audit audit) {
         eventPublisher.publishEvent(new AuditCreationEvent(audit));
+    }
+
+    public void publishAlertCreationEvent(Alert alert) {
+        eventPublisher.publishEvent(new AlertCreationEvent(alert));
     }
 }

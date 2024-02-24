@@ -2,6 +2,7 @@ package org.dockit.dockitserver.services;
 
 import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.Alert;
+import org.dockit.dockitserver.events.publisher.EntityEventPublisher;
 import org.dockit.dockitserver.repositories.AlertRepository;
 import org.dockit.dockitserver.services.templates.AlertService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +17,19 @@ import java.util.UUID;
 public class AlertServiceImpl implements AlertService {
 
     private final AlertRepository alertRepository;
+    private final EntityEventPublisher entityEventPublisher;
 
     @Autowired
-    public AlertServiceImpl(AlertRepository alertRepository) {
+    public AlertServiceImpl(AlertRepository alertRepository, EntityEventPublisher entityEventPublisher) {
         this.alertRepository = alertRepository;
+        this.entityEventPublisher = entityEventPublisher;
     }
 
     @Override
     public Alert save(Alert alert) {
-        return alertRepository.save(alert);
+        Alert savedAlert = alertRepository.save(alert);
+        entityEventPublisher.publishAlertCreationEvent(savedAlert);
+        return savedAlert;
     }
 
     @Override
