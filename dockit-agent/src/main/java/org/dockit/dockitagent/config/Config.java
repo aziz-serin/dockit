@@ -12,6 +12,7 @@ public enum Config {
     private int INTERVAL;
     private boolean DOCKER;
     private boolean VM_DATA;
+    private boolean REST_API;
     private String SECRET_KEY;
     private String API_KEY;
     private String ID;
@@ -67,6 +68,21 @@ public enum Config {
      */
     void setVM_DATA(boolean VM_DATA) {
         this.VM_DATA = VM_DATA;
+    }
+
+    /**
+     * @return if rest api should be enabled or not
+     */
+    public boolean isREST_API() {
+        return REST_API;
+    }
+
+
+    /**
+     * @param REST_API set parameter to enable or disable rest api
+     */
+    void setREST_API(boolean REST_API) {
+        this.REST_API = REST_API;
     }
 
     /**

@@ -50,6 +50,7 @@ public class PropertiesConfigReader implements ConfigReader {
             int interval = Integer.parseInt((String) properties.get(ConfigConstants.INTERVAL));
             boolean docker = Boolean.parseBoolean((String) properties.get(ConfigConstants.DOCKER));
             boolean vmData = Boolean.parseBoolean((String) properties.get(ConfigConstants.VM_DATA));
+            boolean restApi = Boolean.parseBoolean((String) properties.get(ConfigConstants.REST_API));
             String key = (String) properties.get(ConfigConstants.SECRET_KEY);
             String apiKey = (String) properties.get(ConfigConstants.API_KEY);
             String id = (String) properties.get(ConfigConstants.ID);
@@ -63,6 +64,7 @@ public class PropertiesConfigReader implements ConfigReader {
             Config config = Config.INSTANCE.getInstance();
             config.setINTERVAL(interval);
             config.setDOCKER(docker);
+            config.setREST_API(restApi);
             config.setVM_DATA(vmData);
             config.setSECRET_KEY(key);
             config.setAPI_KEY(apiKey);

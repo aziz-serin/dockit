@@ -7,6 +7,7 @@ public final class ConfigConstants {
     public static final String INTERVAL = "interval";
     public static final String DOCKER = "docker";
     public static final String VM_DATA = "vm_data";
+    public static final String REST_API = "rest_api";
     public static final String SECRET_KEY = "secret_key";
     public static final String API_KEY = "api_key";
     public static final String ID = "id";

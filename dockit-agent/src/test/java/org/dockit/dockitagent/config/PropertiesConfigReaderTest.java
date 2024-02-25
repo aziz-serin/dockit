@@ -64,8 +64,10 @@ class PropertiesConfigReaderTest {
                 .isEqualTo(Integer.parseInt((String) properties.get(ConfigConstants.INTERVAL)));
         assertThat(Config.INSTANCE.getInstance().isDOCKER())
                 .isEqualTo(Boolean.parseBoolean((String) properties.get(ConfigConstants.DOCKER)));
-        assertThat(Config.INSTANCE.getInstance().isDOCKER())
+        assertThat(Config.INSTANCE.getInstance().isVM_DATA())
                 .isEqualTo(Boolean.parseBoolean((String) properties.get(ConfigConstants.VM_DATA)));
+        assertThat(Config.INSTANCE.getInstance().isREST_API())
+                .isEqualTo(Boolean.parseBoolean((String) properties.get(ConfigConstants.REST_API)));
         assertThat(Config.INSTANCE.getInstance().getZONE_ID().toString())
                 .isEqualTo((String) properties.get(ConfigConstants.ZONE_ID));
         assertThat(Config.INSTANCE.getInstance().getDOCKER_URL())
