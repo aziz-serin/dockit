@@ -55,7 +55,7 @@ public class CollectJob implements Job {
         } catch (JobException e) {
             logger.error("Failed when sending the audit, trying again");
             JobExecutionException jobException = new JobExecutionException(e);
-            jobException.setRefireImmediately(true);
+            jobException.setUnscheduleFiringTrigger(true);
             throw jobException;
         }
     }
