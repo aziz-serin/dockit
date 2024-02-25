@@ -15,17 +15,31 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Utility class to decrypt request bodies and construct command objects from it
+ */
 public class CommandTranslator {
 
     private static final Logger logger = LoggerFactory.getLogger(CommandTranslator.class);
 
     private final AESGCMEncrypt encrypt;
 
+    /**
+     * @param encrypt {@link AESGCMEncrypt} instance to be injected
+     */
     @Inject
     public CommandTranslator(AESGCMEncrypt encrypt) {
         this.encrypt = encrypt;
     }
 
+    /**
+      * @param data Should contain fields: <br>
+      *             "data" -> encrypted data to be decrypted <br>
+      * The data is an encrypted json string, when decrypted, it should have the fields: <br>
+     *              "command" -> alias for the command to be executed by the agent, see {@link CommandConstants}<br>
+      *             "arguments" -> arguments for the specified command if any, empty string if not <br>
+     * @return {@link Optional} command if decryption was successful and data could be parsed, empty if not
+     */
     public Optional<Command> getCommand(String data) {
         try {
             Gson gson = new Gson();
