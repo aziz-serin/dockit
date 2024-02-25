@@ -39,8 +39,6 @@ public class RestServer {
         // Dummy endpoint to indicate the server is alive
         get("/ping", pingRoute);
 
-        after((request, response) -> {
-            response.type("application/json");
-        });
+        after((request, response) -> response.type("application/json"));
     }
 }
