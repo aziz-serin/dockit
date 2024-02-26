@@ -51,17 +51,36 @@ public class CommandTranslator {
             String decryptedData = encrypt.decrypt(encryptedData);
 
             Map<String, String> jsonData = gson.fromJson(decryptedData, Map.class);
-            String command = jsonData.get(CommandConstants.COMMAND);
+            String alias = jsonData.get(CommandConstants.COMMAND);
             String arguments = jsonData.get(CommandConstants.ARGUMENTS);
-            if (command == null || arguments == null) {
+            if (alias == null || arguments == null) {
                 logger.error("Data does not contain required parameters command and argument!");
                 return Optional.empty();
             }
-            return Optional.of(new Command(command, arguments));
+            String executableCommand = getExecutableCommandFromAlias(alias);
+            if (executableCommand == null) {
+                logger.debug("Given alias {} is not registered as an executable command for the agent", alias);
+                return Optional.empty();
+            }
+            return Optional.of(new Command(executableCommand, arguments));
+
         } catch (InvalidAlgorithmParameterException | NoSuchPaddingException | IllegalBlockSizeException |
                  NoSuchAlgorithmException | BadPaddingException | InvalidKeyException e) {
             logger.error(e.getMessage());
             return Optional.empty();
+        }
+    }
+
+    private String getExecutableCommandFromAlias(String alias) {
+        // add other commands here in the future
+        switch (alias) {
+            case CommandConstants.INTRUSION -> {
+                return CommandConstants.KILL_USER;
+            }
+            default -> {
+                logger.debug("Unknown alias for the given command {}", alias);
+                return null;
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ public class CommandExecutor {
      * @return true if successfully executed, false otherwise
      */
     public boolean execute(Command command) {
-        String executable = getExecutableCommandFromAlias(command.alias());
+        String executable = command.alias();
         String arguments = command.argument();
         if (executable == null) {
             return false;
@@ -35,19 +35,6 @@ public class CommandExecutor {
         } catch (IOException | InterruptedException e) {
             logger.error(e.getMessage());
             return false;
-        }
-    }
-
-    private String getExecutableCommandFromAlias(String alias) {
-        // add other commands here in the future
-        switch (alias) {
-            case CommandConstants.INTRUSION -> {
-                return CommandConstants.KILL_USER;
-            }
-            default -> {
-                logger.debug("Unknown alias for the given command {}", alias);
-                return null;
-            }
         }
     }
 }

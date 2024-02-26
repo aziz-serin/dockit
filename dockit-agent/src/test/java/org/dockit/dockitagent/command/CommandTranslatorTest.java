@@ -22,8 +22,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandTranslatorTest {
-
-    private static final String COMMAND = "some_command";
     private static final String ARGUMENTS = "some_arguments";
 
     @Mock
@@ -38,7 +36,7 @@ public class CommandTranslatorTest {
         Gson gson = new Gson();
 
         Map<String, String> encryptedData = Map.of(
-                CommandConstants.COMMAND, COMMAND,
+                CommandConstants.COMMAND, CommandConstants.INTRUSION,
                 CommandConstants.ARGUMENTS, ARGUMENTS
         );
         String encryptedDataJson = gson.toJson(encryptedData);
@@ -59,7 +57,7 @@ public class CommandTranslatorTest {
         Gson gson = new Gson();
 
         Map<String, String> encryptedData = Map.of(
-                CommandConstants.COMMAND, COMMAND,
+                CommandConstants.COMMAND, CommandConstants.INTRUSION,
                 CommandConstants.ARGUMENTS, ARGUMENTS
         );
         String encryptedDataJson = gson.toJson(encryptedData);
@@ -81,7 +79,7 @@ public class CommandTranslatorTest {
         Gson gson = new Gson();
 
         Map<String, String> encryptedData = Map.of(
-                "some_key", COMMAND,
+                "some_key", CommandConstants.INTRUSION,
                 CommandConstants.ARGUMENTS, ARGUMENTS
         );
         String encryptedDataJson = gson.toJson(encryptedData);
@@ -104,7 +102,7 @@ public class CommandTranslatorTest {
         Gson gson = new Gson();
 
         Map<String, String> encryptedData = Map.of(
-                CommandConstants.COMMAND, COMMAND,
+                CommandConstants.COMMAND, CommandConstants.INTRUSION,
                 CommandConstants.ARGUMENTS, ARGUMENTS
         );
         String encryptedDataJson = gson.toJson(encryptedData);
@@ -120,7 +118,7 @@ public class CommandTranslatorTest {
         Optional<Command> command = commandTranslator.getCommand(json);
 
         assertThat(command).isPresent();
-        assertThat(command.get().alias()).isEqualTo(COMMAND);
+        assertThat(command.get().alias()).isEqualTo(CommandConstants.KILL_USER);
         assertThat(command.get().argument()).isEqualTo(ARGUMENTS);
     }
 
