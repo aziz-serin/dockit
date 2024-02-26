@@ -20,6 +20,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -33,8 +35,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class APIKeyServiceTest {
-
     private static final String CACHE_NAME = CacheNames.API_KEY;
+    static final String DUMMY_URL_STRING = "http://someurl.com";
 
     @Autowired
     private APIKeyService APIKeyService;
@@ -44,34 +46,31 @@ public class APIKeyServiceTest {
     @Autowired
     private CacheManager cacheManager;
 
-    private APIKey APIKey1;
-    private APIKey APIKey2;
-    private APIKey APIKey3;
     private Agent agent1;
-    private Agent agent2;
-    private Agent agent3;
+    private URL url;
 
     @BeforeAll
-    public void setup() {
+    public void setup() throws MalformedURLException {
+        url = new URL(DUMMY_URL_STRING);
         agent1 = EntityCreator.createAgent("agent1", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();
         agentService.save(agent1);
 
-        agent2 = EntityCreator.createAgent("agent2", "password2",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
+        Agent agent2 = EntityCreator.createAgent("agent2", "password2",
+                LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();
         agentService.save(agent2);
 
-        agent3 = EntityCreator.createAgent("agent3", "password3",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
+        Agent agent3 = EntityCreator.createAgent("agent3", "password3",
+                LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();
         agentService.save(agent3);
 
-        APIKey1 = EntityCreator.createAPIKey("token1", agent1).get();
+        APIKey APIKey1 = EntityCreator.createAPIKey("token1", agent1).get();
         APIKeyService.save(APIKey1);
 
-        APIKey2 = APIKey1 = EntityCreator.createAPIKey("token2", agent2).get();
+        APIKey APIKey2 = EntityCreator.createAPIKey("token2", agent2).get();
         APIKeyService.save(APIKey2);
 
-        APIKey3 = EntityCreator.createAPIKey("token3", agent3).get();
+        APIKey APIKey3 = EntityCreator.createAPIKey("token3", agent3).get();
         APIKeyService.save(APIKey3);
     }
 
@@ -97,7 +96,7 @@ public class APIKeyServiceTest {
     public void saveCachesTheResultOfTheOperation() {
         Cache cache = cacheManager.getCache(CACHE_NAME);
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "tempAgent",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();
         agentService.save(tempAgent);
 
         APIKey tempToken = EntityCreator.createAPIKey("token", tempAgent).get();
@@ -119,10 +118,10 @@ public class APIKeyServiceTest {
         Cache cache = cacheManager.getCache(CACHE_NAME);
 
         Agent tempAgent1 = EntityCreator.createAgent("tempAgent1", "tempAgent1",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();
         agentService.save(tempAgent1);
         Agent tempAgent2 = EntityCreator.createAgent("tempAgent2", "tempAgent2",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();
         agentService.save(tempAgent2);
 
         APIKey tempToken1 = EntityCreator.createAPIKey("token", tempAgent1).get();

@@ -1,5 +1,8 @@
 package org.dockit.dockitserver.controllers;
 
+import com.icegreen.greenmail.configuration.GreenMailConfiguration;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.ServerSetupTest;
 import org.dockit.dockitserver.DockitServerApplication;
 import org.dockit.dockitserver.entities.Admin;
 import org.dockit.dockitserver.entities.Agent;
@@ -13,6 +16,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -22,6 +26,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -51,21 +57,29 @@ public class AlertControllerTest {
     static final String AGENT_PASSWORD = "password";
     static final String VM_ID = "vmId";
     static final Alert.Importance IMPORTANCE = Alert.Importance.CRITICAL;
+    static final String DUMMY_URL_STRING = "http://someurl.com";
 
     WebTestClient client;
     Agent agent;
     Alert alert;
 
+    @RegisterExtension
+    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
+            .withConfiguration(GreenMailConfiguration.aConfig().withUser("emailUser", "password"))
+            .withPerMethodLifecycle(false);
+
     @BeforeAll
-    public void setup() {
+    public void setup() throws MalformedURLException {
         Admin admin = EntityCreator.createAdmin(ADMIN_USERNAME, ADMIN_PASSWORD, Admin.Role.SUPER).get();
         adminService.save(admin);
 
         Admin viewer = EntityCreator.createAdmin(VIEWER_ADMIN_USERNAME, ADMIN_PASSWORD, Admin.Role.VIEWER).get();
         adminService.save(viewer);
 
+        URL url = new URL(DUMMY_URL_STRING);
+
         agent = EntityCreator.createAgent(AGENT_NAME, AGENT_PASSWORD, LocalDateTime.now(), LocalDateTime.now(),
-                List.of("")).get();
+                List.of(""), url).get();
         agentService.save(agent);
 
         generateAlert();

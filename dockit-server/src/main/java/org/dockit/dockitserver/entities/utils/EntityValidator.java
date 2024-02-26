@@ -5,7 +5,9 @@ import org.dockit.dockitserver.entities.Admin;
 import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.Alert;
 import org.dockit.dockitserver.entities.Audit;
+import org.springframework.security.web.util.UrlUtils;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +23,15 @@ public class EntityValidator {
      * @param password string specifying the password of the {@link Agent}
      * @param creationTime time specifying the creation time of the {@link Agent}
      * @param lastActiveTime time specifying the last active time of the {@link Agent}
+     * @param allowedUsers list of allowed users for the host of the {@link Agent}
+     * @param agentUrl url to communicate with {@link Agent}
      * @return {@link Optional} agent if successful, empty if not
      */
     protected static boolean validAgent(String agentName, String password, LocalDateTime creationTime,
-                                        LocalDateTime lastActiveTime, List<String> allowedUsers) {
+                                        LocalDateTime lastActiveTime, List<String> allowedUsers, URL agentUrl) {
         return agentName != null && password != null && creationTime.isBefore(LocalDateTime.now())
                 && lastActiveTime.isBefore(LocalDateTime.now()) && agentName.length() < 255 && password.length() < 255
-                && !allowedUsers.isEmpty();
+                && !allowedUsers.isEmpty() && agentUrl != null;
     }
 
     /**

@@ -60,6 +60,8 @@ public class WriteControllerTest {
     static final String VM_ID = "some id for vm";
     static final String CATEGORY = "audit category";
     static final LocalDateTime TIME_STAMP = LocalDateTime.now();
+    static final String DUMMY_URL_STRING = "http://someurl.com";
+
 
     String encryptedData;
 
@@ -177,7 +179,8 @@ public class WriteControllerTest {
         Map<String, Object> json = Map.of(
                 "agentName", AGENT_NAME,
                 "password", AGENT_PASSWORD,
-                "allowedUsers", "user"
+                "allowedUsers", "user",
+                "agentUrl", DUMMY_URL_STRING
         );
 
         client.post().uri("/api/agent")

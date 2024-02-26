@@ -6,6 +6,7 @@ import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.Alert;
 import org.dockit.dockitserver.entities.Audit;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,12 +22,13 @@ public class EntityCreator {
      * @param password string specifying the password of the {@link Agent}
      * @param creationTime time specifying the creation time of the {@link Agent}
      * @param lastActiveTime time specifying the last active time of the {@link Agent}
-     * @param allowedUsers allowed users configured for the vm of the {@link Agent}
+     * @param allowedUsers list of allowed users for the host of the {@link Agent}
+     * @param agentUrl url to communicate with {@link Agent}
      * @return {@link Optional} agent if successful, empty if not
      */
     public static Optional<Agent> createAgent(String agentName, String password, LocalDateTime creationTime,
-                                              LocalDateTime lastActiveTime, List<String> allowedUsers) {
-        if (!EntityValidator.validAgent(agentName, password, creationTime, lastActiveTime, allowedUsers)) {
+                                              LocalDateTime lastActiveTime, List<String> allowedUsers, URL agentUrl) {
+        if (!EntityValidator.validAgent(agentName, password, creationTime, lastActiveTime, allowedUsers, agentUrl)) {
             return Optional.empty();
         }
         Agent agent = new Agent();
@@ -35,6 +37,7 @@ public class EntityCreator {
         agent.setCreationTime(creationTime);
         agent.setLastActiveTime(lastActiveTime);
         agent.setAllowedUsers(allowedUsers);
+        agent.setAgentUrl(agentUrl);
         return Optional.of(agent);
     }
 

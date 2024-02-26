@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -121,6 +123,7 @@ public class AgentController {
      *             "agentName" -> name of the agent to be created <br>
      *             "password" -> password for the new agent <br>
      *             "allowedUsers" -> list of allowed users seperated by space in the form of string <br>
+     *             "agentUrl" -> url to be used to communicate with the agent <br>
      * @return Response entity containing the response
      */
     @PostMapping
@@ -129,14 +132,21 @@ public class AgentController {
         String agentName = (String) body.get("agentName");
         String password = (String) body.get("password");
         String allowedUsers = (String) body.get("allowedUsers");
-        if (ParameterValidator.invalid(agentName, password, allowedUsers)) {
+        String agentUrl = (String) body.get("agentUrl");
+        if (ParameterValidator.invalid(agentName, password, allowedUsers, agentUrl)) {
             return ResponseEntity.badRequest().body("Invalid request!");
         }
         LocalDateTime creationTime = LocalDateTime.now();
         LocalDateTime lastActiveTime = LocalDateTime.now();
         List<String> listAllowedUsers = Arrays.stream(allowedUsers.split(" ")).toList();
+        URL url;
+        try {
+            url = new URL(agentUrl);
+        } catch (MalformedURLException e) {
+            return ResponseEntity.badRequest().body("Invalid request!");
+        }
         Optional<Agent> agent = EntityCreator.createAgent(agentName, password, creationTime, lastActiveTime,
-                listAllowedUsers);
+                listAllowedUsers, url);
 
         if (agent.isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid request!");

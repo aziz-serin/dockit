@@ -30,6 +30,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -63,17 +65,19 @@ public class AuthenticationControllerTest {
 
     static final String USERNAME = "username";
     static final String PASSWORD = "password";
+    static final String DUMMY_URL_STRING = "http://someurl.com";
     Agent agent;
 
     private WebTestClient client;
 
     @BeforeAll
-    public void setup() {
+    public void setup() throws MalformedURLException {
         Admin admin = EntityCreator.createAdmin(USERNAME, PASSWORD, Admin.Role.SUPER).get();
         adminService.save(admin);
 
+        URL url = new URL(DUMMY_URL_STRING);
         agent = EntityCreator.createAgent("agent1", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();
         agentService.save(agent);
 
         client = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();

@@ -12,6 +12,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.net.URI;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -48,6 +50,10 @@ public class Agent implements DTO {
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     @Column(name = "allowedUsers")
     private List<String> allowedUsers;
+
+    @NotEmpty
+    @Column(name = "agent_address")
+    private URL agentUrl;
 
     public UUID getId() {
         return id;
@@ -101,5 +107,13 @@ public class Agent implements DTO {
 
     public void setAllowedUsers(List<String> allowedUsers) {
         this.allowedUsers = allowedUsers;
+    }
+
+    public URL getAgentUrl() {
+        return agentUrl;
+    }
+
+    public void setAgentUrl(URL agentUrl) {
+        this.agentUrl = agentUrl;
     }
 }

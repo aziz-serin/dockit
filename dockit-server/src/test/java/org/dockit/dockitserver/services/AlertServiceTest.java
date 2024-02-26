@@ -1,5 +1,8 @@
 package org.dockit.dockitserver.services;
 
+import com.icegreen.greenmail.configuration.GreenMailConfiguration;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.ServerSetupTest;
 import org.dockit.dockitserver.DockitServerApplication;
 import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.Alert;
@@ -10,12 +13,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AlertServiceTest {
     private static final String VM_ID = "vmId";
+    private static final String DUMMY_URL_STRING = "http://someurl.com";
 
     @Autowired
     private AgentService agentService;
@@ -39,10 +46,16 @@ public class AlertServiceTest {
 
     private Alert alert1;
 
+    @RegisterExtension
+    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
+            .withConfiguration(GreenMailConfiguration.aConfig().withUser("emailUser", "password"))
+            .withPerMethodLifecycle(false);
+
     @BeforeAll
-    public void setup() {
+    public void setup() throws MalformedURLException {
+        URL url = new URL(DUMMY_URL_STRING);
         agent = EntityCreator.createAgent("agent", "password",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();
         agentService.save(agent);
 
         alert1 = EntityCreator.createAlert(VM_ID, agent, Alert.Importance.CRITICAL, LocalDateTime.now(),

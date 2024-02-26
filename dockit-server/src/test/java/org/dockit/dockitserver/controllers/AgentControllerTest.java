@@ -26,6 +26,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -63,14 +65,16 @@ public class AgentControllerTest {
     static final String ADMIN_USERNAME = "admin";
     static final String ADMIN_PASSWORD = "password";
     static final String VIEWER_ADMIN_USERNAME = "viewer";
+    static final String DUMMY_URL_STRING = "http://someurl.com";
 
     WebTestClient client;
     Agent agent;
 
     @BeforeAll
-    public void setup() {
+    public void setup() throws MalformedURLException {
+        URL url = new URL(DUMMY_URL_STRING);
         agent = EntityCreator.createAgent(AGENT_NAME, AGENT_PASSWORD, LocalDateTime.now(), LocalDateTime.now(),
-                List.of("")).get();
+                List.of(""), url).get();
         agentService.save(agent);
 
         Admin admin = EntityCreator.createAdmin(ADMIN_USERNAME, ADMIN_PASSWORD, Admin.Role.SUPER).get();
@@ -171,7 +175,8 @@ public class AgentControllerTest {
         Map<String, Object> json = Map.of(
                 "agentName", AGENT_NAME,
                 "password", AGENT_PASSWORD,
-                "allowedUsers", "user"
+                "allowedUsers", "user",
+                "agentUrl", DUMMY_URL_STRING
         );
 
         client.post().uri("/api/agent")
@@ -207,7 +212,8 @@ public class AgentControllerTest {
         Map<String, Object> json = Map.of(
                 "agentName", AGENT_NAME,
                 "password", AGENT_PASSWORD,
-                "allowedUsers", "user"
+                "allowedUsers", "user",
+                "agentUrl", "http://someurl.com"
         );
         AtomicReference<UUID> id = new AtomicReference<>(); 
 

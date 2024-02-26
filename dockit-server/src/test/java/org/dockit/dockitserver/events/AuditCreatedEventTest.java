@@ -1,5 +1,8 @@
 package org.dockit.dockitserver.events;
 
+import com.icegreen.greenmail.configuration.GreenMailConfiguration;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.ServerSetupTest;
 import com.nimbusds.jose.shaded.gson.Gson;
 import org.dockit.dockitserver.DockitServerApplication;
 import org.dockit.dockitserver.analyze.AuditCategories;
@@ -17,6 +20,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -27,6 +31,8 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -43,6 +49,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AuditCreatedEventTest {
+    static final String DUMMY_URL_STRING = "http://someurl.com";
 
     @Autowired
     private AuditService auditService;
@@ -61,9 +68,14 @@ public class AuditCreatedEventTest {
     private Audit noAlertAudit;
     private Audit invalidCategortyAudit;
 
+    @RegisterExtension
+    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
+            .withConfiguration(GreenMailConfiguration.aConfig().withUser("emailUser", "password"))
+            .withPerMethodLifecycle(false);
+
     @BeforeAll
     public void setup() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
-            NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+            NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, MalformedURLException {
         Map<String, ?> alertJson = Map.of(
                 "cpu_load", 85
         );
@@ -82,8 +94,9 @@ public class AuditCreatedEventTest {
         List<String> allowedUsers = new ArrayList<>();
         allowedUsers.add("allowed_user");
 
+        URL url = new URL(DUMMY_URL_STRING);
         agent = EntityCreator.createAgent("agent", "password",
-                LocalDateTime.now(), LocalDateTime.now(), allowedUsers).get();
+                LocalDateTime.now(), LocalDateTime.now(), allowedUsers, url).get();
         agentService.save(agent);
 
         alertAudit = EntityCreator.createAudit("vmId", AuditCategories.VM_CPU,

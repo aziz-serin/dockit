@@ -1,5 +1,7 @@
 package org.dockit.dockitserver.authentication.issuer;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import org.dockit.dockitserver.DockitServerApplication;
@@ -47,14 +49,16 @@ public class APIKeyIssuerTest {
 
     static final String USERNAME = "user_name";
     static final String PASSWORD = "password";
+    static final String DUMMY_URL_STRING = "http://someurl.com";
 
     Agent agent;
     Admin admin;
 
     @BeforeAll
-    public void setup() {
+    public void setup() throws MalformedURLException {
+        URL url = new URL(DUMMY_URL_STRING);
         agent = EntityCreator.createAgent("agent1", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();
         agentService.save(agent);
 
         admin = EntityCreator.createAdmin(USERNAME, PASSWORD, Admin.Role.SUPER).get();

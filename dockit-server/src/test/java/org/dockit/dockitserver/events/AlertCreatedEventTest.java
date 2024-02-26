@@ -25,6 +25,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -42,6 +44,7 @@ public class AlertCreatedEventTest {
     private static final String PASSWORD = "password";
     private static final String EMAIL_MESSAGE = "This is the message to be sent as an email";
     private static final String VM_ID = "vmId";
+    static final String DUMMY_URL_STRING = "http://someurl.com";
 
     @Autowired
     private ConfigContainer configContainer;
@@ -58,9 +61,10 @@ public class AlertCreatedEventTest {
             .withPerMethodLifecycle(false);
 
     @BeforeAll
-    public void setup() {
+    public void setup() throws MalformedURLException {
+        URL url = new URL(DUMMY_URL_STRING);
         Agent agent = EntityCreator.createAgent("agent", "password",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("allowedUsers")).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of("allowedUsers"), url).get();
 
         agentService.save(agent);
 

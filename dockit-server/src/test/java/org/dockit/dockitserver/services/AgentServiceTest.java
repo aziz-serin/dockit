@@ -17,6 +17,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AgentServiceTest {
     private static final String CACHE_NAME = CacheNames.AGENT;
+    static final String DUMMY_URL_STRING = "http://someurl.com";
 
     @Autowired
     private AgentService agentService;
@@ -45,19 +48,21 @@ public class AgentServiceTest {
     private Agent agent1;
     private Agent agent2;
     private Agent agent3;
+    private URL url;
 
     @BeforeAll
-    public void setup() {
+    public void setup() throws MalformedURLException {
+        url = new URL(DUMMY_URL_STRING);
         agent1 = EntityCreator.createAgent("agent1", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();
         agentService.save(agent1);
 
         agent2 = EntityCreator.createAgent("agent2", "password2",
-                LocalDateTime.now().minusWeeks(1), LocalDateTime.now().minusDays(3), List.of("")).get();
+                LocalDateTime.now().minusWeeks(1), LocalDateTime.now().minusDays(3), List.of(""), url).get();
         agentService.save(agent2);
 
         agent3 = EntityCreator.createAgent("agent3", "password3",
-                LocalDateTime.now().minusDays(1), LocalDateTime.now().minusMinutes(5), List.of("")).get();
+                LocalDateTime.now().minusDays(1), LocalDateTime.now().minusMinutes(5), List.of(""), url).get();
         agentService.save(agent3);
 
         cache = Objects.requireNonNull(cacheManager.getCache(CACHE_NAME));
@@ -204,7 +209,7 @@ public class AgentServiceTest {
     @Test
     public void saveCachesResult() {
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();
         agentService.save(tempAgent);
 
         Agent cachedAgent = (Agent) cache.get(tempAgent.getId()).get();
@@ -218,7 +223,7 @@ public class AgentServiceTest {
     @Test
     public void updateAgentNameUpdatesCachedValue() {
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
-                LocalDateTime.now(), LocalDateTime.now(), List.of("")).get();
+                LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();
         agentService.save(tempAgent);
 
         String newValue = "newUserName";
@@ -236,7 +241,7 @@ public class AgentServiceTest {
     @Test
     public void updateLastActiveTimeUpdatesCachedValue() {
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
-                LocalDateTime.now(), LocalDateTime.now().minusMinutes(15), List.of("")).get();
+                LocalDateTime.now(), LocalDateTime.now().minusMinutes(15), List.of(""), url).get();
         agentService.save(tempAgent);
 
         LocalDateTime newTime = LocalDateTime.now();
@@ -254,7 +259,7 @@ public class AgentServiceTest {
     @Test
     public void deleteEvictsDeletedValue() {
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
-                LocalDateTime.now(), LocalDateTime.now().minusMinutes(15), List.of("")).get();
+                LocalDateTime.now(), LocalDateTime.now().minusMinutes(15), List.of(""), url).get();
         agentService.save(tempAgent);
 
         agentService.deleteById(tempAgent.getId());

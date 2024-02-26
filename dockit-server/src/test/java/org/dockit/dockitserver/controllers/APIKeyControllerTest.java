@@ -118,7 +118,8 @@ public class APIKeyControllerTest {
         Map<String, Object> json = Map.of(
                 "agentName", AGENT_NAME,
                 "password", AGENT_PASSWORD,
-                "allowedUsers", "user"
+                "allowedUsers", "user",
+                "agentUrl", "http://someurl.com"
         );
 
         client.post().uri("/api/agent")

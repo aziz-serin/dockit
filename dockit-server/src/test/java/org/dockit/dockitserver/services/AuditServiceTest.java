@@ -19,6 +19,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -35,8 +37,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AuditServiceTest {
-
     private static final String CACHE_NAME = CacheNames.AUDIT;
+    static final String DUMMY_URL_STRING = "http://someurl.com";
 
     @Autowired
     private AuditService auditService;
@@ -53,9 +55,10 @@ public class AuditServiceTest {
     private Agent agent;
 
     @BeforeAll
-    public void setup() {
+    public void setup() throws MalformedURLException {
+        URL url = new URL(DUMMY_URL_STRING);
         agent = EntityCreator.createAgent("name", "password", LocalDateTime.now(),
-                LocalDateTime.now(), List.of("")).get();
+                LocalDateTime.now(), List.of(""), url).get();
         agentService.save(agent);
 
         audit1 = EntityCreator.createAudit("vm1", "resource_usage", LocalDateTime.now(), "data1", agent).get();

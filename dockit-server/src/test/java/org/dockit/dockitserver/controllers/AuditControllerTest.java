@@ -29,6 +29,8 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -65,6 +67,7 @@ public class AuditControllerTest {
     static final String ADMIN_PASSWORD = "password";
     static final String AGENT_NAME = "agentName";
     static final String AGENT_PASSWORD = "agentPassword";
+    static final String DUMMY_URL_STRING = "http://someurl.com";
 
     WebTestClient client;
     Audit audit;
@@ -73,7 +76,7 @@ public class AuditControllerTest {
 
     @BeforeAll
     public void setup() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
-            NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+            NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, MalformedURLException {
         Admin admin = EntityCreator.createAdmin(ADMIN_USERNAME, ADMIN_PASSWORD, Admin.Role.SUPER).get();
         adminService.save(admin);
 
@@ -82,8 +85,9 @@ public class AuditControllerTest {
 
         key = (SecretKey) keyStoreHandler.getKey(KeyConstants.DB_KEY_ALIAS, "".toCharArray()).get();
 
+        URL url = new URL(DUMMY_URL_STRING);
         agent = EntityCreator.createAgent(AGENT_NAME, AGENT_PASSWORD, LocalDateTime.now(), LocalDateTime.now(),
-                        List.of("")).get();
+                        List.of(""), url).get();
 
         agentService.save(agent);
 
