@@ -20,7 +20,7 @@ public class CommandExecutor {
     public boolean execute(Command command) {
         String executable = command.alias();
         String arguments = command.argument();
-        if (executable == null) {
+        if (executable == null || arguments == null) {
             return false;
         }
         return execute(executable, arguments);
