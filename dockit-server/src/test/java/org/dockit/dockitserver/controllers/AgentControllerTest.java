@@ -324,4 +324,60 @@ public class AgentControllerTest {
                 .exchange()
                 .expectStatus().isOk();
     }
+
+    @Test
+    public void updateAgentUrlFailsGivenInsufficientPermission() {
+        String jwt = TokenObtain.getJwt(VIEWER_ADMIN_USERNAME, ADMIN_PASSWORD, client);
+
+        client.put().uri("/api/agent/agentUrl?id=999")
+                .header("Authorization", jwt)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().is4xxClientError();
+    }
+
+    @Test
+    public void updateAgentUrlFailsGivenInvalidBody() {
+        String jwt = TokenObtain.getJwt(ADMIN_USERNAME, ADMIN_PASSWORD, client);
+        Map<String, Object> json = Map.of(
+                "agenUrl", "http://newurl.com"
+        );
+
+        client.put().uri("/api/agent/agentUrl?id=999")
+                .header("Authorization", jwt)
+                .body(BodyInserters.fromValue(json))
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().is4xxClientError();
+    }
+
+    @Test
+    public void updateAgentUrlFailsGivenInvalidURLString() {
+        String jwt = TokenObtain.getJwt(ADMIN_USERNAME, ADMIN_PASSWORD, client);
+        Map<String, Object> json = Map.of(
+                "agentUrl", "htt://newurl.com"
+        );
+
+        client.put().uri("/api/agent/agentUrl?id=" + agent.getId())
+                .header("Authorization", jwt)
+                .body(BodyInserters.fromValue(json))
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().is4xxClientError();
+    }
+
+    @Test
+    public void updateAgentUrlSucceed() {
+        String jwt = TokenObtain.getJwt(ADMIN_USERNAME, ADMIN_PASSWORD, client);
+        Map<String, Object> json = Map.of(
+                "agentUrl", "http://newurl.com"
+        );
+
+        client.put().uri("/api/agent/agentUrl?id=" + agent.getId())
+                .header("Authorization", jwt)
+                .body(BodyInserters.fromValue(json))
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk();
+    }
 }

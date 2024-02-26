@@ -234,4 +234,34 @@ public class AgentController {
         }
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * Update the agentUrl
+     *
+     * @param id id of the agent to be updated
+     * @param body Should contain the parameters: <br>
+     *             "agentUrl" -> new url for the agent <br>
+     * @return Response entity containing the response
+     */
+    @PutMapping("/agentUrl")
+    @PreAuthorize("hasAnyAuthority('SUPER', 'EDITOR')")
+    public ResponseEntity<?> updateAgentUrl(@RequestParam(name = "id") UUID id,
+                                                @RequestBody @NonNull Map<String, ?> body) {
+        String agentUrl = (String) body.get("agentUrl");
+        if (ParameterValidator.invalid(agentUrl)) {
+            return ResponseEntity.badRequest().body("Invalid request!");
+        }
+        URL url;
+        try {
+            url = new URL(agentUrl);
+        } catch (MalformedURLException e) {
+            return ResponseEntity.badRequest().body("Invalid request!");
+        }
+
+        Optional<Agent> agent = agentService.updateAgentUrl(id, url);
+        if (agent.isEmpty()) {
+            return ResponseEntity.badRequest().body("Invalid request!");
+        }
+        return ResponseEntity.ok().build();
+    }
 }

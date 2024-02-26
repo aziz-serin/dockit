@@ -207,6 +207,20 @@ public class AgentServiceTest {
     }
 
     @Test
+    public void updateAgentUrlReturnsEmptyIfIdDoesNotExist() {
+        assertFalse(agentService.updateAllowedUsers(UUID.randomUUID(), List.of()).isPresent());
+    }
+
+    @Test
+    public void updateAgentUrlUpdatesAgent() throws MalformedURLException {
+        URL url = new URL("http://newurl.com");
+        Optional<Agent> agent = agentService.updateAgentUrl(agent2.getId(), url);
+
+        assertTrue(agent.isPresent());
+        assertThat(agent.get().getAgentUrl().toString()).isEqualTo(url.toString());
+    }
+
+    @Test
     public void saveCachesResult() {
         Agent tempAgent = EntityCreator.createAgent("tempAgent", "password1",
                 LocalDateTime.now(), LocalDateTime.now(), List.of(""), url).get();

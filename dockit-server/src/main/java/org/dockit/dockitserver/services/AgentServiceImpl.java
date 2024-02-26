@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -68,6 +69,18 @@ public class AgentServiceImpl implements AgentService {
         if (optionalAgent.isPresent()) {
             Agent agent = optionalAgent.get();
             agent.setAllowedUsers(allowedUsers);
+            return Optional.of(agentRepository.save(agent));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    @CachePut(key = "#id")
+    public Optional<Agent> updateAgentUrl(UUID id, URL agentUrl) {
+        Optional<Agent> optionalAgent = agentRepository.findById(id);
+        if (optionalAgent.isPresent()) {
+            Agent agent = optionalAgent.get();
+            agent.setAgentUrl(agentUrl);
             return Optional.of(agentRepository.save(agent));
         }
         return Optional.empty();

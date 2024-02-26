@@ -2,6 +2,7 @@ package org.dockit.dockitserver.services.templates;
 
 import org.dockit.dockitserver.entities.Agent;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +46,15 @@ public interface AgentService {
      * @return {@link Optional} Agent if agent exists, empty if not
      */
     Optional<Agent> updateAllowedUsers(UUID id, List<String> allowedUsers);
+
+    /**
+     * Update the agent's url
+     *
+     * @param id id of the {@link Agent} to be updated
+     * @param agentUrl url to connect to agent
+     * @return {@link Optional} Agent if agent exists, empty if not
+     */
+    Optional<Agent> updateAgentUrl(UUID id, URL agentUrl);
 
     /**
      * Delete agent using its id
