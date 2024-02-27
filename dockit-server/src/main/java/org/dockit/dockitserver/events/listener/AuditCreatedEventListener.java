@@ -50,6 +50,7 @@ public class AuditCreatedEventListener {
         if (AuditCategories.CATEGORIES.contains(audit.getCategory())) {
             Audit decryptedAudit = decrypt.decryptAudit(audit);
             List<Alert> alerts = auditAnalyzer.analyze(decryptedAudit);
+            decrypt.encryptAudit(audit);
             alertService.save(alerts);
         }
     }

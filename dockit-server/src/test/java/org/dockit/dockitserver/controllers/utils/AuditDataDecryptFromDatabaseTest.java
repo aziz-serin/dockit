@@ -50,9 +50,10 @@ public class AuditDataDecryptFromDatabaseTest {
     private Agent agent;
 
     private Optional<Key> dbSecretKey;
-    private Audit audit;
+    private Audit decryptAudit;
     // This has undecryptable data as its data to check exception handling
-    private Audit invalidAudit;
+    private Audit encryptAudit;
+    private Audit dummyAudit;
 
     @Before
     public void setup() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
@@ -61,8 +62,9 @@ public class AuditDataDecryptFromDatabaseTest {
         String encryptedData = AESCBCEncryptor.encrypt(DATA, (SecretKey) dbSecretKey.get());
 
 
-        audit = EntityCreator.createAudit(VM_ID, CATEGORY, LocalDateTime.now(), encryptedData, agent).get();
-        invalidAudit = EntityCreator.createAudit(VM_ID, CATEGORY, LocalDateTime.now(), DATA, agent).get();
+        decryptAudit = EntityCreator.createAudit(VM_ID, CATEGORY, LocalDateTime.now(), encryptedData, agent).get();
+        encryptAudit = EntityCreator.createAudit(VM_ID, CATEGORY, LocalDateTime.now(), DATA, agent).get();
+        dummyAudit = EntityCreator.createAudit(VM_ID, CATEGORY, LocalDateTime.now(), DATA, agent).get();
     }
 
     @Test
@@ -71,7 +73,7 @@ public class AuditDataDecryptFromDatabaseTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(KeyStoreException.class, () -> {
-            auditDataDecryptFromDatabase.decryptAudits(List.of(audit));
+            auditDataDecryptFromDatabase.decryptAudits(List.of(decryptAudit));
         });
     }
 
@@ -81,7 +83,7 @@ public class AuditDataDecryptFromDatabaseTest {
                 .thenReturn(dbSecretKey);
 
         assertThrows(EncryptionException.class, () -> {
-            auditDataDecryptFromDatabase.decryptAudits(List.of(invalidAudit));
+            auditDataDecryptFromDatabase.decryptAudits(List.of(encryptAudit));
         });
     }
 
@@ -90,7 +92,7 @@ public class AuditDataDecryptFromDatabaseTest {
         when(keyStoreHandler.getKey(eq(KeyConstants.DB_KEY_ALIAS), eq("".toCharArray())))
                 .thenReturn(dbSecretKey);
 
-        List<Audit> audits = auditDataDecryptFromDatabase.decryptAudits(List.of(audit));
+        List<Audit> audits = auditDataDecryptFromDatabase.decryptAudits(List.of(decryptAudit));
         assertThat(audits).hasSize(1);
         assertThat(audits.get(0).getData()).isEqualTo(DATA);
     }
@@ -101,7 +103,7 @@ public class AuditDataDecryptFromDatabaseTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(KeyStoreException.class, () -> {
-            auditDataDecryptFromDatabase.decryptAudit(audit);
+            auditDataDecryptFromDatabase.decryptAudit(decryptAudit);
         });
     }
 
@@ -111,7 +113,7 @@ public class AuditDataDecryptFromDatabaseTest {
                 .thenReturn(dbSecretKey);
 
         assertThrows(EncryptionException.class, () -> {
-            auditDataDecryptFromDatabase.decryptAudit(invalidAudit);
+            auditDataDecryptFromDatabase.decryptAudit(dummyAudit);
         });
     }
 
@@ -120,7 +122,27 @@ public class AuditDataDecryptFromDatabaseTest {
         when(keyStoreHandler.getKey(eq(KeyConstants.DB_KEY_ALIAS), eq("".toCharArray())))
                 .thenReturn(dbSecretKey);
 
-        Audit decryptedAudit = auditDataDecryptFromDatabase.decryptAudit(audit);
+        Audit decryptedAudit = auditDataDecryptFromDatabase.decryptAudit(decryptAudit);
         assertThat(decryptedAudit.getData()).isEqualTo(DATA);
+    }
+
+    @Test
+    public void encryptAuditFailsGivenKeyNotExisting() {
+        when(keyStoreHandler.getKey(eq(KeyConstants.DB_KEY_ALIAS), eq("".toCharArray())))
+                .thenReturn(Optional.empty());
+
+        assertThrows(KeyStoreException.class, () -> {
+            auditDataDecryptFromDatabase.encryptAudit(decryptAudit);
+        });
+    }
+
+
+    @Test
+    public void encryptAuditSucceeds() throws EncryptionException, KeyStoreException {
+        when(keyStoreHandler.getKey(eq(KeyConstants.DB_KEY_ALIAS), eq("".toCharArray())))
+                .thenReturn(dbSecretKey);
+
+        Audit decryptedAudit = auditDataDecryptFromDatabase.encryptAudit(encryptAudit);
+        assertThat(decryptedAudit.getData()).isNotEqualTo(DATA);
     }
 }

@@ -83,9 +83,38 @@ public class AuditDataDecryptFromDatabase {
         return decryptAudit(audit, (SecretKey) key.get());
     }
 
+    /**
+     * Decrypt the data field of a given {@link Audit} object
+     *
+     * @param audit {@link Audit} data
+     * @return {@link Audit} with decrypted data fields
+     * @throws EncryptionException when the data cannot be decrypted
+     * @throws KeyStoreException when a database key is missing
+     */
+    public Audit encryptAudit(Audit audit) throws EncryptionException, KeyStoreException {
+        Optional<Key> key = keyStoreHandler.getKey(KeyConstants.DB_KEY_ALIAS, "".toCharArray());
+        if (key.isEmpty()) {
+            logger.error("Could not find the database key in the keystore!");
+            throw new KeyStoreException("Missing key");
+        }
+        return encryptAudit(audit, (SecretKey) key.get());
+    }
+
     private Audit decryptAudit(Audit audit, SecretKey key) throws EncryptionException {
         try {
             String decryptedData = AESCBCEncryptor.decrypt(audit.getData(), key);
+            audit.setData(decryptedData);
+            return audit;
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException |
+                 InvalidAlgorithmParameterException | InvalidKeyException | IllegalBlockSizeException |
+                 BadPaddingException | IllegalArgumentException e) {
+            throw new EncryptionException(e.getMessage());
+        }
+    }
+
+    private Audit encryptAudit(Audit audit, SecretKey key) throws EncryptionException {
+        try {
+            String decryptedData = AESCBCEncryptor.encrypt(audit.getData(), key);
             audit.setData(decryptedData);
             return audit;
         } catch (NoSuchPaddingException | NoSuchAlgorithmException |
