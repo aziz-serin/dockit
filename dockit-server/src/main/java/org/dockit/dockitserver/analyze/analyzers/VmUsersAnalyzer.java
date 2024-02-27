@@ -7,6 +7,7 @@ import org.dockit.dockitserver.analyze.analyzers.utils.AnalyzingUtils;
 import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.Alert;
 import org.dockit.dockitserver.entities.Audit;
+import org.dockit.dockitserver.events.publisher.IntrusionEventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,13 +29,16 @@ public class VmUsersAnalyzer implements Analyzer {
     private static String LOGIN_TIME = "login_time";
 
     private final AlertGenerator alertGenerator;
+    private final IntrusionEventPublisher eventPublisher;
 
     /**
-     * @param alertGenerator {@link AlertGenerator instance to be injected}
+     * @param alertGenerator {@link AlertGenerator} instance to be injected
+     * @param eventPublisher {@link IntrusionEventPublisher} instance to be injected
      */
     @Autowired
-    public VmUsersAnalyzer(AlertGenerator alertGenerator) {
+    public VmUsersAnalyzer(AlertGenerator alertGenerator, IntrusionEventPublisher eventPublisher) {
         this.alertGenerator = alertGenerator;
+        this.eventPublisher = eventPublisher;
     }
 
     /**
@@ -65,6 +69,7 @@ public class VmUsersAnalyzer implements Analyzer {
 
             Optional<Alert> generatedAlert = alertGenerator.generateIntrusionAlert(audit, message);
             generatedAlert.ifPresent(alerts::add);
+            eventPublisher.publishIntrusionEvent(audit.getAgent(), userName);
         }
         return alerts;
     }
