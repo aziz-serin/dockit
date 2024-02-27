@@ -22,17 +22,30 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Utility class to prepare requests for the {@link AgentRequestSender}
+ */
 @Component
 public class AgentRequestPreparer {
     private static final Logger logger = LoggerFactory.getLogger(AgentRequestPreparer.class);
 
     private final KeyStoreHandler keyStoreHandler;
 
+    /**
+     * @param keyStoreHandler {@link KeyStoreHandler} to be injected
+     */
     @Autowired
     public AgentRequestPreparer(KeyStoreHandler keyStoreHandler) {
         this.keyStoreHandler = keyStoreHandler;
     }
 
+    /**
+     * Do the required encryption using the supplied agent, and prepare the request which will be sent
+     *
+     * @param agent {@link Agent} to send the request to
+     * @param userName detected intruder
+     * @return {@link Optional} {@link HttpRequest} if successful, empty if not
+     */
     public Optional<HttpRequest> prepareIntrusionRequest(Agent agent, String userName) {
         Gson gson = new Gson();
 

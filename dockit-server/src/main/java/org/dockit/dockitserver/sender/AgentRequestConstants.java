@@ -1,6 +1,9 @@
 package org.dockit.dockitserver.sender;
 
 
+/**
+ * Class that contains constants to be used for agent request sending operations
+ */
 public final class AgentRequestConstants {
     public static final String INTRUSION = "intrusion";
     public static final String DATA = "data";
