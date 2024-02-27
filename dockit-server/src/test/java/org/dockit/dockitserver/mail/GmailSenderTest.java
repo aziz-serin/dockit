@@ -21,9 +21,11 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -48,7 +50,7 @@ public class GmailSenderTest {
     @RegisterExtension
     static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
             .withConfiguration(GreenMailConfiguration.aConfig().withUser(USER, PASSWORD))
-            .withPerMethodLifecycle(false);
+            .withPerMethodLifecycle(true);
 
     @BeforeAll
     public void setup() {
@@ -59,7 +61,7 @@ public class GmailSenderTest {
     }
 
     @Test
-    public void mailSenderSendsMailGivenAlertShouldBeSent() throws MessagingException {
+    public void emailSenderSendsMailGivenAlertShouldBeSent() throws MessagingException {
         gmailEmailService.sendEmail(alert, TO, Alert.Importance.LOW);
         Date alertDate = Date.from(alert.getAuditTimeStamp().atZone(ZoneId.systemDefault()).toInstant());
 
@@ -78,9 +80,30 @@ public class GmailSenderTest {
     }
 
     @Test
-    public void mailSendDoesNotSendMailGivenAlertShouldNotBeSent() {
+    public void emailSendDoesNotSendMailGivenAlertShouldNotBeSent() {
         gmailEmailService.sendEmail(alert, TO, Alert.Importance.CRITICAL);
 
         assertThat(greenMail.getReceivedMessages()).hasSize(0);
+    }
+
+    @Test
+    public void emailSenderSendsIntrusionMail() throws MessagingException, IOException {
+        Agent agent = new Agent();
+        UUID agentId = UUID.randomUUID();
+        agent.setId(agentId);
+
+        gmailEmailService.sendEmail(agent, TO, EMAIL_MESSAGE);
+
+        assertThat(greenMail.getReceivedMessages()).hasSize(1);
+
+        MimeMessage receivedMessage = greenMail.getReceivedMessages()[0];
+
+        assertThat(receivedMessage.getFrom()).hasSize(1);
+        assertThat(receivedMessage.getFrom()[0].toString()).isEqualTo(MailConstants.FROM);
+        assertThat(receivedMessage.getSubject()).containsIgnoringCase(agentId.toString());
+        assertThat((String) receivedMessage.getContent()).containsIgnoringCase(EMAIL_MESSAGE);
+        assertThat(receivedMessage.getAllRecipients()).hasSize(1);
+        assertThat(receivedMessage.getAllRecipients()[0].toString()).isEqualTo(TO);
+
     }
 }

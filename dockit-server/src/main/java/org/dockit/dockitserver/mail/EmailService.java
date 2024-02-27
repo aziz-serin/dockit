@@ -1,5 +1,6 @@
 package org.dockit.dockitserver.mail;
 
+import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.Alert;
 
 /**
@@ -7,4 +8,5 @@ import org.dockit.dockitserver.entities.Alert;
  */
 public interface EmailService {
     void sendEmail(Alert alert, String to, Alert.Importance defaultImportance);
+    void sendEmail(Agent agent, String to, String message);
 }

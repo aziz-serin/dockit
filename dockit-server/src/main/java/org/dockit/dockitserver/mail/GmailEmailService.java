@@ -1,5 +1,6 @@
 package org.dockit.dockitserver.mail;
 
+import org.dockit.dockitserver.entities.Agent;
 import org.dockit.dockitserver.entities.Alert;
 import org.dockit.dockitserver.entities.utils.AlertImportanceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,24 @@ public class GmailEmailService implements EmailService {
 
             mailSender.send(mail);
         }
+    }
 
+    /**
+     * Method to send user intrusion emails
+     *
+     * @param agent Agent which detected the intrusion
+     * @param to address to send the mail to
+     * @param message body of the mail
+     */
+    @Override
+    public void sendEmail(Agent agent, String to, String message) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(to);
+        mail.setFrom(MailConstants.FROM);
+        mail.setSubject("Intrusion detection for agent %s".formatted(agent.getId()));
+        mail.setText(message);
+
+        mailSender.send(mail);
     }
 
     private boolean shouldSend(Alert.Importance alertImportance, Alert.Importance defaultImportance) {
