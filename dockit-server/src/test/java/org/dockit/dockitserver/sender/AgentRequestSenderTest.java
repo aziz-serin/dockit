@@ -1,6 +1,7 @@
 package org.dockit.dockitserver.sender;
 
 import org.dockit.dockitserver.entities.Agent;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
@@ -42,7 +43,7 @@ public class AgentRequestSenderTest {
     }
 
     @Test
-    //@Ignore("Enable this test if the agent is running at the same time with the given URL!")
+    @Ignore("Enable this test if the agent is running at the same time with the given URL!")
     public void isAgentAliveReturnsTrueGivenAgentIsAlive() throws MalformedURLException {
         Agent agent = new Agent();
         URL agentUrl = new URL(AGENT_URL);
@@ -73,7 +74,7 @@ public class AgentRequestSenderTest {
     }
 
     @Test
-    //@Ignore("Enable this test if the agent is running at the same time with the given URL!")
+    @Ignore("Enable this test if the agent is running at the same time with the given URL!")
     public void sendIntrusionRequestReturnsTrueGivenRequestWasSentSuccessfully() throws MalformedURLException {
         HttpRequest request = HttpRequest.newBuilder(URI.create(AGENT_URL
                         + AgentRequestConstants.PING_ENDPOINT))
