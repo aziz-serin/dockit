@@ -54,8 +54,9 @@ public class CollectorInitialiser {
         } else if (configContainer.getConfig().isVM_DATA()) {
             return initialiseVmCollectors();
         } else {
-            throw new CollectorInitialisationException("Both docker and vm settings are turned off," +
+            logger.info("Both docker and vm settings are turned off," +
                     " nothing to collect!");
+            return List.of();
         }
     }
 
