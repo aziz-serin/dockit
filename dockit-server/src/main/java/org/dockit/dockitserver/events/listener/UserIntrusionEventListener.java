@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+/**
+ * Listener for the {@link UserIntrusionEvent}s.
+ */
 @Component
 public class UserIntrusionEventListener {
     private static final String KICKED_OUT_MAIL = """
@@ -33,6 +36,11 @@ public class UserIntrusionEventListener {
     private final GmailEmailService emailService;
     private final ConfigContainer configContainer;
 
+    /**
+     * @param agentRequestSender {@link AgentRequestSender} instance to be injected
+     * @param emailService {@link GmailEmailService} instance to be injected
+     * @param configContainer {@link ConfigContainer} instance to be injected
+     */
     @Autowired
     public UserIntrusionEventListener(AgentRequestSender agentRequestSender, GmailEmailService emailService,
                                       ConfigContainer configContainer) {
@@ -41,6 +49,12 @@ public class UserIntrusionEventListener {
         this.configContainer = configContainer;
     }
 
+    /**
+     * When an intrusion event occurs, email to inform the admins and send a request to the agent
+     * to kick out the intruder
+     *
+     * @param userIntrusionEvent event to listen for
+     */
     @EventListener
     public void userIntrusionAlertListener(UserIntrusionEvent userIntrusionEvent) {
         Agent agent = userIntrusionEvent.agent();
