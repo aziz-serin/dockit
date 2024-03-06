@@ -100,9 +100,9 @@ public class WriteSimulation extends Simulation {
     }
 
     private OpenInjectionStep.RampRate.RampRateOpenInjectionStep postEndpointInjectionProfile() {
-        int totalDesiredUserCount = 15;
-        double userRampUpPerInterval = 3;
-        double rampUpIntervalSeconds = 5;
+        int totalDesiredUserCount = 10;
+        double userRampUpPerInterval = 1;
+        double rampUpIntervalSeconds = 10;
         int totalRampUptimeSeconds = 30;
         int steadyStateDurationSeconds = 30;
 
