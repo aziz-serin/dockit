@@ -48,7 +48,8 @@ public class WriteController {
      * @param body should contain the parameters: <br>
      *             "vmId" -> vmId string for the audit <br>
      *             "category" -> category string for the audit <br>
-     *             "timeStamp" -> timeStamps string in
+     *             "timeStamp" -> timeStamps string in <br>
+     *             "data" -> data string
      *             <a href="https://www.iso.org/iso-8601-date-and-time-format.html">ISO Local Date Time format</a> <br>
      * @param id id of an {@link Agent} which sent the request
      * @return Response entity containing the response
