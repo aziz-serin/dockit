@@ -61,7 +61,7 @@ public class StartupInitialisation {
         }
         // If another super admin is present other than the specified one, inform and do nothing
         if(anotherSuperAdminIsPresent()) {
-            logger.info("{} is not present, but another SUPER admin is present", USERNAME);
+            logger.info("{} is not present, but another SUPER admin is present", userName);
             return;
         }
         // If there is no super admin, we need a default one. So create it
@@ -75,7 +75,7 @@ public class StartupInitialisation {
             return;
         }
         adminService.save(admin.get());
-        logger.info("Created the default admin with USERNAME {} and PASSWORD {}", USERNAME, PASSWORD);
+        logger.info("Created the default admin with USERNAME {} and PASSWORD {}", userName, password);
     }
 
     private boolean adminWithGivenUsernameExists(String userName) {
