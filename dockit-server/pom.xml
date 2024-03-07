@@ -144,8 +144,7 @@
                 <artifactId>gatling-maven-plugin</artifactId>
                 <version>4.2.9</version>
                 <configuration>
-                    <!--   ...  -->
-                    <simulationClass>org.dockit.performance.AdminOperationsSimulation</simulationClass>
+                    <runMultipleSimulations>true</runMultipleSimulations>
                 </configuration>
             </plugin>
         </plugins>
