@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -31,12 +32,12 @@ import static io.gatling.javaapi.core.CoreDsl.rampUsersPerSec;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
-public class WriteSimulation extends Simulation {
+public class AuditSimulation extends Simulation {
     private static final HttpProtocolBuilder HTTP_PROTOCOL_BUILDER = setupProtocolForSimulation();
 
     private static final ScenarioBuilder POST_SCENARIO_BUILDER = buildPostScenario();
 
-    public WriteSimulation() {
+    public AuditSimulation() {
         this.setUp(POST_SCENARIO_BUILDER.injectOpen(postEndpointInjectionProfile())
                 .protocols(HTTP_PROTOCOL_BUILDER));
     }
@@ -71,6 +72,7 @@ public class WriteSimulation extends Simulation {
 
     private static ScenarioBuilder buildPostScenario() {
         Map<String, String> parameters = PerformanceTokenObtainer.getAPIToken();
+        String adminToken = Objects.requireNonNull(PerformanceTokenObtainer.getAdminToken());
         return CoreDsl.scenario("Load Write Endpoint")
                 .feed(feedData(parameters.get("agentKey"), parameters.get("agentId")))
                 .exec(http("write-request").post("/api/write?id=" + parameters.get("agentId"))
@@ -84,6 +86,14 @@ public class WriteSimulation extends Simulation {
                                 "data": "${data}"
                                 }
                                 """))
+                        .check(status().is(200)))
+                .exec(http("read-audit").get("/api/audit/category?category=vm_cpu")
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", adminToken)
+                        .check(status().is(200)))
+                .exec(http("read-alert").get("/api/alert/importance?importance=" + "CRITICAL")
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", adminToken)
                         .check(status().is(200)));
     }
 
