@@ -27,6 +27,7 @@ public class KeyStoreInitializer {
     @Autowired
     public KeyStoreInitializer(ConfigContainer configContainer, KeyStoreHandler keyStoreHandler, KeyHandler keyHandler)
             throws KeyStoreException {
+        keyStoreHandler.initialiseCache();
         String jwtSecretAlias = configContainer.getConfig().getJwtSecretAlias();
         if (!keyStoreHandler.keyExists(jwtSecretAlias)) {
             // Generate key to be used in jwt generation
